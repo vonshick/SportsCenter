@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package database_connection;
+package sportscenter;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -17,23 +17,37 @@ import java.util.logging.Logger;
  *
  * @author student
  */
-public class DBConnection {
-
-    public static void main(String[] args) throws SQLException {
+public class DBConnection extends Thread {
+    private String address;
+    private String port;
+    private String sid;
+    
+    DBConnection(){}
+    
+    DBConnection(String address, String port, String sid){
+        this.address = address;
+        this.port = port;
+        this.sid = sid;
+    }
+    
+    public void run(){
         Connection conn = null;
         Properties connectionProps = new Properties();
         
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Pass username:");
-        String user = scanner.nextLine();
-        System.out.println("Pass password:");
-        String password = scanner.nextLine();
-        System.out.println("Pass address:");
-        String address = scanner.nextLine();
-        System.out.println("Pass port:");
-        String port = scanner.nextLine();
-        System.out.println("Pass SID:");
-        String sid = scanner.nextLine();
+//        Scanner scanner = new Scanner(System.in);
+//        System.out.println("Pass username:");
+//        String user = scanner.nextLine();
+//        System.out.println("Pass password:");
+//        String password = scanner.nextLine();
+//        System.out.println("Pass address:");
+//        String address = scanner.nextLine();
+//        System.out.println("Pass port:");
+//        String port = scanner.nextLine();
+//        System.out.println("Pass SID:");
+//        String sid = scanner.nextLine();
+
+        String user = "system";
+        String password = "oracle";
 
         connectionProps.put("user", user);
         connectionProps.put("password", password);
@@ -51,7 +65,7 @@ public class DBConnection {
         Statement stmt = null;
         ResultSet rs = null;
         
-                try {
+        try {
             stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
                     ResultSet.CONCUR_READ_ONLY);
             rs = stmt.executeQuery("SELECT imie, nazwisko, funkcja FROM pracownik");
@@ -62,10 +76,10 @@ public class DBConnection {
         } catch (SQLException ex) {
             System.out.println("Bład wykonania polecenia" + ex.toString());
         }
-                
-        stmt.close();
-        rs.close();
+        
         try {
+            stmt.close();
+            rs.close();
             conn.close();
         } catch (SQLException ex) {
             Logger.getLogger(DBConnection.class.getName()).log(Level.SEVERE, null, ex);

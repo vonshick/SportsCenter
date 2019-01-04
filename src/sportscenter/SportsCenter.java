@@ -11,11 +11,21 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.util.Properties;
+import java.sql.*;
+import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author kuba
  */
 public class SportsCenter extends Application {
+    
+    public static DBConnection dbManager;
     
     @Override
     public void start(Stage stage) throws Exception {
@@ -31,6 +41,7 @@ public class SportsCenter extends Application {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+//        dbManager = new DBConnection();
         launch(args);
     }
     

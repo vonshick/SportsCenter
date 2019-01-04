@@ -5,14 +5,20 @@
  */
 package sportscenter;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 
 /**
  *
@@ -20,21 +26,29 @@ import javafx.scene.control.TextField;
  */
 public class FXMLDocumentController implements Initializable {
     
-//    @FXML
-    private TextField address;
-    private TextField port;
-    private TextField sid;
-    
     @FXML
-    private void handleButtonAction(ActionEvent event) {
+    private TextField address;
+    @FXML
+    private TextField port;
+    @FXML
+    private TextField sid;
+    @FXML
+    private Button button;
+    @FXML
+    private void handleButtonAction(ActionEvent event) throws IOException {
         System.out.println("You clicked me!");
-//        SportsCenter.dbManager = new DBConnection(address.getText(), port.getText(), sid.getText());
-//        SportsCenter.dbManager.initialize(address.getText(), port.getText(), sid.getText());
-        SportsCenter.dbManager = new DBConnection("localhost", "1521", "xe");
-
+        SportsCenter.dbManager = new DBConnection(address.getText(), port.getText(), sid.getText());
         SportsCenter.dbManager.start();
-
+        
+        Parent root = FXMLLoader.load(getClass().getResource("Username.fxml"));
+        Stage stage = new Stage();
+        stage.setTitle("My New Stage Title");
+        stage.setScene(new Scene(root));
+        stage.show();
+        // Hide current window
+        ((Node)(event.getSource())).getScene().getWindow().hide();
     }
+    
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {

@@ -22,8 +22,6 @@ public class DBConnection extends Thread {
     private String port;
     private String sid;
     
-    DBConnection(){}
-    
     DBConnection(String address, String port, String sid){
         this.address = address;
         this.port = port;

@@ -1,41 +1,34 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package database_connection;
+package sportscenter;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.util.Properties;
 import java.sql.*;
-import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- *
- * @author student
- */
-public class DBConnection {
-
-    public static void main(String[] args) throws SQLException {
+public class DBConnection extends Thread {
+    private String address;
+    private String port;
+    private String sid;
+    private String username;
+    private String password;
+    
+    DBConnection(String address, String port, String sid){
+        this.address = address;
+        this.port = port;
+        this.sid = sid;
+    }
+    
+    public void authenticateUser(String username, String password){
+       this.username = username;
+       this.password = password;
+    }
+    
+    public void run(){
         Connection conn = null;
         Properties connectionProps = new Properties();
-        
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Pass username:");
-        String user = scanner.nextLine();
-        System.out.println("Pass password:");
-        String password = scanner.nextLine();
-        System.out.println("Pass address:");
-        String address = scanner.nextLine();
-        System.out.println("Pass port:");
-        String port = scanner.nextLine();
-        System.out.println("Pass SID:");
-        String sid = scanner.nextLine();
-
-        connectionProps.put("user", user);
+        connectionProps.put("user", username);
         connectionProps.put("password", password);
         try {
             conn = DriverManager.getConnection(
@@ -51,7 +44,7 @@ public class DBConnection {
         Statement stmt = null;
         ResultSet rs = null;
         
-                try {
+        try {
             stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
                     ResultSet.CONCUR_READ_ONLY);
             rs = stmt.executeQuery("SELECT imie, nazwisko, funkcja FROM pracownik");
@@ -62,10 +55,10 @@ public class DBConnection {
         } catch (SQLException ex) {
             System.out.println("Bład wykonania polecenia" + ex.toString());
         }
-                
-        stmt.close();
-        rs.close();
+        
         try {
+            stmt.close();
+            rs.close();
             conn.close();
         } catch (SQLException ex) {
             Logger.getLogger(DBConnection.class.getName()).log(Level.SEVERE, null, ex);

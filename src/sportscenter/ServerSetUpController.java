@@ -16,7 +16,6 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
@@ -24,7 +23,7 @@ import javafx.stage.Stage;
  *
  * @author kuba
  */
-public class FXMLDocumentController implements Initializable {
+public class ServerSetUpController implements Initializable {
     
     @FXML
     private TextField address;
@@ -36,19 +35,18 @@ public class FXMLDocumentController implements Initializable {
     private Button button;
     @FXML
     private void handleButtonAction(ActionEvent event) throws IOException {
-        System.out.println("You clicked me!");
-        SportsCenter.dbManager = new DBConnection(address.getText(), port.getText(), sid.getText());
-        SportsCenter.dbManager.start();
-        
-        Parent root = FXMLLoader.load(getClass().getResource("Username.fxml"));
+        SportsCenter.dbManager = new DBConnection(address.getText(), port.getText(), sid.getText());        
+        openUserLogInWindow(event);
+    }
+    private void openUserLogInWindow(ActionEvent event) throws IOException{
+        Parent root = FXMLLoader.load(getClass().getResource("UserLogIn.fxml"));
         Stage stage = new Stage();
-        stage.setTitle("My New Stage Title");
+        stage.setTitle("Log in");
         stage.setScene(new Scene(root));
         stage.show();
         // Hide current window
         ((Node)(event.getSource())).getScene().getWindow().hide();
     }
-    
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {

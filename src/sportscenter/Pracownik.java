@@ -13,6 +13,9 @@ public class Pracownik extends SQLObject {
     public String imie;
     public String funkcja;
 
+    public Pracownik() {
+    }
+    
     public Pracownik(String pesel, String nazwisko, String imie, String funkcja) {
         this.pesel = pesel;
         this.nazwisko = nazwisko;
@@ -33,6 +36,11 @@ public class Pracownik extends SQLObject {
         this.nazwisko = rs.getString(2);
         this.imie = rs.getString(3);
         this.funkcja = rs.getString(4);
+    }
+    
+    @Override
+    public String getSth() {
+        return pesel;
     }
     
     public String getPesel() {

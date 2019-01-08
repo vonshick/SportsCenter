@@ -8,12 +8,12 @@ import java.sql.SQLException;
  * @author Piter
  */
 public class ObiektSportowy extends SQLObject {
-    public Integer idObiektu;
+    public String idObiektu;
     public String lokalizacja;
     public String nazwa;
     public String typObiektu;
 
-    public ObiektSportowy(int idObiektu, String lokalizacja, String nazwa, String typObiektu) {
+    public ObiektSportowy(String idObiektu, String lokalizacja, String nazwa, String typObiektu) {
         this.idObiektu = idObiektu;
         this.lokalizacja = lokalizacja;
         this.nazwa = nazwa;
@@ -21,7 +21,7 @@ public class ObiektSportowy extends SQLObject {
     }
     
     public ObiektSportowy(ResultSet rs) throws SQLException {
-        this.idObiektu = rs.getInt(1);
+        this.idObiektu = rs.getString(1);
         this.lokalizacja = rs.getString(2);
         this.nazwa = rs.getString(3);
         this.typObiektu = rs.getString(4);
@@ -29,13 +29,18 @@ public class ObiektSportowy extends SQLObject {
     
     @Override
     public void loadFromSql(ResultSet rs) throws SQLException {
-        this.idObiektu = rs.getInt(1);
+        this.idObiektu = rs.getString(1);
         this.lokalizacja = rs.getString(2);
         this.nazwa = rs.getString(3);
         this.typObiektu = rs.getString(4);
     }
+    
+    @Override
+    public String getSth() {
+        return nazwa;
+    }
 
-    public Integer getIdObiektu() {
+    public String getIdObiektu() {
         return idObiektu;
     }
 

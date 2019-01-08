@@ -8,7 +8,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import com.google.common.reflect.TypeToken;
+//import com.google.common.reflect.TypeToken;
 
 /**
  *
@@ -16,41 +16,42 @@ import com.google.common.reflect.TypeToken;
  */
 public class DBManager {
     private Connection connection;
+    private static Connection connections;
     private MainWindowController MainWindowController;
 
     public DBManager(Connection connection) {
         this.connection = connection;
+        connections = connection;
     }
     
-//    static abstract class ParameterizedClass<T> {
-//        final TypeToken<T> type = new TypeToken<T>(getClass()) {};
-//    }
-//    
-//    public <T extends SQLLoad> ObservableList<T> selectAll(Class<T> classType) throws InstantiationException, IllegalAccessException {
-//        ObservableList<T> queryResult = FXCollections.observableArrayList();
-//        try {
-//            Statement stmt = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
-//                    ResultSet.CONCUR_READ_ONLY);
-//            ResultSet rs = stmt.executeQuery("select * from pracownik");
-//            rs.beforeFirst();
-//            while (rs.next()) {
-//                System.out.println(rs.getString(1));
+
+    
+    public <T extends SQLObject> ObservableList<T> selectAllGeneric(Class<T> classType, T obj) throws InstantiationException, IllegalAccessException {
+        ObservableList<T> queryResult = FXCollections.observableArrayList();
+        try {
+            Statement stmt = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+                    ResultSet.CONCUR_READ_ONLY);
+            ResultSet rs = stmt.executeQuery("select * from pracownik");
+            rs.beforeFirst();
+            while (rs.next()) {
+                //System.out.println(rs.getString(1));
 //                final ParameterizedClass<T> pc = new ParameterizedClass<T>() {};
 //                final T obj = (T) pc.type.getRawType().newInstance();
-//                obj.loadFromSql(rs);
-//                queryResult.add(obj);
-//            }
-//            try {
-//                stmt.close();
-//                rs.close();
-//            } catch (SQLException ex) {
-//                Logger.getLogger(DBConnection.class.getName()).log(Level.SEVERE, null, ex);
-//            }
-//        } catch (SQLException ex) {
-//            System.out.println("Bład wykonania polecenia" + ex.toString());
-//        }
-//        return queryResult;
-//    }
+                obj.loadFromSql(rs);
+                System.out.println(obj.getSth());
+                queryResult.add(obj);
+            }
+            try {
+                stmt.close();
+                rs.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(DBConnection.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } catch (SQLException ex) {
+            System.out.println("Bład wykonania polecenia" + ex.toString());
+        }
+        return queryResult;
+    }
     
     public ObservableList<SQLObject> selectAll(String table) {
         ObservableList<SQLObject> sqlList = FXCollections.observableArrayList();
@@ -136,3 +137,39 @@ public class DBManager {
     }
     
 }
+//static abstract class ParameterizedClass<T> {
+//
+//    final Class<T> type;
+//
+//    public ParameterizedClass(Class<T> type) {
+//        this.type = type;
+//    }
+//
+//    public ObservableList<SQLObject> selectAllGenericClass() {
+//        ObservableList<T> queryResult = FXCollections.observableArrayList();
+//        try {
+//            Statement stmt = connections.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+//                    ResultSet.CONCUR_READ_ONLY);
+//            ResultSet rs = stmt.executeQuery("select * from pracownik");
+//            rs.beforeFirst();
+//            while (rs.next()) {
+//                //System.out.println(rs.getString(1));
+//                //                final ParameterizedClass<T> pc = new ParameterizedClass<T>() {};
+//                //                final T obj = (T) pc.type.getRawType().newInstance();
+//                type obj
+//                .loadFromSql(rs);
+//                System.out.println(obj.getSth());
+//                queryResult.add(obj);
+//            }
+//            try {
+//                stmt.close();
+//                rs.close();
+//            } catch (SQLException ex) {
+//                Logger.getLogger(DBConnection.class.getName()).log(Level.SEVERE, null, ex);
+//            }
+//        } catch (SQLException ex) {
+//            System.out.println("Bład wykonania polecenia" + ex.toString());
+//        }
+//        return queryResult;
+//    }
+//}

@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package sportscenter;
 
 import java.net.URL;
@@ -15,27 +10,21 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 
-/**
- * FXML Controller class
- *
- * @author Piter
- */
 public class MainWindowController implements Initializable {
     
     @FXML
     private TableView tableView;
 
-    /**
-     * Initializes the controller class.
-     */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         SportsCenter.manager.setMainWindowController(this);
-        //showPracownicy();
-        showObiektySportowe();
+        ObservableList<SQLObject> sqlList = SportsCenter.manager.selectAll("pracownik");
+        showPracownicy(sqlList);
+//        ObservableList<SQLObject> sqlList = SportsCenter.manager.selectAll("obiekt_sportowy");
+//        showObiektySportowe(sqlList);
     }
     
-    private void showPracownicy() {
+    private void showPracownicy(ObservableList<SQLObject> sqlList) {
         TableColumn<Pracownik, String> peselColumn = new TableColumn<>("pesel");
         peselColumn.setCellValueFactory(new PropertyValueFactory<>("pesel"));
         
@@ -48,24 +37,17 @@ public class MainWindowController implements Initializable {
         TableColumn<Pracownik, String> funkcjaColumn = new TableColumn<>("funkcja");
         funkcjaColumn.setCellValueFactory(new PropertyValueFactory<>("funkcja"));
         
-//        try {
-//            tableView.setItems(SportsCenter.manager.selectAll(Pracownik.class));
-//        } catch (InstantiationException ex) {
-//            Logger.getLogger(MainWindowController.class.getName()).log(Level.SEVERE, null, ex);
-//        } catch (IllegalAccessException ex) {
-//            Logger.getLogger(MainWindowController.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-        ObservableList<SQLObject> sqlList = SportsCenter.manager.selectAll("pracownik");
         ObservableList<Pracownik> pracownicy = FXCollections.observableArrayList();
         for (SQLObject sQLObject : sqlList) {
-            pracownicy.add((Pracownik)sQLObject);
+            pracownicy.add((Pracownik) sQLObject);
         }
+        tableView.getItems().clear();
         tableView.setItems(pracownicy);
-        tableView.getColumns().addAll(peselColumn, nazwiskoColumn, imieColumn, funkcjaColumn);
+        tableView.getColumns().addAll(peselColumn, nazwiskoColumn, imieColumn, funkcjaColumn);  
     }
     
-    private void showObiektySportowe() {
-        TableColumn<ObiektSportowy, Integer> idColumn = new TableColumn<>("idObiektu");
+    private void showObiektySportowe(ObservableList<SQLObject> sqlList) {
+        TableColumn<ObiektSportowy, String> idColumn = new TableColumn<>("idObiektu");
         idColumn.setCellValueFactory(new PropertyValueFactory<>("idObiektu"));
         
         TableColumn<ObiektSportowy, String> lokalizacjaColumn = new TableColumn<>("lokalizacja");
@@ -76,6 +58,14 @@ public class MainWindowController implements Initializable {
         
         TableColumn<ObiektSportowy, String> typObiektuColumn = new TableColumn<>("typObiektu");
         typObiektuColumn.setCellValueFactory(new PropertyValueFactory<>("typObiektu"));
+        
+        ObservableList<ObiektSportowy> obiekty = FXCollections.observableArrayList();
+        for (SQLObject sQLObject : sqlList) {
+            obiekty.add((ObiektSportowy) sQLObject);
+        }
+        tableView.getItems().clear();
+        tableView.setItems(obiekty);
+        tableView.getColumns().addAll(idColumn, lokalizacjaColumn, nazwaColumn, typObiektuColumn);
 
 //        try {
 //            tableView.setItems(SportsCenter.manager.selectAll(ObiektSportowy.class));
@@ -85,14 +75,6 @@ public class MainWindowController implements Initializable {
 //            Logger.getLogger(MainWindowController.class.getName()).log(Level.SEVERE, null, ex);
 //        }
 // //       tableView.setItems(SportsCenter.manager.selectAllObiektySportowe());
-        
-        ObservableList<SQLObject> sqlList = SportsCenter.manager.selectAll("obiekt_sportowy");
-        ObservableList<ObiektSportowy> obiekty = FXCollections.observableArrayList();
-        for (SQLObject sQLObject : sqlList) {
-            obiekty.add((ObiektSportowy) sQLObject);
-        }
-        tableView.setItems(obiekty);
-        tableView.getColumns().addAll(idColumn, lokalizacjaColumn, nazwaColumn, typObiektuColumn);
     }
     
 }

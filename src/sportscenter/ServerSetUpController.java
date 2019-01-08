@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package sportscenter;
 
 import java.io.IOException;
@@ -35,7 +30,7 @@ public class ServerSetUpController implements Initializable {
     private Button button;
     @FXML
     private void handleButtonAction(ActionEvent event) throws IOException {
-        SportsCenter.dbManager = new DBConnection(address.getText(), port.getText(), sid.getText());        
+        SportsCenter.connection = new DBConnection(address.getText(), port.getText(), sid.getText());        
         openUserLogInWindow(event);
     }
     private void openUserLogInWindow(ActionEvent event) throws IOException{
@@ -44,7 +39,6 @@ public class ServerSetUpController implements Initializable {
         stage.setTitle("Log in");
         stage.setScene(new Scene(root));
         stage.show();
-        // Hide current window
         ((Node)(event.getSource())).getScene().getWindow().hide();
     }
     

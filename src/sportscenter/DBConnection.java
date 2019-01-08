@@ -7,7 +7,8 @@ import java.sql.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class DBConnection extends Thread {
+public class DBConnection {
+    private Connection conn;
     private String address;
     private String port;
     private String sid;
@@ -25,14 +26,13 @@ public class DBConnection extends Thread {
        this.password = password;
     }
     
-    public void run(){
-        Connection conn = null;
+    public Connection connect(){
         Properties connectionProps = new Properties();
         connectionProps.put("user", username);
         connectionProps.put("password", password);
         try {
             conn = DriverManager.getConnection(
-                    "jdbc:oracle:thin:@//"+address+":"+port+"/"+sid,
+                    "jdbc:oracle:thin:@"+address+":"+port+":"+sid,
                     connectionProps);
             System.out.println("Połączono z bazą danych");
         } catch (SQLException ex) {
@@ -40,30 +40,22 @@ public class DBConnection extends Thread {
                     "nie udało się połączyć z bazą danych", ex);
             System.exit(-1);
         }
-  
-        Statement stmt = null;
-        ResultSet rs = null;
-        
+        return conn;
+    }
+    
+    public void disconnect() {
         try {
-            stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
-                    ResultSet.CONCUR_READ_ONLY);
-            rs = stmt.executeQuery("SELECT imie, nazwisko, funkcja FROM pracownik");
-            rs.afterLast();
-            while (rs.previous()) {
-                System.out.println(rs.getString(1) + " " + rs.getString(2) + " pracuje jako " + rs.getString(3));
-            }
-        } catch (SQLException ex) {
-            System.out.println("Bład wykonania polecenia" + ex.toString());
-        }
-        
-        try {
-            stmt.close();
-            rs.close();
             conn.close();
+            System.out.println("Disconnected.");
         } catch (SQLException ex) {
             Logger.getLogger(DBConnection.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+    }
+
+    public Connection getConn() {
+        return conn;
+    }
+}           
 //        try {
 //            stmt = conn.createStatement();
 //            rs = stmt.executeQuery("select count(*) FROM pracownicy");
@@ -184,5 +176,5 @@ public class DBConnection extends Thread {
 //            Logger.getLogger(Lab_JDBC.class.getName()).log(Level.SEVERE, null, ex);
 //        }
 //        System.out.println("Rozłączono z bazą danych");
-    }
-}
+//    }
+//}

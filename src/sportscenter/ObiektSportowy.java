@@ -7,7 +7,7 @@ import java.sql.SQLException;
  *
  * @author Piter
  */
-public class ObiektSportowy implements SQLLoad {
+public class ObiektSportowy extends SQLObject {
     public Integer idObiektu;
     public String lokalizacja;
     public String nazwa;

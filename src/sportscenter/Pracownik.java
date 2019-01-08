@@ -7,7 +7,7 @@ import java.sql.SQLException;
  *
  * @author Piter
  */
-public class Pracownik implements SQLLoad {
+public class Pracownik extends SQLObject {
     public String pesel;
     public String nazwisko;
     public String imie;

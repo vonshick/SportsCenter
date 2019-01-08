@@ -7,8 +7,8 @@ package sportscenter;
 
 import java.net.URL;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
@@ -31,8 +31,8 @@ public class MainWindowController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         SportsCenter.manager.setMainWindowController(this);
-        showPracownicy();
-        //showObiektySportowe();
+        //showPracownicy();
+        showObiektySportowe();
     }
     
     private void showPracownicy() {
@@ -55,7 +55,12 @@ public class MainWindowController implements Initializable {
 //        } catch (IllegalAccessException ex) {
 //            Logger.getLogger(MainWindowController.class.getName()).log(Level.SEVERE, null, ex);
 //        }
-        tableView.setItems(SportsCenter.manager.selectAllPracownicy());
+        ObservableList<SQLObject> sqlList = SportsCenter.manager.selectAll("pracownik");
+        ObservableList<Pracownik> pracownicy = FXCollections.observableArrayList();
+        for (SQLObject sQLObject : sqlList) {
+            pracownicy.add((Pracownik)sQLObject);
+        }
+        tableView.setItems(pracownicy);
         tableView.getColumns().addAll(peselColumn, nazwiskoColumn, imieColumn, funkcjaColumn);
     }
     
@@ -79,7 +84,14 @@ public class MainWindowController implements Initializable {
 //        } catch (IllegalAccessException ex) {
 //            Logger.getLogger(MainWindowController.class.getName()).log(Level.SEVERE, null, ex);
 //        }
-        tableView.setItems(SportsCenter.manager.selectAllObiektySportowe());
+// //       tableView.setItems(SportsCenter.manager.selectAllObiektySportowe());
+        
+        ObservableList<SQLObject> sqlList = SportsCenter.manager.selectAll("obiekt_sportowy");
+        ObservableList<ObiektSportowy> obiekty = FXCollections.observableArrayList();
+        for (SQLObject sQLObject : sqlList) {
+            obiekty.add((ObiektSportowy) sQLObject);
+        }
+        tableView.setItems(obiekty);
         tableView.getColumns().addAll(idColumn, lokalizacjaColumn, nazwaColumn, typObiektuColumn);
     }
     

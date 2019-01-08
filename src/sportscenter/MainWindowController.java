@@ -1,20 +1,40 @@
 package sportscenter;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
 
 public class MainWindowController implements Initializable {
     
     @FXML
     private TableView tableView;
 
+    @FXML
+    public void handleButtonAction(ActionEvent event) throws IOException{
+        openNewEmployeeWindow(event);
+    }
+    
+    private void openNewEmployeeWindow(javafx.event.ActionEvent event) throws IOException{
+        Parent root = FXMLLoader.load(getClass().getResource("AddPracownik.fxml"));
+        Stage stage = new Stage();
+        stage.setTitle("Add new employee");
+        stage.setScene(new Scene(root));
+        stage.show();
+    }
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         SportsCenter.manager.setMainWindowController(this);

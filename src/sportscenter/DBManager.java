@@ -23,8 +23,10 @@ public class DBManager {
         this.connection = connection;
         connections = connection;
     }
-    
 
+    public Connection getConnection() {
+        return connection;
+    }
     
     public <T extends SQLObject> ObservableList<T> selectAllGeneric(Class<T> classType, T obj) throws InstantiationException, IllegalAccessException {
         ObservableList<T> queryResult = FXCollections.observableArrayList();

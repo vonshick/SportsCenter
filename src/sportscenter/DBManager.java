@@ -49,7 +49,7 @@ public class DBManager {
                 break;
             }
             case "Pracownicy": {
-                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/TablePracownicyWindow.fxml"));
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/TablePracownikWindow.fxml"));
                 Parent root = (Parent) fxmlLoader.load();
                 TablePracownikWindowController controller = fxmlLoader.<TablePracownikWindowController>getController();
                 controller.setDbManager(SportsCenter.manager);

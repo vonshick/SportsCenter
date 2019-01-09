@@ -77,9 +77,9 @@ public class TableObiektSportowyWindowController implements Initializable {
     
     @FXML
     private void openNewObiektSportowyWindow() throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("/view/AddPracownik.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/view/AddObiektSportowy.fxml"));
         Stage stage = new Stage();
-        stage.setTitle("Add new employee");
+        stage.setTitle("Add new sport facility");
         stage.setScene(new Scene(root));
         stage.showAndWait();
         showObiektySportowe();

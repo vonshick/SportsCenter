@@ -12,6 +12,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
@@ -23,6 +24,8 @@ public class UserLogInController implements Initializable {
     private TextField username;
     @FXML
     private PasswordField password;
+    @FXML
+    private Button button;
     @FXML
     private void handleButtonAction(ActionEvent event) throws IOException{
         SportsCenter.connection.authenticateUser(username.getText(), password.getText());
@@ -44,7 +47,6 @@ public class UserLogInController implements Initializable {
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
     }    
     
 }

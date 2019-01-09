@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="170.0" prefWidth="446.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AddTrenerController">
+   <children>
+      <TextField fx:id="sport" layoutX="53.0" layoutY="73.0" prefHeight="25.0" prefWidth="335.0" text="squash" />
+      <Label layoutX="51.0" layoutY="38.0" prefHeight="15.0" prefWidth="344.0" text="Dyscyplina sportowa, której dodany trener naucza:" />
+      <Button fx:id="button" layoutX="193.0" layoutY="119.0" mnemonicParsing="false" onAction="#handleButtonAction" text="Dodaj" />
+      <Accordion />
+   </children>
+</AnchorPane>

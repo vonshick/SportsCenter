@@ -68,7 +68,9 @@ public class TablePracownikWindowController implements Initializable {
 
     @FXML
     private void openNewPracownikWindow() throws IOException{
-        Parent root = FXMLLoader.load(getClass().getResource("/view/AddPracownik.fxml"));
+//        Parent root = FXMLLoader.load(getClass().getResource("/view/AddPracownik.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/view/AddSala.fxml")); //temporary test
+
         Stage stage = new Stage();
         stage.setTitle("Add new employee");
         stage.setScene(new Scene(root));

@@ -1,5 +1,6 @@
 package sportscenter;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -8,6 +9,12 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.input.MouseEvent;
+import javafx.stage.Stage;
 //import com.google.common.reflect.TypeToken;
 
 /**
@@ -16,16 +23,44 @@ import javafx.collections.ObservableList;
  */
 public class DBManager {
     private Connection connection;
+    private Stage primaryStage;
     private static Connection connections;
-    private MainWindowController MainWindowController;
+//    private TablePracownikWindowController MainWindowController;
 
     public DBManager(Connection connection) {
         this.connection = connection;
         connections = connection;
     }
-
-    public Connection getConnection() {
-        return connection;
+    
+    public void changeScene(MouseEvent event) throws IOException {
+        Button btn = (Button) event.getSource();
+        String btnId = btn.getId();
+        switch (btnId) {
+            case "ObiektySportowe": {
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("TableObiektSportowyWindow.fxml"));
+                Parent root = (Parent) fxmlLoader.load();
+                TableObiektSportowyWindowController controller = fxmlLoader.<TableObiektSportowyWindowController>getController();
+                controller.setDbManager(SportsCenter.manager);
+                primaryStage.setTitle("Tabela Obiekty Sportowe");
+                primaryStage.setScene(new Scene(root));
+                primaryStage.show();
+                break;
+            }
+            case "Pracownicy": {
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("TablePracownicyWindow.fxml"));
+                Parent root = (Parent) fxmlLoader.load();
+                TablePracownikWindowController controller = fxmlLoader.<TablePracownikWindowController>getController();
+                controller.setDbManager(SportsCenter.manager);
+                primaryStage.setTitle("Tabela Pracownicy");
+                primaryStage.setScene(new Scene(root));
+                primaryStage.show();
+                break;
+            }
+            default: {
+                System.out.println("Bad ID");
+                break;
+            }
+        }
     }
     
     public <T extends SQLObject> ObservableList<T> selectAllGeneric(Class<T> classType, T obj) throws InstantiationException, IllegalAccessException {
@@ -89,6 +124,18 @@ public class DBManager {
         return sqlList;
     }
     
+    public Connection getConnection() {
+        return connection;
+    }
+    
+    public Stage getPrimaryStage() {
+        return primaryStage;
+    }
+
+    public void setPrimaryStage(Stage primaryStage) {
+        this.primaryStage = primaryStage;
+    }
+}
 //    public ObservableList<Pracownik> selectAllPracownicy() {
 //        ObservableList<Pracownik> pracownicy = FXCollections.observableArrayList();
 //        try {
@@ -134,11 +181,10 @@ public class DBManager {
 //        return obiekty;
 //    }
     
-    public void setMainWindowController(MainWindowController MainWindowController) {
-        this.MainWindowController = MainWindowController;
-    }
+//    public void setMainWindowController(TablePracownikWindowController MainWindowController) {
+//        this.MainWindowController = MainWindowController;
+//    }
     
-}
 //static abstract class ParameterizedClass<T> {
 //
 //    final Class<T> type;

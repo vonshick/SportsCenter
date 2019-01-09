@@ -25,9 +25,16 @@ public class UserLogInController implements Initializable {
         SportsCenter.connection.authenticateUser(username.getText(), password.getText());
         SportsCenter.manager = new DBManager(SportsCenter.connection.connect());
         ((Node)(event.getSource())).getScene().getWindow().hide();
-        Parent root = FXMLLoader.load(getClass().getResource("MainWindow.fxml"));
+        
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("TablePracownikWindow.fxml"));
+        Parent root = (Parent) fxmlLoader.load();
+        TablePracownikWindowController controller = fxmlLoader.<TablePracownikWindowController>getController();
+        controller.setDbManager(SportsCenter.manager);
+        
+//        Parent root = FXMLLoader.load(getClass().getResource("TablePracownikWindow.fxml"));
         Stage stage = new Stage();
-        stage.setTitle("DBMS");
+        SportsCenter.manager.setPrimaryStage(stage);
+        stage.setTitle("Tabela Pracownicy");
         stage.setScene(new Scene(root));
         stage.show();
     }

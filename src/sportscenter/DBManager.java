@@ -1,5 +1,7 @@
 package sportscenter;
 
+import controller.TablePracownikWindowController;
+import controller.TableObiektSportowyWindowController;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -37,7 +39,7 @@ public class DBManager {
         String btnId = btn.getId();
         switch (btnId) {
             case "ObiektySportowe": {
-                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("TableObiektSportowyWindow.fxml"));
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/TableObiektSportowyWindow.fxml"));
                 Parent root = (Parent) fxmlLoader.load();
                 TableObiektSportowyWindowController controller = fxmlLoader.<TableObiektSportowyWindowController>getController();
                 controller.setDbManager(SportsCenter.manager);
@@ -47,7 +49,7 @@ public class DBManager {
                 break;
             }
             case "Pracownicy": {
-                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("TablePracownicyWindow.fxml"));
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/TablePracownicyWindow.fxml"));
                 Parent root = (Parent) fxmlLoader.load();
                 TablePracownikWindowController controller = fxmlLoader.<TablePracownikWindowController>getController();
                 controller.setDbManager(SportsCenter.manager);

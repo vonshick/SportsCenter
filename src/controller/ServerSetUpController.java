@@ -1,4 +1,4 @@
-package sportscenter;
+package controller;
 
 import java.io.IOException;
 import java.net.URL;
@@ -13,6 +13,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import sportscenter.DBConnection;
+import sportscenter.SportsCenter;
 
 /**
  *
@@ -34,7 +36,7 @@ public class ServerSetUpController implements Initializable {
         openUserLogInWindow(event);
     }
     private void openUserLogInWindow(ActionEvent event) throws IOException{
-        Parent root = FXMLLoader.load(getClass().getResource("UserLogIn.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/view/UserLogIn.fxml"));
         Stage stage = new Stage();
         stage.setTitle("Log in");
         stage.setScene(new Scene(root));

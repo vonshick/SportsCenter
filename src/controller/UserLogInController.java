@@ -1,4 +1,6 @@
-package sportscenter;
+package controller;
+
+
 
 import java.io.IOException;
 import java.net.URL;
@@ -13,7 +15,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-
+import sportscenter.DBManager;
+import sportscenter.SportsCenter;
 
 public class UserLogInController implements Initializable {
     @FXML
@@ -26,7 +29,7 @@ public class UserLogInController implements Initializable {
         SportsCenter.manager = new DBManager(SportsCenter.connection.connect());
         ((Node)(event.getSource())).getScene().getWindow().hide();
         
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("TablePracownikWindow.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/TablePracownikWindow.fxml"));
         Parent root = (Parent) fxmlLoader.load();
         TablePracownikWindowController controller = fxmlLoader.<TablePracownikWindowController>getController();
         controller.setDbManager(SportsCenter.manager);

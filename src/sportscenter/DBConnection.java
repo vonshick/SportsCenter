@@ -15,7 +15,7 @@ public class DBConnection {
     private String username;
     private String password;
     
-    DBConnection(String address, String port, String sid){
+    public DBConnection(String address, String port, String sid){
         this.address = address;
         this.port = port;
         this.sid = sid;

@@ -1,4 +1,4 @@
-package sportscenter;
+package controller;
 
 import java.io.IOException;
 import java.net.URL;
@@ -18,6 +18,10 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import sportscenter.DBManager;
+import sportscenter.ObiektSportowy;
+import sportscenter.SQLObject;
+import sportscenter.SportsCenter;
 
 public class TableObiektSportowyWindowController implements Initializable {
     
@@ -73,7 +77,7 @@ public class TableObiektSportowyWindowController implements Initializable {
     
     @FXML
     private void openNewObiektSportowyWindow() throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("AddPracownik.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/view/AddPracownik.fxml"));
         Stage stage = new Stage();
         stage.setTitle("Add new employee");
         stage.setScene(new Scene(root));

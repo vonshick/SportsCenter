@@ -6,7 +6,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="231.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sportscenter.ServerSetUpController">
+<AnchorPane id="AnchorPane" prefHeight="231.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ServerSetUpController">
     <children>
         <Button fx:id="button" layoutX="166.0" layoutY="175.0" onAction="#handleButtonAction" prefHeight="25.0" prefWidth="69.0" text="OK" />
         <Label fx:id="label" layoutX="126" layoutY="120" minHeight="16" minWidth="69" />

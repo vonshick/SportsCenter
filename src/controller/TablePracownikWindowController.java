@@ -45,19 +45,28 @@ public class TablePracownikWindowController implements Initializable {
 
         tableView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         
-        TableColumn<Pracownik, String> peselColumn = new TableColumn<>("pesel");
-        peselColumn.setCellValueFactory(new PropertyValueFactory<>("pesel"));
+//        PESEL;
+//    public String surname;
+//    public String name;
+//    public String profession;
+//    public Integer salary;
+        
+        TableColumn<Pracownik, String> peselColumn = new TableColumn<>("PESEL");
+        peselColumn.setCellValueFactory(new PropertyValueFactory<>("PESEL"));
 
-        TableColumn<Pracownik, String> nazwiskoColumn = new TableColumn<>("nazwisko");
-        nazwiskoColumn.setCellValueFactory(new PropertyValueFactory<>("nazwisko"));
+        TableColumn<Pracownik, String> surnameColumn = new TableColumn<>("surname");
+        surnameColumn.setCellValueFactory(new PropertyValueFactory<>("surname"));
 
-        TableColumn<Pracownik, String> imieColumn = new TableColumn<>("imie");
-        imieColumn.setCellValueFactory(new PropertyValueFactory<>("imie"));
+        TableColumn<Pracownik, String> nameColumn = new TableColumn<>("name");
+        nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
 
-        TableColumn<Pracownik, String> funkcjaColumn = new TableColumn<>("funkcja");
-        funkcjaColumn.setCellValueFactory(new PropertyValueFactory<>("funkcja"));
-        tableView.getColumns().addAll(peselColumn, nazwiskoColumn, imieColumn, funkcjaColumn);
-
+        TableColumn<Pracownik, String> professionColumn = new TableColumn<>("profession");
+        professionColumn.setCellValueFactory(new PropertyValueFactory<>("profession"));
+        
+        TableColumn<Pracownik, Float> salaryColumn = new TableColumn<>("salary");
+        salaryColumn.setCellValueFactory(new PropertyValueFactory<>("salary"));
+        
+        tableView.getColumns().addAll(peselColumn, surnameColumn, nameColumn, professionColumn, salaryColumn);
         showPracownicy();
     }
     
@@ -68,8 +77,8 @@ public class TablePracownikWindowController implements Initializable {
 
     @FXML
     private void openNewPracownikWindow() throws IOException{
-//        Parent root = FXMLLoader.load(getClass().getResource("/view/AddPracownik.fxml"));
-        Parent root = FXMLLoader.load(getClass().getResource("/view/AddSala.fxml")); //temporary test
+        Parent root = FXMLLoader.load(getClass().getResource("/view/AddPracownik.fxml"));
+//        Parent root = FXMLLoader.load(getClass().getResource("/view/AddSala.fxml")); //temporary test
 
         Stage stage = new Stage();
         stage.setTitle("Add new employee");
@@ -79,19 +88,26 @@ public class TablePracownikWindowController implements Initializable {
     }
     
     @FXML
-    private void selectRowPracownik(MouseEvent event) {
+    private void selectRowPracownik(MouseEvent event) throws IOException {
         if(event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) {
             Pracownik pracownik = (Pracownik) tableView.getSelectionModel().getSelectedItem();
-            tableView.getSelectionModel().clearSelection();
             if(pracownik != null) {
-                System.out.println("Wybrano " + pracownik.getPesel());
+                System.out.println("Wybrano " + pracownik.getPESEL());
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/EditPracownik.fxml"));
+                Parent root = (Parent) fxmlLoader.load();
+                EditPracownikController controller = fxmlLoader.<EditPracownikController>getController();
+                controller.setPracownik(pracownik);
+                controller.setDbManager(dbManager);
+                Stage stage = new Stage();
+                stage.setTitle("Edytuj Pracownika");
+                stage.setScene(new Scene(root));
+                stage.showAndWait();
+                showPracownicy();
             }
         }
     }
     
     private void showPracownicy() {
-
-        
         ObservableList<SQLObject> sqlList = SportsCenter.manager.selectAll("pracownik");
         ObservableList<Pracownik> pracownicy = FXCollections.observableArrayList();
         for (SQLObject sQLObject : sqlList) {

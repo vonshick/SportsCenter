@@ -3,10 +3,6 @@ package sportscenter;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-/**
- *
- * @author Piter
- */
 public class ObiektSportowy extends SQLObject {
     public String idObiektu;
     public String lokalizacja;

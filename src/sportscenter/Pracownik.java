@@ -8,55 +8,63 @@ import java.sql.SQLException;
  * @author Piter
  */
 public class Pracownik extends SQLObject {
-    public String pesel;
-    public String nazwisko;
-    public String imie;
-    public String funkcja;
+    public String PESEL;
+    public String surname;
+    public String name;
+    public String profession;
+    public Float salary;
 
     public Pracownik() {
     }
     
-    public Pracownik(String pesel, String nazwisko, String imie, String funkcja) {
-        this.pesel = pesel;
-        this.nazwisko = nazwisko;
-        this.imie = imie;
-        this.funkcja = funkcja;
+    public Pracownik(String PESEL, String surname, String name, String profession, Float salary) {
+        this.PESEL = PESEL;
+        this.surname = surname;
+        this.name = name;
+        this.profession = profession;
+        this.salary = salary;
     }
     
     public Pracownik(ResultSet rs) throws SQLException {
-        this.pesel = rs.getString(1);
-        this.nazwisko = rs.getString(2);
-        this.imie = rs.getString(3);
-        this.funkcja = rs.getString(4);
+        this.PESEL = rs.getString(1);
+        this.surname = rs.getString(2);
+        this.name = rs.getString(3);
+        this.profession = rs.getString(4);
+        this.salary = rs.getFloat(5);
     }
 
     @Override
     public void loadFromSql(ResultSet rs) throws SQLException {
-        this.pesel = rs.getString(1);
-        this.nazwisko = rs.getString(2);
-        this.imie = rs.getString(3);
-        this.funkcja = rs.getString(4);
+        this.PESEL = rs.getString(1);
+        this.surname = rs.getString(2);
+        this.name = rs.getString(3);
+        this.profession = rs.getString(4);
+        this.salary = rs.getFloat(5);
     }
     
     @Override
     public String getSth() {
-        return pesel;
+        return PESEL;
     }
     
-    public String getPesel() {
-        return pesel;
+    public String getPESEL() {
+        return PESEL;
     }
 
-    public String getNazwisko() {
-        return nazwisko;
+    public String getSurname() {
+        return surname;
     }
 
-    public String getImie() {
-        return imie;
+    public String getName() {
+        return name;
     }
 
-    public String getFunkcja() {
-        return funkcja;
+    public String getProfession() {
+        return profession;
+    }
+
+    public Float getSalary() {
+        return salary;
     }
     
 }

@@ -23,10 +23,6 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import sportscenter.SportsCenter;
 
-/**
- *
- * @author kuba
- */
 public class AddPracownikController implements Initializable {
     
     @FXML
@@ -73,7 +69,7 @@ public class AddPracownikController implements Initializable {
         alert.showAndWait();
     }
     
-    private void insertIntoDB(String name, String surname, String PESEL, String profession, String salary, ActionEvent event) throws SQLException, IOException{
+    private void insertIntoDB(String name, String surname, String PESEL, String profession, String salary, ActionEvent event) throws IOException {
         try{
             PreparedStatement pstmt = SportsCenter.manager.getConnection().prepareStatement("INSERT INTO pracownik VALUES(?, ?, ?, ?, ?)");
             SportsCenter.manager.getConnection().setAutoCommit(false); // if coach adding fails we have to rollback
@@ -89,7 +85,6 @@ public class AddPracownikController implements Initializable {
             }
         }catch(SQLException e ){
             System.out.println("Employee inserting error");
-            e.printStackTrace();
         }
     }
     

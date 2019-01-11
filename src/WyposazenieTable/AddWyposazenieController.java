@@ -1,9 +1,7 @@
 package WyposazenieTable;
 
-import SalaTable.*;
 import java.io.IOException;
 import java.net.URL;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -16,10 +14,13 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import GUI.AlertBox;
+import static com.sun.org.apache.xalan.internal.xsltc.compiler.util.Type.String;
+import java.util.List;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import sportscenter.DBManager;
 import sportscenter.SportsCenter;
 import sportscenter.ValidateData;
@@ -74,9 +75,37 @@ public class AddWyposazenieController implements Initializable {
             }
             building.setItems(FXCollections.observableArrayList(choices));
         } catch (SQLException ex) {
-            System.out.println("Bład wykonania polecenia" + ex.toString());
+            System.out.println("Error while filling buildings list" + ex.toString());
         }    
+        addChangeListener();
     }    
+    
+    private void addChangeListener(){
+        building.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue, Number index1, Number index2) {
+                System.out.println(building.getItems().get((Integer) index2));
+                fillHallChoiceBox((String) building.getItems().get((Integer) index2));
+            }
+        }); 
+    }
+    
+    private void fillHallChoiceBox(String buildingName){
+        try {
+            Statement stmt = SportsCenter.connection.getConn().createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT nr_sali FROM sala "
+                    + "WHERE obiekt_sportowy_id_obiektu = "
+                    + "(SELECT id_obiektu FROM obiekt_sportowy WHERE nazwa = "+buildingName+")");
+//            List<String> hallIds = new ArrayList<String>();
+            ArrayList<String> choices = new ArrayList<String>();
+            while (rs.next()) {
+                 choices.add(rs.getString(1));
+            }
+            hall.setItems(FXCollections.observableArrayList(choices));
+        } catch (SQLException ex) {
+            System.out.println("Bład wykonania polecenia" + ex.toString());
+        }
+    }
     
     private int getBuildingId(){
         return buildings.get((String) building.getSelectionModel().getSelectedItem());

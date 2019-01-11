@@ -1,7 +1,14 @@
 package sportscenter;
 
-import controller.TablePracownikWindowController;
-import controller.TableObiektSportowyWindowController;
+import ObiektSportowyTable.DBManagerObiektSportowy;
+import ObiektSportowyTable.ObiektSportowy;
+import PracownikTable.Pracownik;
+import PracownikTable.TablePracownikWindowController;
+import ObiektSportowyTable.TableObiektSportowyWindowController;
+import PracownikTable.DBManagerPracownik;
+import TrenerTable.DBManagerTrener;
+import TrenerTable.TableTrenerWindowController;
+import TrenerTable.Trener;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -17,82 +24,63 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
-//import com.google.common.reflect.TypeToken;
 
-/**
- *
- * @author Piter
- */
 public class DBManager {
     private Connection connection;
     private Stage primaryStage;
-    private static Connection connections;
+    private DBManagerPracownik dBManagerPracownik;
+    private DBManagerTrener dBManagerTrener;
+    private DBManagerObiektSportowy dbManagerObiektSportowy;
+
+    
 //    private TablePracownikWindowController MainWindowController;
 
     public DBManager(Connection connection) {
         this.connection = connection;
-        connections = connection;
+        this.dBManagerPracownik = new DBManagerPracownik(this);
+        this.dBManagerTrener = new DBManagerTrener(this);
+        this.dbManagerObiektSportowy = new DBManagerObiektSportowy(this);
     }
     
-    public void changeScene(MouseEvent event) throws IOException {
-        Button btn = (Button) event.getSource();
-        String btnId = btn.getId();
-        switch (btnId) {
-            case "ObiektySportowe": {
-                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/TableObiektSportowyWindow.fxml"));
-                Parent root = (Parent) fxmlLoader.load();
+    public void changeScene(String table) throws IOException {
+        Parent root;
+        switch (table) {
+            case "obiekty sportowe": {
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/ObiektSportowyTable/TableObiektSportowyWindow.fxml"));
+                root = (Parent) fxmlLoader.load();
                 TableObiektSportowyWindowController controller = fxmlLoader.<TableObiektSportowyWindowController>getController();
-                controller.setDbManager(SportsCenter.manager);
-                primaryStage.setTitle("Tabela Obiekty Sportowe");
-                primaryStage.setScene(new Scene(root));
-                primaryStage.show();
+                primaryStage.setTitle("Tabela Obiekt Sportowy");
                 break;
             }
-            case "Pracownicy": {
-                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/TablePracownikWindow.fxml"));
-                Parent root = (Parent) fxmlLoader.load();
+            case "pracownicy": {
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/PracownikTable/TablePracownikWindow.fxml"));
+                root = (Parent) fxmlLoader.load();
                 TablePracownikWindowController controller = fxmlLoader.<TablePracownikWindowController>getController();
-                controller.setDbManager(SportsCenter.manager);
-                primaryStage.setTitle("Tabela Pracownicy");
-                primaryStage.setScene(new Scene(root));
-                primaryStage.show();
+                primaryStage.setTitle("Tabela Pracownik");
+                break;
+            }
+            case "trenerzy": {
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/TrenerTable/TableTrenerWindow.fxml"));
+                root = (Parent) fxmlLoader.load();
+                TableTrenerWindowController controller = fxmlLoader.<TableTrenerWindowController>getController();
+                primaryStage.setTitle("Tabela Trener");
                 break;
             }
             default: {
-                System.out.println("Bad ID");
-                break;
+                System.out.println("Bad ID, not changing view.");
+                return;
             }
         }
+        primaryStage.setScene(new Scene(root));
+        primaryStage.show();
     }
     
-    public <T extends SQLObject> ObservableList<T> selectAllGeneric(Class<T> classType, T obj) throws InstantiationException, IllegalAccessException {
-        ObservableList<T> queryResult = FXCollections.observableArrayList();
-        try {
-            Statement stmt = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
-                    ResultSet.CONCUR_READ_ONLY);
-            ResultSet rs = stmt.executeQuery("select * from pracownik");
-            rs.beforeFirst();
-            while (rs.next()) {
-                //System.out.println(rs.getString(1));
-//                final ParameterizedClass<T> pc = new ParameterizedClass<T>() {};
-//                final T obj = (T) pc.type.getRawType().newInstance();
-                obj.loadFromSql(rs);
-                System.out.println(obj.getSth());
-                queryResult.add(obj);
-            }
-            try {
-                stmt.close();
-                rs.close();
-            } catch (SQLException ex) {
-                Logger.getLogger(DBConnection.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        } catch (SQLException ex) {
-            System.out.println("Bład wykonania polecenia" + ex.toString());
-        }
-        return queryResult;
-    }
-    
-    public ObservableList<SQLObject> selectAll(String table) {
+    /**
+     * Returns all data from spcified table
+     * @param table name of table
+     * @return all data in table as ObservableList of SQLObject
+     */
+    public ObservableList<SQLObject> selectFromTable(String table) {
         ObservableList<SQLObject> sqlList = FXCollections.observableArrayList();
         try {
             Statement stmt = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
@@ -100,15 +88,29 @@ public class DBManager {
             ResultSet rs = stmt.executeQuery("select * from " + table);
             rs.beforeFirst();
             while (rs.next()) {
-                System.out.println(rs.getString(1));
                 switch (table) {
                     case "pracownik":
-                        Pracownik pracownik = new Pracownik(rs);
-                        sqlList.add(pracownik);
+                        sqlList.add(new Pracownik(rs));
                         break;
                     case "obiekt_sportowy":
-                        ObiektSportowy obiekt = new ObiektSportowy(rs);
-                        sqlList.add(obiekt);
+                        sqlList.add(new ObiektSportowy(rs));
+                        break;
+                    case "trener":
+                        sqlList.add(new Trener(rs));
+                        break;
+                    case "karnet":
+                        break;
+                    case "klient":
+                        break;
+                    case "sala":
+                        break;
+                    case "uczestnik":
+                        break;
+                    case "wyposazenie":
+                        break;
+                    case "zajecia":
+                        break;
+                    case "zawody":
                         break;
                     default:
                         throw new AssertionError();
@@ -137,7 +139,49 @@ public class DBManager {
     public void setPrimaryStage(Stage primaryStage) {
         this.primaryStage = primaryStage;
     }
+
+    public DBManagerPracownik getdBManagerPracownik() {
+        return dBManagerPracownik;
+    }
+
+    public DBManagerTrener getdBManagerTrener() {
+        return dBManagerTrener;
+    }
+
+    public DBManagerObiektSportowy getDbManagerObiektSportowy() {
+        return dbManagerObiektSportowy;
+    }
+    
 }
+//public <T extends SQLObject> ObservableList<T> selectAllGeneric(Class<T> classType, T obj) throws InstantiationException, IllegalAccessException {
+//        ObservableList<T> queryResult = FXCollections.observableArrayList();
+//        try {
+//            Statement stmt = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+//                    ResultSet.CONCUR_READ_ONLY);
+//            ResultSet rs = stmt.executeQuery("select * from pracownik");
+//            rs.beforeFirst();
+//            while (rs.next()) {
+//                //System.out.println(rs.getString(1));
+////                final ParameterizedClass<T> pc = new ParameterizedClass<T>() {};
+////                final T obj = (T) pc.type.getRawType().newInstance();
+//                obj.loadFromSql(rs);
+//                System.out.println(obj.getSth());
+//                queryResult.add(obj);
+//            }
+//            try {
+//                stmt.close();
+//                rs.close();
+//            
+//
+//} catch (SQLException ex) {
+//                Logger.getLogger(DBConnection.class
+//.getName()).log(Level.SEVERE, null, ex);
+//            }
+//        } catch (SQLException ex) {
+//            System.out.println("Bład wykonania polecenia" + ex.toString());
+//        }
+//        return queryResult;
+//    }
 //    public ObservableList<Pracownik> selectAllPracownicy() {
 //        ObservableList<Pracownik> pracownicy = FXCollections.observableArrayList();
 //        try {

@@ -1,7 +1,9 @@
 package sportscenter;
 
-import controller.TablePracownikWindowController;
-import controller.TableObiektSportowyWindowController;
+import ObiektSportowyTable.ObiektSportowy;
+import PracownikTable.Pracownik;
+import PracownikTable.TablePracownikWindowController;
+import ObiektSportowyTable.TableObiektSportowyWindowController;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;

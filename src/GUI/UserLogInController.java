@@ -1,7 +1,8 @@
-package controller;
+package GUI;
 
 
 
+import PracownikTable.TablePracownikWindowController;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -29,17 +30,15 @@ public class UserLogInController implements Initializable {
     @FXML
     private void handleButtonAction(ActionEvent event) throws IOException{
         SportsCenter.connection.authenticateUser(username.getText(), password.getText());
-        SportsCenter.manager = new DBManager(SportsCenter.connection.connect());
+        SportsCenter.dBManager = new DBManager(SportsCenter.connection.connect());
         ((Node)(event.getSource())).getScene().getWindow().hide();
         
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/TablePracownikWindow.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/PracownikTable/TablePracownikWindow.fxml"));
         Parent root = (Parent) fxmlLoader.load();
         TablePracownikWindowController controller = fxmlLoader.<TablePracownikWindowController>getController();
-        controller.setDbManager(SportsCenter.manager);
         
-//        Parent root = FXMLLoader.load(getClass().getResource("TablePracownikWindow.fxml"));
         Stage stage = new Stage();
-        SportsCenter.manager.setPrimaryStage(stage);
+        SportsCenter.dBManager.setPrimaryStage(stage);
         stage.setTitle("Tabela Pracownicy");
         stage.setScene(new Scene(root));
         stage.show();

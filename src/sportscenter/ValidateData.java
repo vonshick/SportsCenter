@@ -1,6 +1,7 @@
 package sportscenter;
 
 import java.util.List;
+import javafx.scene.control.ChoiceBox;
 
 public class ValidateData {
     public static boolean isIncorrectPESEL(String PESEL) {
@@ -14,5 +15,14 @@ public class ValidateData {
             }
         }
         return false;
+    }
+    
+    public static boolean isNumber(String stringToCheck){
+        return (stringToCheck.matches("[0-9]+"));
+    }
+    
+        
+    public static boolean ifValueNotSelected(ChoiceBox choiceBox){
+        return choiceBox.getSelectionModel().isEmpty();
     }
 }

@@ -1,5 +1,6 @@
 package PracownikTable;
 
+import WyposazenieTable.AddWyposazenieController;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -72,9 +73,11 @@ public class TablePracownikWindowController implements Initializable {
 
     @FXML
     private void openNewPracownikWindow() throws IOException{
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/PracownikTable/AddPracownik.fxml"));
+//        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/PracownikTable/AddPracownik.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/WyposazenieTable/AddWyposazenie.fxml"));
         Parent root = (Parent) fxmlLoader.load();
-        AddPracownikController controller = fxmlLoader.<AddPracownikController>getController();
+//        AddPracownikController controller = fxmlLoader.<AddPracownikController>getController();
+        AddWyposazenieController controller = fxmlLoader.<AddWyposazenieController>getController();
         Stage stage = new Stage();
         stage.setTitle("Add new employee");
         stage.setScene(new Scene(root));

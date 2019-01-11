@@ -7,7 +7,7 @@ public class ValidateData {
         return (!(PESEL.matches("[0-9]+") && PESEL.length() == 11));
     }
 
-    public static boolean isAnyEmpty(List<String> stringsToCheck) {
+    public static boolean isAnyEmpty(String[] stringsToCheck) {
         for (String string : stringsToCheck) {
             if(string.equals("")) {
                 return true;

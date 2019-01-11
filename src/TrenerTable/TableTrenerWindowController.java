@@ -23,6 +23,7 @@ import javafx.stage.Stage;
 import sportscenter.DBManager;
 import sportscenter.SQLObject;
 import sportscenter.SportsCenter;
+import sportscenter.DBManagerProject;
 
 
 public class TableTrenerWindowController implements Initializable {

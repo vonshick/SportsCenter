@@ -20,6 +20,7 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import GUI.AlertBox;
 import sportscenter.SportsCenter;
+import sportscenter.ValidateData;
 
 public class AddSalaController implements Initializable {
     private Map<String, Integer> buildings;
@@ -31,12 +32,13 @@ public class AddSalaController implements Initializable {
     private Button button;
     @FXML
     private void handleButtonAction(ActionEvent event) throws IOException, SQLException {
-        if(ifSomeEmpty()){
+       String[] providedData = {name.getText(), (String) building.getSelectionModel().getSelectedItem()};
+        if(ValidateData.isAnyEmpty(providedData)){
             AlertBox.showAlert("None of fields can be empty");
         } else if (ifBuildingNotSelected()){
             AlertBox.showAlert("None building was chosen");
         } else{
-            insertIntoDB(name.getText(), (String) building.getSelectionModel().getSelectedItem());
+            insertIntoDB(providedData[0], providedData[1]);
             ((Node)(event.getSource())).getScene().getWindow().hide();
         }
     }

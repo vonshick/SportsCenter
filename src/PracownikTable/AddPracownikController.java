@@ -13,6 +13,7 @@ import javafx.scene.control.TextField;
 import GUI.AlertBox;
 import sportscenter.DBManager;
 import sportscenter.SportsCenter;
+import sportscenter.ValidateData;
 
 public class AddPracownikController implements Initializable {
     
@@ -33,12 +34,13 @@ public class AddPracownikController implements Initializable {
     @FXML
     
     private void handleButtonAction(ActionEvent event) throws IOException, SQLException {
-        if(ifSomeEmpty()){
+        String[] providedData = { name.getText(), surname.getText(), PESEL.getText(), profession.getText(), salary.getText() };
+        if(ValidateData.isAnyEmpty(providedData)){
             AlertBox.showAlert("None of fields can be empty");
-        }else if (ifIncorrectPESEL()){
+        }else if (ValidateData.isIncorrectPESEL(PESEL.getText())){
             AlertBox.showAlert("Incorrect PESEL format");
         } else {
-            dbManager.getdBManagerPracownik().insertNewPracownik(name.getText(), surname.getText(), PESEL.getText(), profession.getText(), salary.getText(), event);
+            dbManager.getdBManagerPracownik().insertNewPracownik(providedData[0], providedData[1], providedData[2], providedData[3], providedData[4], event);
             ((Node)(event.getSource())).getScene().getWindow().hide();
         }
     }
@@ -47,16 +49,5 @@ public class AddPracownikController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         this.dbManager = SportsCenter.dBManager;
     }    
-    
-    private boolean ifIncorrectPESEL(){
-        return (!(PESEL.getText().matches("[0-9]+") && PESEL.getText().length()==11));
-    }
-    
-    private boolean ifSomeEmpty(){
-        return (name.getText().equals("") || surname.getText()==null || 
-                PESEL.getText()==null || profession.getText()==null || 
-                salary.getText()==null);
-    }
-
 }
 

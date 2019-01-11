@@ -14,6 +14,7 @@ import javafx.scene.control.TextField;
 import GUI.AlertBox;
 import sportscenter.DBManager;
 import sportscenter.SportsCenter;
+import sportscenter.ValidateData;
 
 public class AddObiektSportowyController implements Initializable {
     
@@ -29,10 +30,11 @@ public class AddObiektSportowyController implements Initializable {
     private Button button;
     @FXML
     private void handleButtonAction(ActionEvent event) throws IOException, SQLException {
-        if(ifSomeEmpty()){
+        String[] providedData = { name.getText(), location.getText(), type.getText() };
+        if(ValidateData.isAnyEmpty(providedData)){
             AlertBox.showAlert("None of fields can be empty");
         } else {
-            dBManager.getDbManagerObiektSportowy().insertNewObiektSportowy(name.getText(), location.getText(), type.getText());
+            dBManager.getDbManagerObiektSportowy().insertNewObiektSportowy(providedData[0],providedData[1],providedData[2]);
             ((Node)(event.getSource())).getScene().getWindow().hide();
         }
     }

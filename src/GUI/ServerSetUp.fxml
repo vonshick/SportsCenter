@@ -6,7 +6,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="231.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ServerSetUpController">
+<AnchorPane id="AnchorPane" prefHeight="231.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.ServerSetUpController">
     <children>
         <Label fx:id="label" layoutX="126" layoutY="120" minHeight="16" minWidth="69" />
       <TextField fx:id="address" layoutX="126.0" layoutY="49.0" prefHeight="25.0" prefWidth="213.0" promptText="Enter server address" text="localhost" />

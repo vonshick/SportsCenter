@@ -1,4 +1,4 @@
-package controller;
+package PracownikTable;
 
 import java.io.IOException;
 import java.net.URL;
@@ -11,6 +11,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -19,7 +20,6 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import sportscenter.DBManager;
-import sportscenter.Pracownik;
 import sportscenter.SQLObject;
 import sportscenter.SportsCenter;
 
@@ -30,26 +30,18 @@ public class TablePracownikWindowController implements Initializable {
     @FXML
     private TableView tableView;
     @FXML
-    private Button Pracownicy;
-    @FXML
-    private Button ObiektySportowe;
-    @FXML
     private Button AddData;
+    @FXML
+    private ComboBox selectTableView;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-//        SportsCenter.manager.setMainWindowController(this);
-        Pracownicy.setDisable(true);
-        ObiektySportowe.setDisable(false);
+        this.dbManager = SportsCenter.dBManager;
         AddData.setText("Dodaj Pracownika");
+        selectTableView.setItems(FXCollections.observableArrayList("karnety", "klienci", "obiekty sportowe", "pracownicy", "sale", "trenerzy", "uczestnicy", "wyposazenie", "zajecia", "zawody"));
+        selectTableView.getSelectionModel().select("pracownicy");
 
         tableView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
-        
-//        PESEL;
-//    public String surname;
-//    public String name;
-//    public String profession;
-//    public Integer salary;
         
         TableColumn<Pracownik, String> peselColumn = new TableColumn<>("PESEL");
         peselColumn.setCellValueFactory(new PropertyValueFactory<>("PESEL"));
@@ -71,15 +63,18 @@ public class TablePracownikWindowController implements Initializable {
     }
     
     @FXML
-    private void changeTableView(MouseEvent event) throws IOException {
-        dbManager.changeScene(event);
+    private void changeTableView() throws IOException {
+        String selected = selectTableView.getSelectionModel().getSelectedItem().toString();
+        if (selected != null && !selected.equals("pracownik")) {
+            dbManager.changeScene(selected);
+        }
     }
 
     @FXML
     private void openNewPracownikWindow() throws IOException{
-        Parent root = FXMLLoader.load(getClass().getResource("/view/AddPracownik.fxml"));
-//        Parent root = FXMLLoader.load(getClass().getResource("/view/AddSala.fxml")); //temporary test
-
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/PracownikTable/AddPracownik.fxml"));
+        Parent root = (Parent) fxmlLoader.load();
+        AddPracownikController controller = fxmlLoader.<AddPracownikController>getController();
         Stage stage = new Stage();
         stage.setTitle("Add new employee");
         stage.setScene(new Scene(root));
@@ -93,11 +88,10 @@ public class TablePracownikWindowController implements Initializable {
             Pracownik pracownik = (Pracownik) tableView.getSelectionModel().getSelectedItem();
             if(pracownik != null) {
                 System.out.println("Wybrano " + pracownik.getPESEL());
-                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/EditPracownik.fxml"));
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/PracownikTable/EditPracownik.fxml"));
                 Parent root = (Parent) fxmlLoader.load();
                 EditPracownikController controller = fxmlLoader.<EditPracownikController>getController();
                 controller.setPracownik(pracownik);
-                controller.setDbManager(dbManager);
                 Stage stage = new Stage();
                 stage.setTitle("Edytuj Pracownika");
                 stage.setScene(new Scene(root));
@@ -108,17 +102,13 @@ public class TablePracownikWindowController implements Initializable {
     }
     
     private void showPracownicy() {
-        ObservableList<SQLObject> sqlList = SportsCenter.manager.selectAll("pracownik");
+        ObservableList<SQLObject> sqlList = SportsCenter.dBManager.selectFromTable("pracownik");
         ObservableList<Pracownik> pracownicy = FXCollections.observableArrayList();
         for (SQLObject sQLObject : sqlList) {
             pracownicy.add((Pracownik) sQLObject);
         }
         tableView.getItems().clear();
         tableView.setItems(pracownicy);
-    }
-
-    public void setDbManager(DBManager manager) {
-        this.dbManager = manager;
     }
     
 }

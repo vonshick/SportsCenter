@@ -1,4 +1,4 @@
-package controller;
+package SalaTable;
 
 import java.io.IOException;
 import java.net.URL;
@@ -15,18 +15,12 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
+import GUI.AlertBox;
 import sportscenter.SportsCenter;
 
-/**
- *
- * @author kuba
- */
 public class AddSalaController implements Initializable {
     private Map<String, Integer> buildings;
     @FXML
@@ -38,9 +32,9 @@ public class AddSalaController implements Initializable {
     @FXML
     private void handleButtonAction(ActionEvent event) throws IOException, SQLException {
         if(ifSomeEmpty()){
-            showAlert("None of fields can be empty");
+            AlertBox.showAlert("None of fields can be empty");
         } else if (ifBuildingNotSelected()){
-            showAlert("None building was chosen");
+            AlertBox.showAlert("None building was chosen");
         } else{
             insertIntoDB(name.getText(), (String) building.getSelectionModel().getSelectedItem());
             ((Node)(event.getSource())).getScene().getWindow().hide();
@@ -73,20 +67,15 @@ public class AddSalaController implements Initializable {
         return building.getSelectionModel().isEmpty();
     }
     
-    private void showAlert(String message){
-        Alert alert = new Alert(AlertType.WARNING, message, ButtonType.OK);
-        alert.showAndWait();
-    }
     private void insertIntoDB(String name, String buildingName) throws SQLException{
         try{
-            PreparedStatement pstmt = SportsCenter.manager.getConnection().prepareStatement("INSERT INTO sala VALUES(?, ?)");
+            PreparedStatement pstmt = SportsCenter.dBManager.getConnection().prepareStatement("INSERT INTO sala VALUES(?, ?)");
             pstmt.setString(1, name);
             pstmt.setInt(2, buildings.get(buildingName));
             pstmt.executeUpdate();
             System.out.println("Sports room added!");
         }catch(SQLException e ){
             System.out.println("Sports room inserting error");
-            e.printStackTrace();
         }
     }
     

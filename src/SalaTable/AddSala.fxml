@@ -6,7 +6,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="315.0" prefWidth="445.5" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AddSalaController">
+<AnchorPane id="AnchorPane" prefHeight="315.0" prefWidth="445.5" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="SalaTable.AddSalaController">
    <children>
       <TextField fx:id="name" layoutX="135.0" layoutY="81.0" prefHeight="25.0" prefWidth="275.0" text="Wembley" />
       <Label layoutX="53.0" layoutY="86.0" text="Nazwa" />

@@ -1,21 +1,17 @@
-package controller;
+package PracownikTable;
 
 import java.io.IOException;
 import java.net.URL;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
+import GUI.AlertBox;
 import sportscenter.DBManager;
-import sportscenter.Pracownik;
 import sportscenter.SportsCenter;
 
 public class EditPracownikController implements Initializable {
@@ -39,12 +35,12 @@ public class EditPracownikController implements Initializable {
     @FXML
     private void save(MouseEvent event) throws IOException, SQLException {
         if (ifSomeEmpty()) {
-            showAlert("None of fields can be empty");
+            AlertBox.showAlert("None of fields can be empty");
         } else if (ifIncorrectPESEL()) {
-            showAlert("Incorrect PESEL format");
+            AlertBox.showAlert("Incorrect PESEL format");
         } else {
             System.out.println("clicked save");
-            dbManager.editPracownik(pracownik.getPESEL(), name.getText(), surname.getText(), PESEL.getText(), profession.getText(), salary.getText());
+            dbManager.getdBManagerPracownik().editPracownik(pracownik.getPESEL(), name.getText(), surname.getText(), PESEL.getText(), profession.getText(), salary.getText());
             ((Node) (event.getSource())).getScene().getWindow().hide();
         }
     }
@@ -52,6 +48,7 @@ public class EditPracownikController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         save.setText("Zapisz");
+        this.dbManager = SportsCenter.dBManager;
     }
 
     private boolean ifIncorrectPESEL() {
@@ -64,13 +61,6 @@ public class EditPracownikController implements Initializable {
                 || salary.getText() == null);
     }
 
-    private void showAlert(String message) {
-        Alert alert = new Alert(Alert.AlertType.WARNING, message, ButtonType.OK);
-        alert.showAndWait();
-    }
-
-
-
     public void setPracownik(Pracownik pracownik) {
         this.pracownik = pracownik;
         name.setText(pracownik.getName());
@@ -78,10 +68,6 @@ public class EditPracownikController implements Initializable {
         PESEL.setText(pracownik.getPESEL());
         profession.setText(pracownik.getProfession());
         salary.setText(pracownik.getSalary().toString());
-    }
-
-    public void setDbManager(DBManager dbManager) {
-        this.dbManager = dbManager;
     }
     
 }

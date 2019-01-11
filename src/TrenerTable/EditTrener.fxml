@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="315.0" prefWidth="445.5" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="TrenerTable.EditTrenerController">
+    <children>
+        <TextField fx:id="PESEL" layoutX="122.0" layoutY="38.0" prefHeight="25.0" prefWidth="275.0" />
+        <TextField fx:id="disciplin" layoutX="122.0" layoutY="79.0" prefHeight="25.0" prefWidth="275.0" />
+        <Label layoutX="61.0" layoutY="43.0" text="PESEL" />
+        <Label layoutX="30.0" layoutY="84.0" text="Dyscyplina" />
+        <Button fx:id="save" layoutX="195.0" layoutY="259.0" mnemonicParsing="false" onMouseClicked="#save" text="Zapisz" />
+        <Accordion />
+    </children>
+</AnchorPane>

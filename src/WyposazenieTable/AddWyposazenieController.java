@@ -2,11 +2,8 @@ package WyposazenieTable;
 
 import java.io.IOException;
 import java.net.URL;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
@@ -17,8 +14,6 @@ import javafx.scene.Node;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import GUI.AlertBox;
-import static com.sun.org.apache.xalan.internal.xsltc.compiler.util.Type.String;
-import java.util.List;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import sportscenter.DBManager;
@@ -61,20 +56,12 @@ public class AddWyposazenieController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         this.dbManager = SportsCenter.dBManager;
-        try {
-            Statement stmt = SportsCenter.connection.getConn().createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT nazwa, id_obiektu FROM obiekt_sportowy");
-            buildings = new HashMap<String, Integer>();
-            ArrayList<String> choices = new ArrayList<String>();
-            while (rs.next()) {
-                String buildingName = rs.getString(1);
-                 choices.add(buildingName);
-                 buildings.put(buildingName, rs.getInt(2));
-            }
-            building.setItems(FXCollections.observableArrayList(choices));
-        } catch (SQLException ex) {
-            System.out.println("Error while filling buildings list" + ex.toString());
-        }    
+        buildings = dbManager.getDbManagerWyposazenie().generateBuildingsList();
+        ArrayList<String> choices = new ArrayList<String>();
+        for (Map.Entry<String, Integer> entry : buildings.entrySet()){   
+            choices.add(entry.getKey());
+        }
+        building.setItems(FXCollections.observableArrayList(choices));
         addChangeListener();
     }    
     
@@ -82,27 +69,11 @@ public class AddWyposazenieController implements Initializable {
         building.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observableValue, Number index1, Number index2) {
-                System.out.println(building.getItems().get((Integer) index2));
-                fillHallChoiceBox((String) building.getItems().get((Integer) index2));
+                String buildingName = (String) building.getItems().get((Integer) index2);
+                ArrayList<String> choices = dbManager.getDbManagerWyposazenie().generateHallsList(buildingName);
+                hall.setItems(FXCollections.observableArrayList(choices));
             }
         }); 
-    }
-    
-    private void fillHallChoiceBox(String buildingName){
-        try {
-            Statement stmt = SportsCenter.connection.getConn().createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT nr_sali FROM sala "
-                    + "WHERE obiekt_sportowy_id_obiektu = "
-                    + "(SELECT id_obiektu FROM obiekt_sportowy WHERE nazwa = '"+buildingName+"')");
-//            List<String> hallIds = new ArrayList<String>();
-            ArrayList<String> choices = new ArrayList<String>();
-            while (rs.next()) {
-                 choices.add(rs.getString(1));
-            }
-            hall.setItems(FXCollections.observableArrayList(choices));
-        } catch (SQLException ex) {
-            System.out.println("Bład wykonania polecenia" + ex.toString());
-        }
     }
     
     private int getBuildingId(){

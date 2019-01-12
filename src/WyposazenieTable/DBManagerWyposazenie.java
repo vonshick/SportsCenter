@@ -3,7 +3,12 @@ package WyposazenieTable;
 import java.io.IOException;
 import sportscenter.*;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.HashMap;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 
 public class DBManagerWyposazenie {
@@ -13,8 +18,8 @@ public class DBManagerWyposazenie {
     public DBManagerWyposazenie(DBManager dBManager) {
         this.dBManager = dBManager;
     }
-
-//    public void editPracownik(String oldPESEL, String name, String surname, String newPESEL, String profession, String salary) {
+//
+//    public void editWyposażenie(String oldPESEL, String name, String surname, String newPESEL, String profession, String salary) {
 //        try {
 //            PreparedStatement pstmt = SportsCenter.dBManager.getConnection().prepareStatement("update pracownik set pesel = ?, nazwisko = ?, imie = ?, funkcja = ?, placa = ? where pesel = ?");
 //            pstmt.setString(1, newPESEL);
@@ -41,6 +46,43 @@ public class DBManagerWyposazenie {
 //    sala_nr_sali                 VARCHAR2(50)
 //);
 
+    public HashMap<String,Integer> generateBuildingsList(){
+        Statement stmt;
+        ResultSet rs;
+        HashMap<String, Integer> buildings = new HashMap<String, Integer>();
+        try {
+            stmt = SportsCenter.connection.getConn().createStatement();
+            rs  = stmt.executeQuery("SELECT nazwa, id_obiektu FROM obiekt_sportowy");
+            while (rs.next()) {
+                String buildingName = rs.getString(1);
+                buildings.put(buildingName, rs.getInt(2));
+            }
+        } catch (SQLException ex) {
+        System.out.println("Error while filling buildings list" + ex.toString());
+        }  
+        return buildings;
+    }
+    
+    public ArrayList<String> generateHallsList(String buildingName){
+        Statement stmt;
+        ResultSet rs;
+        ArrayList<String> hallIds = new ArrayList<String>();
+        try {
+            stmt = SportsCenter.connection.getConn().createStatement();
+            rs = stmt.executeQuery("SELECT nr_sali FROM sala "
+                    + "WHERE obiekt_sportowy_id_obiektu = "
+                    + "(SELECT id_obiektu FROM obiekt_sportowy WHERE nazwa = '"+buildingName+"')");
+            ArrayList<String> choices = new ArrayList<String>();
+            while (rs.next()) {
+                 hallIds.add(rs.getString(1));
+            }
+        } catch (SQLException ex) {
+            System.out.println("Bład wykonania polecenia" + ex.toString());
+        }
+        return hallIds;
+
+    }
+    
     public void insertNewWyposazenie(String name, String sport, String count, int building, String hall) throws IOException {
         try {
             PreparedStatement pstmt;

@@ -35,10 +35,10 @@ public class AddWyposazenieController implements Initializable {
     private ChoiceBox hall;
     @FXML
     private void handleButtonAction(ActionEvent event) throws IOException, SQLException {
-       String[] providedData = {name.getText(), sport.getText(), count.getText()};
+       String[] providedData = {name.getText()};
         if(ValidateData.isAnyEmpty(providedData)){
-            AlertBox.showAlert("None of fields can be empty");
-        } else if (!ValidateData.isNumber(providedData[2])){
+            AlertBox.showAlert("Name field can not be empty");
+        } else if (!ValidateData.isNumber(count.getText())){
             AlertBox.showAlert("'Count' value should be an integer");
         } else if (ValidateData.ifValueNotSelected(building)){
             AlertBox.showAlert("None building was chosen");
@@ -47,7 +47,7 @@ public class AddWyposazenieController implements Initializable {
             if (!ValidateData.ifValueNotSelected(hall)){
                 hallId = (String) hall.getSelectionModel().getSelectedItem();
             }
-            dbManager.getDbManagerWyposazenie().insertNewWyposazenie(providedData[0], providedData[1], providedData[2], 
+            dbManager.getDbManagerWyposazenie().insertNewWyposazenie(providedData[0], sport.getText(), count.getText(), 
                     getBuildingId(), hallId);
             ((Node)(event.getSource())).getScene().getWindow().hide();
         }

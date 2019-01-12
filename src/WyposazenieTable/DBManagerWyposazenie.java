@@ -18,33 +18,33 @@ public class DBManagerWyposazenie {
     public DBManagerWyposazenie(DBManager dBManager) {
         this.dBManager = dBManager;
     }
-//
-//    public void editWyposażenie(String oldPESEL, String name, String surname, String newPESEL, String profession, String salary) {
-//        try {
-//            PreparedStatement pstmt = SportsCenter.dBManager.getConnection().prepareStatement("update pracownik set pesel = ?, nazwisko = ?, imie = ?, funkcja = ?, placa = ? where pesel = ?");
-//            pstmt.setString(1, newPESEL);
-//            pstmt.setString(2, surname);
-//            pstmt.setString(3, name);
-//            pstmt.setString(4, profession);
-//            pstmt.setFloat(5, Float.parseFloat(salary));
-//            pstmt.setString(6, oldPESEL);
-//            pstmt.executeQuery();
-//            SportsCenter.dBManager.getConnection().commit();
-//            System.out.println("Employee updated!");
-//        } catch (SQLException e) {
-//            System.out.println("Employee update error");
-//        }
-//    }
-    
-//    CREATE TABLE wyposazenie (
-//    id_wyposazenia               INTEGER NOT NULL,
-//    nazwa                        VARCHAR2(50) NOT NULL,
-//    dyscyplina                   VARCHAR2(50),
-//    ilosc                        INTEGER,
-//    obiekt_sportowy_id_obiektu   INTEGER,
-//    sala_obiekt_sportowy_id_ob   INTEGER,
-//    sala_nr_sali                 VARCHAR2(50)
-//);
+
+    public void editWyposazenie(int id, String name, String sport, String count, int buildingId, String hallId) {
+        try {
+            PreparedStatement pstmt ;
+            pstmt = SportsCenter.dBManager.getConnection().prepareStatement("update wyposazenie set nazwa = ?, dyscyplina = ?, ilosc = ?, obiekt_sportowy_id_obiektu = ?, sala_obiekt_sportowy_id_ob = ?, sala_nr_sali = ? where id_wyposazenia = ?");
+
+            pstmt.setString(1, name);
+            pstmt.setString(2, sport);
+            pstmt.setInt(3, Integer.parseInt(count));
+            if(hallId.equals("")){
+                pstmt.setInt(4, buildingId);
+                pstmt.setNull(5, java.sql.Types.INTEGER);
+                pstmt.setNull(6, java.sql.Types.VARCHAR);
+            }else{
+                pstmt.setNull(4, java.sql.Types.INTEGER);
+                pstmt.setInt(5, buildingId);
+                pstmt.setString(6, hallId);
+            }
+            pstmt.setInt(7, id);
+            pstmt.executeQuery();
+            SportsCenter.dBManager.getConnection().commit();
+            System.out.println("Equipment updated!");
+        } catch (SQLException e) {
+            System.out.println("Equipment update error");
+        }
+    }
+   
 
     public HashMap<String,Integer> generateBuildingsMap(){
         Statement stmt;

@@ -12,6 +12,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import GUI.AlertBox;
+import java.util.ArrayList;
+import java.util.Map;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
 import javafx.scene.control.ChoiceBox;
 import sportscenter.DBManager;
 import sportscenter.SportsCenter;
@@ -21,7 +26,8 @@ public class EditWyposazenieController implements Initializable {
 
     private Wyposazenie wyposazenie;
     private DBManager dbManager;
-    
+    private Map<String, Integer> buildings;
+
     @FXML
     private TextField name;
     @FXML
@@ -50,7 +56,8 @@ public class EditWyposazenieController implements Initializable {
                 hallId = (String) hall.getSelectionModel().getSelectedItem();
             }
             System.out.println("clicked save");
-//            dbManager.getDbManagerWyposazenie().editWydarzenie(pracownik.getPESEL(), name.getText(), surname.getText(), PESEL.getText(), profession.getText(), salary.getText());
+            //TO DO 
+//            dbManager.getDbManagerWyposazenie().editWydarzenie();
             ((Node) (event.getSource())).getScene().getWindow().hide();
         }
     }
@@ -59,6 +66,32 @@ public class EditWyposazenieController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         save.setText("Zapisz");
         this.dbManager = SportsCenter.dBManager;
+        buildings = dbManager.getDbManagerWyposazenie().generateBuildingsMap();
+        ArrayList<String> choices = new ArrayList<String>();
+        String currentBuilding = "";
+        for (Map.Entry<String, Integer> entry : buildings.entrySet()){   
+            choices.add(entry.getKey());
+            if (entry.getValue() == wyposazenie.getBuildingId()){
+                currentBuilding = entry.getKey();
+            }
+        } 
+        building.setItems(FXCollections.observableArrayList(choices));
+        
+        choices = dbManager.getDbManagerWyposazenie().generateHallsList(currentBuilding);
+        hall.setItems(FXCollections.observableArrayList(choices));
+        
+        addChangeListener();
+    }
+    
+    private void addChangeListener(){
+        building.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue, Number index1, Number index2) {
+                String buildingName = (String) building.getItems().get((Integer) index2);
+                ArrayList<String> choices = dbManager.getDbManagerWyposazenie().generateHallsList(buildingName);
+                hall.setItems(FXCollections.observableArrayList(choices));
+            }
+        }); 
     }
     
     public void setWyposazenie(Wyposazenie wyposazenie) {
@@ -66,6 +99,7 @@ public class EditWyposazenieController implements Initializable {
         name.setText(wyposazenie.getName());
         sport.setText(wyposazenie.getSport());
         count.setText(Integer.toString(wyposazenie.getCount()));
+        //TO DO!!!
 //        building.setText(Integer.toString(wyposazenie.getBuildingId()));
 //        hall.setText(wyposazenie.getSalary().toString());
     }

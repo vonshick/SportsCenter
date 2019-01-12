@@ -30,9 +30,6 @@ public class AddPracownikController implements Initializable {
     @FXML
     private TextField salary;
     @FXML
-    private Button button;
-    @FXML
-    
     private void handleButtonAction(ActionEvent event) throws IOException, SQLException {
         String[] providedData = { name.getText(), surname.getText(), PESEL.getText(), profession.getText(), salary.getText() };
         if(ValidateData.isAnyEmpty(providedData)){

@@ -56,7 +56,7 @@ public class AddWyposazenieController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         this.dbManager = SportsCenter.dBManager;
-        buildings = dbManager.getDbManagerWyposazenie().generateBuildingsList();
+        buildings = dbManager.getDbManagerWyposazenie().generateBuildingsMap();
         ArrayList<String> choices = new ArrayList<String>();
         for (Map.Entry<String, Integer> entry : buildings.entrySet()){   
             choices.add(entry.getKey());

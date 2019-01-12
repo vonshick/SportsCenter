@@ -46,7 +46,7 @@ public class DBManagerWyposazenie {
 //    sala_nr_sali                 VARCHAR2(50)
 //);
 
-    public HashMap<String,Integer> generateBuildingsList(){
+    public HashMap<String,Integer> generateBuildingsMap(){
         Statement stmt;
         ResultSet rs;
         HashMap<String, Integer> buildings = new HashMap<String, Integer>();

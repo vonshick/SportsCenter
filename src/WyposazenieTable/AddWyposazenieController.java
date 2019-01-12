@@ -48,11 +48,9 @@ public class AddWyposazenieController implements Initializable {
         } else if (ValidateData.ifValueNotSelected(building)){
             AlertBox.showAlert("None building was chosen");
         }  else {
-            int hallId = 0;
-            if (ValidateData.ifValueNotSelected(hall)){
-                hallId = -1;
-            } else {
-//                hallString = (String) hall.getSelectionModel().getSelectedItem();
+            String hallId = "";
+            if (!ValidateData.ifValueNotSelected(hall)){
+                hallId = (String) hall.getSelectionModel().getSelectedItem();
             }
             dbManager.getDbManagerWyposazenie().insertNewWyposazenie(providedData[0], providedData[1], providedData[2], 
                     getBuildingId(), hallId);
@@ -95,7 +93,7 @@ public class AddWyposazenieController implements Initializable {
             Statement stmt = SportsCenter.connection.getConn().createStatement();
             ResultSet rs = stmt.executeQuery("SELECT nr_sali FROM sala "
                     + "WHERE obiekt_sportowy_id_obiektu = "
-                    + "(SELECT id_obiektu FROM obiekt_sportowy WHERE nazwa = "+buildingName+")");
+                    + "(SELECT id_obiektu FROM obiekt_sportowy WHERE nazwa = '"+buildingName+"')");
 //            List<String> hallIds = new ArrayList<String>();
             ArrayList<String> choices = new ArrayList<String>();
             while (rs.next()) {

@@ -41,29 +41,30 @@ public class DBManagerWyposazenie {
 //    sala_nr_sali                 VARCHAR2(50)
 //);
 
-    public void insertNewWyposazenie(String name, String sport, String count, int building, int hall) throws IOException {
+    public void insertNewWyposazenie(String name, String sport, String count, int building, String hall) throws IOException {
         try {
             PreparedStatement pstmt;
-            if (hall == -1){
+            if (hall.equals("")){
                 pstmt = SportsCenter.dBManager.getConnection().prepareStatement("INSERT INTO wyposazenie"
                         + "(id_wyposazenia, nazwa, dyscyplina, ilosc, obiekt_sportowy_id_obiektu)"
                         + " VALUES(seq_id_wyposazenia.nextval, ?, ?, ?, ?)");
             } else {
                 pstmt = SportsCenter.dBManager.getConnection().prepareStatement("INSERT INTO wyposazenie"
-                        + "(id_wyposazenia, nazwa, dyscyplina, ilosc, obiekt_sportowy_id_obiektu, sala_obiekt_sportowy_id_ob)"
-                        + " VALUES(seq_id_wyposazenia.nextval, ?, ?, ?, ?)");
+                        + "(id_wyposazenia, nazwa, dyscyplina, ilosc, sala_obiekt_sportowy_id_ob, sala_nr_sali)"
+                        + " VALUES(seq_id_wyposazenia.nextval, ?, ?, ?, ?, ?)");
             }
             pstmt.setString(1, name);
             pstmt.setString(2, sport);
             pstmt.setInt(3, Integer.parseInt(count));
             pstmt.setInt(4, building);
-            if (hall != -1){
-                pstmt.setInt(5, hall);
+            if (!hall.equals("")){
+                pstmt.setString(5, hall);
             }
             pstmt.executeUpdate();
             System.out.println("Equipment added!");
         } catch (SQLException e) {
             System.out.println("Equipment inserting error");
+            e.printStackTrace();
         }
     }
     

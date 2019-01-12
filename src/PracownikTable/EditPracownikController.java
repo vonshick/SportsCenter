@@ -13,6 +13,7 @@ import javafx.scene.input.MouseEvent;
 import GUI.AlertBox;
 import sportscenter.DBManager;
 import sportscenter.SportsCenter;
+import sportscenter.ValidateData;
 
 public class EditPracownikController implements Initializable {
 
@@ -34,9 +35,10 @@ public class EditPracownikController implements Initializable {
 
     @FXML
     private void save(MouseEvent event) throws IOException, SQLException {
-        if (ifSomeEmpty()) {
+        String[] providedData = { name.getText(), surname.getText(), PESEL.getText(), profession.getText(), salary.getText() };
+        if(ValidateData.isAnyEmpty(providedData)){
             AlertBox.showAlert("None of fields can be empty");
-        } else if (ifIncorrectPESEL()) {
+        }else if (ValidateData.isIncorrectPESEL(PESEL.getText())){
             AlertBox.showAlert("Incorrect PESEL format");
         } else {
             System.out.println("clicked save");
@@ -49,16 +51,6 @@ public class EditPracownikController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         save.setText("Zapisz");
         this.dbManager = SportsCenter.dBManager;
-    }
-
-    private boolean ifIncorrectPESEL() {
-        return (!(PESEL.getText().matches("[0-9]+") && PESEL.getText().length() == 11));
-    }
-
-    private boolean ifSomeEmpty() {
-        return (name.getText().equals("") || surname.getText() == null
-                || PESEL.getText() == null || profession.getText() == null
-                || salary.getText() == null);
     }
 
     public void setPracownik(Pracownik pracownik) {

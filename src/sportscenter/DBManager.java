@@ -9,6 +9,9 @@ import PracownikTable.DBManagerPracownik;
 import TrenerTable.DBManagerTrener;
 import TrenerTable.TableTrenerWindowController;
 import TrenerTable.Trener;
+import WyposazenieTable.DBManagerWyposazenie;
+import WyposazenieTable.TableWyposazenieWindowController;
+import WyposazenieTable.Wyposazenie;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -31,6 +34,7 @@ public class DBManager {
     private DBManagerPracownik dBManagerPracownik;
     private DBManagerTrener dBManagerTrener;
     private DBManagerObiektSportowy dbManagerObiektSportowy;
+    private DBManagerWyposazenie dbManagerWyposazenie;
 
     
 //    private TablePracownikWindowController MainWindowController;
@@ -40,6 +44,8 @@ public class DBManager {
         this.dBManagerPracownik = new DBManagerPracownik(this);
         this.dBManagerTrener = new DBManagerTrener(this);
         this.dbManagerObiektSportowy = new DBManagerObiektSportowy(this);
+        this.dbManagerWyposazenie = new DBManagerWyposazenie(this);
+
     }
     
     public void changeScene(String table) throws IOException {
@@ -66,6 +72,13 @@ public class DBManager {
                 primaryStage.setTitle("Tabela Trener");
                 break;
             }
+            case "wyposazenie": {
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/WyposazenieTable/TableWyposazenieWindow.fxml"));
+                root = (Parent) fxmlLoader.load();
+                TableWyposazenieWindowController controller = fxmlLoader.<TableWyposazenieWindowController>getController();
+                primaryStage.setTitle("Tabela Wyposazenie");
+                break;
+            }
             default: {
                 System.out.println("Bad ID, not changing view.");
                 return;
@@ -76,7 +89,7 @@ public class DBManager {
     }
     
     /**
-     * Returns all data from spcified table
+     * Returns all data from specified table
      * @param table name of table
      * @return all data in table as ObservableList of SQLObject
      */
@@ -107,7 +120,7 @@ public class DBManager {
                     case "uczestnik":
                         break;
                     case "wyposazenie":
-                        break;
+                        sqlList.add(new Wyposazenie(rs));
                     case "zajecia":
                         break;
                     case "zawody":
@@ -152,6 +165,9 @@ public class DBManager {
         return dbManagerObiektSportowy;
     }
     
+    public DBManagerWyposazenie getDbManagerWyposazenie(){
+        return dbManagerWyposazenie;
+    }
 }
 //public <T extends SQLObject> ObservableList<T> selectAllGeneric(Class<T> classType, T obj) throws InstantiationException, IllegalAccessException {
 //        ObservableList<T> queryResult = FXCollections.observableArrayList();

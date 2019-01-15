@@ -67,6 +67,14 @@ public class DBManagerPracownik {
         stage.setTitle("Log in");
         stage.setOnCloseRequest((WindowEvent event1) -> {
             AlertBox.showAlert("Employee not added!");
+            
+            /*
+            
+            Cos tu nie gra z try catch i przywracaniem autocommit
+            
+            */
+            
+            
             try {
                 SportsCenter.dBManager.getConnection().rollback(); // if coach adding fails we have to rollback
                 SportsCenter.dBManager.getConnection().setAutoCommit(true);

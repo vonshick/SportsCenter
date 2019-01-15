@@ -63,7 +63,7 @@ public class TableObiektSportowyWindowController implements Initializable {
     @FXML
     private void changeTableView() throws IOException {
         String selected = selectTableView.getSelectionModel().getSelectedItem().toString();
-        if(selected != null && !selected.equals("obiekt_sportowy")) {
+        if(selected != null && !selected.equals("obiekty sportowe")) {
             dbManager.changeScene(selected);
         }
     }

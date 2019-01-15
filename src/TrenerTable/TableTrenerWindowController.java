@@ -59,7 +59,7 @@ public class TableTrenerWindowController implements Initializable {
     @FXML
     private void changeTableView() throws IOException {
         String selected = selectTableView.getSelectionModel().getSelectedItem().toString();
-        if (selected != null && !selected.equals("pracownik")) {
+        if (selected != null && !selected.equals("trenerzy")) {
             dbManager.changeScene(selected);
         }
     }

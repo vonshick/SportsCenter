@@ -1,5 +1,8 @@
 package sportscenter;
 
+import KlientTable.DBManagerKlient;
+import KlientTable.Klient;
+import KlientTable.TableKlientWindowController;
 import ObiektSportowyTable.DBManagerObiektSportowy;
 import ObiektSportowyTable.ObiektSportowy;
 import PracownikTable.Pracownik;
@@ -35,7 +38,7 @@ public class DBManager {
     private DBManagerTrener dBManagerTrener;
     private DBManagerObiektSportowy dbManagerObiektSportowy;
     private DBManagerWyposazenie dbManagerWyposazenie;
-
+    private DBManagerKlient dbManagerKlient;
     
 //    private TablePracownikWindowController MainWindowController;
 
@@ -45,7 +48,7 @@ public class DBManager {
         this.dBManagerTrener = new DBManagerTrener(this);
         this.dbManagerObiektSportowy = new DBManagerObiektSportowy(this);
         this.dbManagerWyposazenie = new DBManagerWyposazenie(this);
-
+        this.dbManagerKlient = new DBManagerKlient(this);
     }
     
     public void changeScene(String table) throws IOException {
@@ -77,6 +80,13 @@ public class DBManager {
                 root = (Parent) fxmlLoader.load();
                 TableWyposazenieWindowController controller = fxmlLoader.<TableWyposazenieWindowController>getController();
                 primaryStage.setTitle("Tabela Wyposazenie");
+                break;
+            }
+            case "klienci": {
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/KlientTable/TableKlientWindow.fxml"));
+                root = (Parent) fxmlLoader.load();
+                TableKlientWindowController controller = fxmlLoader.<TableKlientWindowController>getController();
+                primaryStage.setTitle("Tabela Klient");
                 break;
             }
             default: {
@@ -114,6 +124,7 @@ public class DBManager {
                     case "karnet":
                         break;
                     case "klient":
+                        sqlList.add(new Klient(rs));
                         break;
                     case "sala":
                         break;
@@ -167,6 +178,10 @@ public class DBManager {
     
     public DBManagerWyposazenie getDbManagerWyposazenie(){
         return dbManagerWyposazenie;
+    }
+
+    public DBManagerKlient getDbManagerKlient() {
+        return dbManagerKlient;
     }
 }
 //public <T extends SQLObject> ObservableList<T> selectAllGeneric(Class<T> classType, T obj) throws InstantiationException, IllegalAccessException {

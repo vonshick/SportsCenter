@@ -1,7 +1,5 @@
 package KlientTable;
 
-import PracownikTable.*;
-import WyposazenieTable.AddWyposazenieController;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;

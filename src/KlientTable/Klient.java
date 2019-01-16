@@ -31,11 +31,11 @@ public class Klient extends SQLObject {
         return name;
     }
 
-    public int getIDKlienta() {
+    public int getID() {
         return ID;
     }
     
-    public void setIDKlienta(int IDKlienta) {
+    public void setID(int IDKlienta) {
         this.ID = IDKlienta;
     }
 

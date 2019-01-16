@@ -1,4 +1,4 @@
-package KlientTable;
+package KarnetTable;
 
 import java.io.IOException;
 import java.net.URL;
@@ -15,26 +15,32 @@ import sportscenter.DBManager;
 import sportscenter.SportsCenter;
 import sportscenter.ValidateData;
 
-public class EditKlientController implements Initializable {
+public class EditKarnetController implements Initializable {
 
-    private Klient klient;
+    private Karnet karnet;
     private DBManager dbManager;
     
     @FXML
-    private TextField name;
+    private TextField idClient;
     @FXML
-    private TextField surname;
+    private TextField idActivity;
+    @FXML
+    private TextField price;
+    @FXML
+    private TextField dateStart;
+    @FXML
+    private TextField dateEnd;
     @FXML
     private Button save;
 
     @FXML
     private void save(MouseEvent event) throws IOException, SQLException {
-        String[] providedData = { name.getText(), surname.getText() };
+        String[] providedData = { idClient.getText(), idActivity.getText(), price.getText(), dateStart.getText(), dateEnd.getText() };
         if(ValidateData.isAnyEmpty(providedData)){
             AlertBox.showAlert("Wszystkie pola muszą być wypełnione!");
         } else {
             System.out.println("clicked save");
-            dbManager.getDbManagerKlient().editKlient(klient.getID(), providedData[0], providedData[1]);
+            dbManager.getdBManagerKarnet().editKarnet(karnet.getIDClient(), karnet.getIDActivity(), providedData[0], providedData[1], providedData[2], providedData[3], providedData[4]);
             ((Node) (event.getSource())).getScene().getWindow().hide();
         }
     }
@@ -45,10 +51,13 @@ public class EditKlientController implements Initializable {
         this.dbManager = SportsCenter.dBManager;
     }
 
-    public void setKlient(Klient klient) {
-        this.klient = klient;
-        name.setText(klient.getName());
-        surname.setText(klient.getSurname());
+    public void setKarnet(Karnet karnet) {
+        this.karnet = karnet;
+        idClient.setText(Integer.toString(karnet.getIDClient()));
+        idActivity.setText(Integer.toString(karnet.getIDActivity()));
+        price.setText(Float.toString(karnet.getPrice()));
+        dateStart.setText(karnet.getDateStart());
+        dateEnd.setText(karnet.getDateEnd());
     }
     
 }

@@ -1,5 +1,8 @@
 package sportscenter;
 
+import KarnetTable.DBManagerKarnet;
+import KarnetTable.Karnet;
+import KarnetTable.TableKarnetWindowController;
 import KlientTable.DBManagerKlient;
 import KlientTable.Klient;
 import KlientTable.TableKlientWindowController;
@@ -27,8 +30,6 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
 public class DBManager {
@@ -39,6 +40,7 @@ public class DBManager {
     private DBManagerObiektSportowy dbManagerObiektSportowy;
     private DBManagerWyposazenie dbManagerWyposazenie;
     private DBManagerKlient dbManagerKlient;
+    private DBManagerKarnet dBManagerKarnet;
     
 //    private TablePracownikWindowController MainWindowController;
 
@@ -49,6 +51,7 @@ public class DBManager {
         this.dbManagerObiektSportowy = new DBManagerObiektSportowy(this);
         this.dbManagerWyposazenie = new DBManagerWyposazenie(this);
         this.dbManagerKlient = new DBManagerKlient(this);
+        this.dBManagerKarnet = new DBManagerKarnet(this);
     }
     
     public void changeScene(String table) throws IOException {
@@ -89,6 +92,13 @@ public class DBManager {
                 primaryStage.setTitle("Tabela Klient");
                 break;
             }
+            case "karnety": {
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/KarnetTable/TableKarnetWindow.fxml"));
+                root = (Parent) fxmlLoader.load();
+                TableKarnetWindowController controller = fxmlLoader.<TableKarnetWindowController>getController();
+                primaryStage.setTitle("Tabela Karnet");
+                break;
+            }
             default: {
                 System.out.println("Bad ID, not changing view.");
                 return;
@@ -122,6 +132,7 @@ public class DBManager {
                         sqlList.add(new Trener(rs));
                         break;
                     case "karnet":
+                        sqlList.add(new Karnet(rs));
                         break;
                     case "klient":
                         sqlList.add(new Klient(rs));
@@ -182,6 +193,10 @@ public class DBManager {
 
     public DBManagerKlient getDbManagerKlient() {
         return dbManagerKlient;
+    }
+
+    public DBManagerKarnet getdBManagerKarnet() {
+        return dBManagerKarnet;
     }
 }
 //public <T extends SQLObject> ObservableList<T> selectAllGeneric(Class<T> classType, T obj) throws InstantiationException, IllegalAccessException {

@@ -12,6 +12,9 @@ import PracownikTable.Pracownik;
 import PracownikTable.TablePracownikWindowController;
 import ObiektSportowyTable.TableObiektSportowyWindowController;
 import PracownikTable.DBManagerPracownik;
+import SalaTable.DBManagerSala;
+import SalaTable.Sala;
+import SalaTable.TableSalaWindowController;
 import TrenerTable.DBManagerTrener;
 import TrenerTable.TableTrenerWindowController;
 import TrenerTable.Trener;
@@ -41,6 +44,8 @@ public class DBManager {
     private DBManagerWyposazenie dbManagerWyposazenie;
     private DBManagerKlient dbManagerKlient;
     private DBManagerKarnet dBManagerKarnet;
+    private DBManagerSala dbManagerSala;
+    
     
 //    private TablePracownikWindowController MainWindowController;
 
@@ -52,6 +57,8 @@ public class DBManager {
         this.dbManagerWyposazenie = new DBManagerWyposazenie(this);
         this.dbManagerKlient = new DBManagerKlient(this);
         this.dBManagerKarnet = new DBManagerKarnet(this);
+        this.dbManagerSala = new DBManagerSala(this);
+
     }
     
     public void changeScene(String table) throws IOException {
@@ -99,6 +106,13 @@ public class DBManager {
                 primaryStage.setTitle("Tabela Karnet");
                 break;
             }
+            case "sale": {
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/SalaTable/TableSalaWindow.fxml"));
+                root = (Parent) fxmlLoader.load();
+                TableSalaWindowController controller = fxmlLoader.<TableSalaWindowController>getController();
+                primaryStage.setTitle("Tabela Sale");
+                break;
+            }
             default: {
                 System.out.println("Bad ID, not changing view.");
                 return;
@@ -138,6 +152,7 @@ public class DBManager {
                         sqlList.add(new Klient(rs));
                         break;
                     case "sala":
+                        sqlList.add(new Sala(rs));
                         break;
                     case "uczestnik":
                         break;
@@ -197,6 +212,10 @@ public class DBManager {
 
     public DBManagerKarnet getdBManagerKarnet() {
         return dBManagerKarnet;
+    }
+
+    public DBManagerSala getDbManagerSala() {
+        return dbManagerSala;
     }
 }
 //public <T extends SQLObject> ObservableList<T> selectAllGeneric(Class<T> classType, T obj) throws InstantiationException, IllegalAccessException {

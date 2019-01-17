@@ -18,6 +18,8 @@ import SalaTable.TableSalaWindowController;
 import TrenerTable.DBManagerTrener;
 import TrenerTable.TableTrenerWindowController;
 import TrenerTable.Trener;
+import UczestnikTable.DBManagerUczestnik;
+import UczestnikTable.TableUczestnikWindowController;
 import WyposazenieTable.DBManagerWyposazenie;
 import WyposazenieTable.TableWyposazenieWindowController;
 import WyposazenieTable.Wyposazenie;
@@ -47,7 +49,8 @@ public class DBManager {
     private DBManagerKlient dbManagerKlient;
     private DBManagerKarnet dBManagerKarnet;
     private DBManagerSala dbManagerSala;
-    
+    private DBManagerUczestnik dbManagerUczestnik;
+
     
 //    private TablePracownikWindowController MainWindowController;
 
@@ -60,6 +63,7 @@ public class DBManager {
         this.dbManagerKlient = new DBManagerKlient(this);
         this.dBManagerKarnet = new DBManagerKarnet(this);
         this.dbManagerSala = new DBManagerSala(this);
+        this.dbManagerUczestnik = new DBManagerUczestnik(this);
 
     }
     
@@ -120,6 +124,13 @@ public class DBManager {
                 root = (Parent) fxmlLoader.load();
                 TableSalaWindowController controller = fxmlLoader.<TableSalaWindowController>getController();
                 primaryStage.setTitle("Tabela Sale");
+                break;
+            }
+            case "uczestnicy": {
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/UczestnikTable/TableUczestnikWindow.fxml"));
+                root = (Parent) fxmlLoader.load();
+                TableUczestnikWindowController controller = fxmlLoader.<TableUczestnikWindowController>getController();
+                primaryStage.setTitle("Tabela Uczestnicy");
                 break;
             }
             default: {
@@ -227,6 +238,11 @@ public class DBManager {
     public DBManagerSala getDbManagerSala() {
         return dbManagerSala;
     }
+
+    public DBManagerUczestnik getDbManagerUczestnik() {
+        return dbManagerUczestnik;
+    }
+    
 }
 //public <T extends SQLObject> ObservableList<T> selectAllGeneric(Class<T> classType, T obj) throws InstantiationException, IllegalAccessException {
 //        ObservableList<T> queryResult = FXCollections.observableArrayList();

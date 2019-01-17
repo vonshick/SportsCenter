@@ -2,8 +2,6 @@ package PracownikTable;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -107,7 +105,7 @@ public class TablePracownikWindowController implements Initializable {
     }
     
     @FXML
-    private void search() throws IOException {
+    private void searchPracownik() throws IOException {
         String input = searchTextBox.getText().toLowerCase();
         ObservableList<SQLObject> sqlList = SportsCenter.dBManager.selectFromTable("pracownik");
         ObservableList<Pracownik> pracownicy = FXCollections.observableArrayList();

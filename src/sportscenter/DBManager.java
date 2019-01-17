@@ -18,6 +18,8 @@ import TrenerTable.Trener;
 import WyposazenieTable.DBManagerWyposazenie;
 import WyposazenieTable.TableWyposazenieWindowController;
 import WyposazenieTable.Wyposazenie;
+import ZawodyTable.TableZawodyWindowController;
+import ZawodyTable.Zawody;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -99,6 +101,13 @@ public class DBManager {
                 primaryStage.setTitle("Tabela Karnet");
                 break;
             }
+            case "zawody": {
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/ZawodyTable/TableZawodyWindow.fxml"));
+                root = (Parent) fxmlLoader.load();
+                TableZawodyWindowController controller = fxmlLoader.<TableZawodyWindowController>getController();
+                primaryStage.setTitle("Tabela Zawody");
+                break;
+            }
             default: {
                 System.out.println("Bad ID, not changing view.");
                 return;
@@ -146,6 +155,7 @@ public class DBManager {
                     case "zajecia":
                         break;
                     case "zawody":
+                        sqlList.add(new Zawody(rs));
                         break;
                     default:
                         throw new AssertionError();

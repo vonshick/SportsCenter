@@ -43,7 +43,7 @@ public class TableUczestnikWindowController implements Initializable {
         this.dbManager = SportsCenter.dBManager;
         AddData.setText("Dodaj Uczestnika");
         selectTableView.setItems(FXCollections.observableArrayList("karnety", "klienci", "obiekty sportowe", "pracownicy", "sale", "trenerzy", "uczestnicy", "wyposazenie", "zajecia", "zawody"));
-        selectTableView.getSelectionModel().select("sale");
+        selectTableView.getSelectionModel().select("uczestnicy");
 
         tableView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
                 

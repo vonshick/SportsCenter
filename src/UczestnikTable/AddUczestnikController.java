@@ -45,8 +45,8 @@ public class AddUczestnikController implements Initializable {
        String[] providedData = {PESEL.getText(), surname.getText(), name.getText()};
         if(ValidateData.isAnyEmpty(providedData)){
             AlertBox.showAlert("None of fields can be empty");
-        } else if (ValidateData.ifValueNotSelected(competition)){
-            AlertBox.showAlert("None competition was chosen");
+//        } else if (ValidateData.ifValueNotSelected(competition)){
+//            AlertBox.showAlert("None competition was chosen");
         } else if (ValidateData.ifValueNotSelected(status)){
             AlertBox.showAlert("None status was chosen");
         } else{

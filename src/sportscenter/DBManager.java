@@ -20,6 +20,7 @@ import TrenerTable.TableTrenerWindowController;
 import TrenerTable.Trener;
 import UczestnikTable.DBManagerUczestnik;
 import UczestnikTable.TableUczestnikWindowController;
+import UczestnikTable.Uczestnik;
 import WyposazenieTable.DBManagerWyposazenie;
 import WyposazenieTable.TableWyposazenieWindowController;
 import WyposazenieTable.Wyposazenie;
@@ -175,6 +176,7 @@ public class DBManager {
                         sqlList.add(new Sala(rs));
                         break;
                     case "uczestnik":
+                        sqlList.add(new Uczestnik(rs));
                         break;
                     case "wyposazenie":
                         sqlList.add(new Wyposazenie(rs));

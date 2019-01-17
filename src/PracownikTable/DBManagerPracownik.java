@@ -23,7 +23,7 @@ public class DBManagerPracownik {
     public DBManagerPracownik(DBManager dBManager) {
         this.dBManager = dBManager;
     }
-
+    
     public void editPracownik(String oldPESEL, String name, String surname, String newPESEL, String profession, String salary) {
         try {
             PreparedStatement pstmt = SportsCenter.dBManager.getConnection().prepareStatement("update pracownik set pesel = ?, nazwisko = ?, imie = ?, funkcja = ?, placa = ? where pesel = ?");
@@ -67,14 +67,6 @@ public class DBManagerPracownik {
         stage.setTitle("Log in");
         stage.setOnCloseRequest((WindowEvent event1) -> {
             AlertBox.showAlert("Employee not added!");
-            
-            /*
-            
-            Cos tu nie gra z try catch i przywracaniem autocommit
-            
-            */
-            
-            
             try {
                 SportsCenter.dBManager.getConnection().rollback(); // if coach adding fails we have to rollback
                 SportsCenter.dBManager.getConnection().setAutoCommit(true);

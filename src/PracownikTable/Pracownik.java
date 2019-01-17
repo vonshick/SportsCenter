@@ -35,6 +35,11 @@ public class Pracownik extends SQLObject {
         return PESEL;
     }
     
+    @Override
+    public String toString() {
+        return this.PESEL + "," + this.surname + "," + this.name + "," + this.profession + "," + this.salary;
+    }
+    
     public String getPESEL() {
         return PESEL;
     }
@@ -74,7 +79,5 @@ public class Pracownik extends SQLObject {
     public void setSalary(Float salary) {
         this.salary = salary;
     }
-    
-    
     
 }

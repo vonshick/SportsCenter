@@ -2,6 +2,8 @@ package PracownikTable;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -15,6 +17,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
@@ -33,6 +36,8 @@ public class TablePracownikWindowController implements Initializable {
     private Button AddData;
     @FXML
     private ComboBox selectTableView;
+    @FXML
+    private TextField searchTextBox;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -99,6 +104,33 @@ public class TablePracownikWindowController implements Initializable {
                 showPracownicy();
             }
         }
+    }
+    
+    @FXML
+    private void search() throws IOException {
+        String input = searchTextBox.getText().toLowerCase();
+        ObservableList<SQLObject> sqlList = SportsCenter.dBManager.selectFromTable("pracownik");
+        ObservableList<Pracownik> pracownicy = FXCollections.observableArrayList();
+        String []parts = input.split(",");
+        for (int i = 0; i < parts.length; i++) {
+            parts[i] = parts[i].trim();
+        }
+        for (SQLObject sQLObject : sqlList) {
+            Pracownik pracownik = (Pracownik) sQLObject;
+            String rowToString = pracownik.toString().toLowerCase();
+            boolean add = true;
+            for (int i = 0; i < parts.length; i++) {
+                if (!rowToString.contains(parts[i])) {
+                    add = false;
+                    break;
+                }
+            }
+            if(add) {
+                pracownicy.add(pracownik);
+            }
+        }
+        tableView.getItems().clear();
+        tableView.setItems(pracownicy);
     }
     
     private void showPracownicy() {

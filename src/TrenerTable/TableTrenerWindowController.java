@@ -1,6 +1,5 @@
 package TrenerTable;
 
-import PracownikTable.AddPracownikController;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -23,7 +22,6 @@ import javafx.stage.Stage;
 import sportscenter.DBManager;
 import sportscenter.SQLObject;
 import sportscenter.SportsCenter;
-import sportscenter.DBManagerProject;
 
 
 public class TableTrenerWindowController implements Initializable {
@@ -33,14 +31,11 @@ public class TableTrenerWindowController implements Initializable {
     @FXML
     private TableView tableView;
     @FXML
-    private Button AddData;
-    @FXML
     private ComboBox selectTableView;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         this.dbManager = SportsCenter.dBManager;
-        AddData.setText("Dodaj Trenera");
         selectTableView.setItems(FXCollections.observableArrayList("karnety", "klienci", "obiekty sportowe", "pracownicy", "sale", "trenerzy", "uczestnicy", "wyposazenie", "zajecia", "zawody"));
         selectTableView.getSelectionModel().select("trenerzy");
 
@@ -62,19 +57,6 @@ public class TableTrenerWindowController implements Initializable {
         if (selected != null && !selected.equals("trenerzy")) {
             dbManager.changeScene(selected);
         }
-    }
-
-    @FXML
-    private void openNewTrenerWindow() throws IOException {
-        System.out.println("TODO new trener");
-//        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/TrenerTable/AddTrener.fxml"));
-//        Parent root = (Parent) fxmlLoader.load();
-//        AddPracownikController controller = fxmlLoader.<AddPracownikController>getController();
-//        Stage stage = new Stage();
-//        stage.setTitle("Add new employee");
-//        stage.setScene(new Scene(root));
-//        stage.showAndWait();
-//        showTrenerzy();
     }
 
     @FXML

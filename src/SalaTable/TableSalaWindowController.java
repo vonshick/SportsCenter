@@ -41,7 +41,7 @@ public class TableSalaWindowController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         this.dbManager = SportsCenter.dBManager;
         AddData.setText("Dodaj Salę");
-        selectTableView.setItems(FXCollections.observableArrayList("karnety", "klienci", "obiekty sportowe", "pracownicy", "sale", "trenerzy", "uczestnicy", "sala", "zajecia", "zawody"));
+        selectTableView.setItems(FXCollections.observableArrayList("karnety", "klienci", "obiekty sportowe", "pracownicy", "sale", "trenerzy", "uczestnicy", "wyposazenie", "zajecia", "zawody"));
         selectTableView.getSelectionModel().select("sale");
 
         tableView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);

@@ -18,21 +18,23 @@ public class DBManagerSala {
     }
 
     public void editSala(String oldHallId, int oldBuildingId, String newHallId, int newBuildingId) {
-        try {
-            PreparedStatement pstmt ;
-            pstmt = SportsCenter.dBManager.getConnection().prepareStatement("update sala set nr_sali = ?, obiekt_sportowy_id_obiektu = ? where nr_sali = ?, obiekt_sportowy_id_obiektu = ?");
-
-            pstmt.setString(1, newHallId);
-            pstmt.setInt(2, newBuildingId);
-            pstmt.setString(3, oldHallId);
-            pstmt.setInt(4, oldBuildingId);
-            pstmt.execute();
-            System.out.println("Hall update success");
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("Hall update error");
-        }
+        //TO DO
+//        try {
+//            PreparedStatement pstmt ;
+//            pstmt = SportsCenter.dBManager.getConnection().prepareStatement("update sala set nr_sali = ?, obiekt_sportowy_id_obiektu = ? where nr_sali = ?, obiekt_sportowy_id_obiektu = ?");
+//
+//            pstmt.setString(1, newHallId);
+//            pstmt.setInt(2, newBuildingId);
+//            pstmt.setString(3, oldHallId);
+//            pstmt.setInt(4, oldBuildingId);
+//            pstmt.executeQuery();
+//                SportsCenter.dBManager.getConnection().commit();
+//            System.out.println("Hall update success");
+//
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//            System.out.println("Hall update error");
+//        }
     }
 
     public HashMap<String,Integer> generateBuildingsMap(){

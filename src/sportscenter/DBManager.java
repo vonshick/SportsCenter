@@ -18,6 +18,9 @@ import SalaTable.TableSalaWindowController;
 import TrenerTable.DBManagerTrener;
 import TrenerTable.TableTrenerWindowController;
 import TrenerTable.Trener;
+import UczestnikTable.DBManagerUczestnik;
+import UczestnikTable.TableUczestnikWindowController;
+import UczestnikTable.Uczestnik;
 import WyposazenieTable.DBManagerWyposazenie;
 import WyposazenieTable.TableWyposazenieWindowController;
 import WyposazenieTable.Wyposazenie;
@@ -47,7 +50,8 @@ public class DBManager {
     private DBManagerKlient dbManagerKlient;
     private DBManagerKarnet dBManagerKarnet;
     private DBManagerSala dbManagerSala;
-    
+    private DBManagerUczestnik dbManagerUczestnik;
+
     
 //    private TablePracownikWindowController MainWindowController;
 
@@ -60,6 +64,7 @@ public class DBManager {
         this.dbManagerKlient = new DBManagerKlient(this);
         this.dBManagerKarnet = new DBManagerKarnet(this);
         this.dbManagerSala = new DBManagerSala(this);
+        this.dbManagerUczestnik = new DBManagerUczestnik(this);
 
     }
     
@@ -122,6 +127,13 @@ public class DBManager {
                 primaryStage.setTitle("Tabela Sale");
                 break;
             }
+            case "uczestnicy": {
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/UczestnikTable/TableUczestnikWindow.fxml"));
+                root = (Parent) fxmlLoader.load();
+                TableUczestnikWindowController controller = fxmlLoader.<TableUczestnikWindowController>getController();
+                primaryStage.setTitle("Tabela Uczestnicy");
+                break;
+            }
             default: {
                 System.out.println("Bad ID, not changing view.");
                 return;
@@ -164,6 +176,7 @@ public class DBManager {
                         sqlList.add(new Sala(rs));
                         break;
                     case "uczestnik":
+                        sqlList.add(new Uczestnik(rs));
                         break;
                     case "wyposazenie":
                         sqlList.add(new Wyposazenie(rs));
@@ -227,6 +240,11 @@ public class DBManager {
     public DBManagerSala getDbManagerSala() {
         return dbManagerSala;
     }
+
+    public DBManagerUczestnik getDbManagerUczestnik() {
+        return dbManagerUczestnik;
+    }
+    
 }
 //public <T extends SQLObject> ObservableList<T> selectAllGeneric(Class<T> classType, T obj) throws InstantiationException, IllegalAccessException {
 //        ObservableList<T> queryResult = FXCollections.observableArrayList();

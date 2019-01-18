@@ -19,6 +19,7 @@ public class DBManagerObiektSportowy {
             pstmt.setString(2, location);
             pstmt.setString(3, type);
             pstmt.executeUpdate();
+            SportsCenter.dBManager.getConnection().commit();
             System.out.println("Sports facility added!");
         } catch (SQLException e) {
             System.out.println("Sports facility inserting error");

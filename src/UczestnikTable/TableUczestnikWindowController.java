@@ -56,7 +56,7 @@ public class TableUczestnikWindowController implements Initializable {
         TableColumn<Uczestnik, String> nameColumn = new TableColumn<>("Imię");
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));     
         
-        TableColumn<Uczestnik, String> statusColumn = new TableColumn<>("Status");
+        TableColumn<Uczestnik, Integer> statusColumn = new TableColumn<>("Status");
         statusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
         
         tableView.getColumns().addAll(peselColumn, surnameColumn, nameColumn, statusColumn);

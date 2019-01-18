@@ -27,7 +27,8 @@ public class DBManagerSala {
 //            pstmt.setInt(2, newBuildingId);
 //            pstmt.setString(3, oldHallId);
 //            pstmt.setInt(4, oldBuildingId);
-//            pstmt.execute();
+//            pstmt.executeQuery();
+//                SportsCenter.dBManager.getConnection().commit();
 //            System.out.println("Hall update success");
 //
 //        } catch (SQLException e) {

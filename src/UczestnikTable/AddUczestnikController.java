@@ -72,11 +72,11 @@ public class AddUczestnikController implements Initializable {
         status.setItems(FXCollections.observableArrayList(choices));
     }    
     
-    private char getStatus(){
+    private int getStatus(){
        if(status.getSelectionModel().getSelectedItem().equals("OPŁACONY")){
-            return '1';
+            return 1;
        } else {
-           return '0';
+           return 0;
        }
     }
 }

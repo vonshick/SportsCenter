@@ -45,7 +45,8 @@ public class EditUczestnikController implements Initializable {
         } else if (ValidateData.ifValueNotSelected(status)){
             AlertBox.showAlert("None status was chosen");
         } else{
-            dbManager.getDbManagerUczestnik().editUczestnik(providedData[0], providedData[1], providedData[2], 
+            dbManager.getDbManagerUczestnik().editUczestnik(uczestnik.getPESEL(),
+                    providedData[0], providedData[1], providedData[2], 
                     (String)competition.getSelectionModel().getSelectedItem(),
                     getStatus());
                     
@@ -82,7 +83,7 @@ public class EditUczestnikController implements Initializable {
     }
     
     private String setStatus(){
-        if(uczestnik.getStatus() == '1'){
+        if(uczestnik.getStatus() == 1){
             return "OPŁACONY";
        } else {
            return "NIEOPŁACONY";
@@ -91,9 +92,9 @@ public class EditUczestnikController implements Initializable {
 
     private char getStatus(){
        if(status.getSelectionModel().getSelectedItem().equals("OPŁACONY")){
-            return '1';
+            return 1;
        } else {
-           return '0';
+           return 0;
        }
     }
 

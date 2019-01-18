@@ -24,12 +24,28 @@ import sportscenter.ValidateData;
 public class AddZajeciaController implements Initializable {
     private DBManager dbManager;
     private Map<String, Integer> buildings;
-    @FXML
-    private TextField name;
+    private Map<String, String> coaches;
+    /*
+    !!!!!!!!!
+    !!!!!!!!!
+    DODAJ CENE!
+    !!!!!!!!!
+    !!!!!!!!!
+    */
     @FXML
     private TextField sport;
     @FXML
-    private TextField count;
+    private ChoiceBox dayOfWeek;
+    @FXML
+    private ChoiceBox startHour;
+    @FXML
+    private ChoiceBox startMinute;
+    @FXML
+    private ChoiceBox endHour;
+    @FXML
+    private ChoiceBox endMinute;
+    @FXML
+    private ChoiceBox coach;
     @FXML
     private ChoiceBox building;
     @FXML
@@ -57,7 +73,8 @@ public class AddZajeciaController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         this.dbManager = SportsCenter.dBManager;
-//        buildings = dbManager.getDbManagerZajecia().generateBuildingsMap();
+        buildings = dbManager.getdBManagerZajecia().generateBuildingsMap();
+        
         ArrayList<String> choices = new ArrayList<String>();
         for (Map.Entry<String, Integer> entry : buildings.entrySet()){   
             choices.add(entry.getKey());
@@ -66,13 +83,15 @@ public class AddZajeciaController implements Initializable {
         addChangeListener();
     }    
     
+    private fill
+    
     private void addChangeListener(){
         building.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observableValue, Number index1, Number index2) {
                 String buildingName = (String) building.getItems().get((Integer) index2);
-//                ArrayList<String> choices = dbManager.getDbManagerZajecia().generateHallsList(buildingName);
-//                hall.setItems(FXCollections.observableArrayList(choices));
+                ArrayList<String> choices = dbManager.getDbManagerZajecia().generateHallsList(buildingName);
+                hall.setItems(FXCollections.observableArrayList(choices));
             }
         }); 
     }

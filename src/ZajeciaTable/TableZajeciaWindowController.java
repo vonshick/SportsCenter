@@ -46,19 +46,6 @@ public class TableZajeciaWindowController implements Initializable {
 
         tableView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         
-            //    CREATE TABLE zajecia (
-//    id_zajec                     INTEGER NOT NULL,
-//    dzien_tygodnia               VARCHAR2(20) NOT NULL,
-//    godzina_rozp                 DATE NOT NULL,
-//    godzina_zakon                DATE NOT NULL,
-//    dyscyplina                   VARCHAR2(50) NOT NULL,
-//    cena                         NUMBER(6,2) NOT NULL,
-//    trener_pesel                 VARCHAR2(11),
-//    obiekt_sportowy_id_obiektu   INTEGER,
-//    sala_obiekt_sportowy_id_ob   INTEGER,
-//    sala_nr_sali                 VARCHAR2(50)
-//);
-        
         TableColumn<Zajecia, Integer> idColumn = new TableColumn<>("id");
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         
@@ -77,16 +64,19 @@ public class TableZajeciaWindowController implements Initializable {
         TableColumn<Zajecia, Float> priceColumn = new TableColumn<>("Cena");
         priceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
         
-        TableColumn<Zajecia, String> coachColumn = new TableColumn<>("Trener");
-        coachColumn.setCellValueFactory(new PropertyValueFactory<>("coachPESEL"));
+//        TableColumn<Zajecia, String> coachPESELColumn = new TableColumn<>("Trener PESEL");
+//        coachPESELColumn.setCellValueFactory(new PropertyValueFactory<>("coachPESEL"));
+        
+        TableColumn<Zajecia, String> coachNameColumn = new TableColumn<>("Trener");
+        coachNameColumn.setCellValueFactory(new PropertyValueFactory<>("coachName"));
  
-        TableColumn<Zajecia, Integer> buildingColumn = new TableColumn<>("building");
+        TableColumn<Zajecia, Integer> buildingColumn = new TableColumn<>("Budynek");
         buildingColumn.setCellValueFactory(new PropertyValueFactory<>("buildingId"));
 
-        TableColumn<Zajecia, String> hallColumn = new TableColumn<>("hall");
+        TableColumn<Zajecia, String> hallColumn = new TableColumn<>("Sala");
         hallColumn.setCellValueFactory(new PropertyValueFactory<>("hallId"));
         
-        tableView.getColumns().addAll(idColumn, dayColumn, sportColumn,startColumn, endColumn, sportColumn, priceColumn, coachColumn, buildingColumn, hallColumn);
+        tableView.getColumns().addAll(idColumn, dayColumn,startColumn, endColumn, sportColumn, priceColumn, coachNameColumn, buildingColumn, hallColumn);
         showZajecia();
     }
     
@@ -130,7 +120,7 @@ public class TableZajeciaWindowController implements Initializable {
     }
     
     private void showZajecia() {
-        ObservableList<SQLObject> sqlList = SportsCenter.dBManager.selectFromTable("zajecia");
+        ObservableList<SQLObject> sqlList = SportsCenter.dBManager.selectFromTable("v_zajecia");
         ObservableList<Zajecia> zajecia = FXCollections.observableArrayList();
         for (SQLObject sQLObject : sqlList) {
             zajecia.add((Zajecia) sQLObject);

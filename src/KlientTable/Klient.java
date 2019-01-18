@@ -17,10 +17,10 @@ public class Klient extends SQLObject {
         this.surname = rs.getString(2);
         this.name = rs.getString(3);
     }
-
+    
     @Override
-    public String getSth() {
-        return surname;
+    public String toString() {
+        return this.ID + "," + this.surname + "," + this.name;
     }
     
     public String getSurname() {

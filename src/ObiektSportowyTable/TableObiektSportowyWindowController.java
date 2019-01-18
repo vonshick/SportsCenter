@@ -15,6 +15,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
@@ -33,6 +34,8 @@ public class TableObiektSportowyWindowController implements Initializable {
     private Button AddData;
     @FXML
     private ComboBox selectTableView;
+    @FXML
+    private TextField searchTextBox;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -85,6 +88,83 @@ public class TableObiektSportowyWindowController implements Initializable {
         stage.setScene(new Scene(root));
         stage.showAndWait();
         showObiektySportowe();
+    }
+    
+    @FXML
+    private void searchObiektSportowy() throws IOException {
+        String input = searchTextBox.getText().toLowerCase();
+        if (input.isEmpty()) {
+            showObiektySportowe();
+            return;
+        }
+        ObservableList<SQLObject> sqlList = SportsCenter.dBManager.selectFromTable("obiekt_sportowy");
+        ObservableList<ObiektSportowy> obiekty = FXCollections.observableArrayList();
+        String[] patterns = input.split(",");
+        for (int i = 0; i < patterns.length; i++) {
+            patterns[i] = patterns[i].trim();
+        }
+        for (SQLObject sQLObject : sqlList) {
+            ObiektSportowy obiektSportowy = (ObiektSportowy) sQLObject;
+            String[] rowColumns = obiektSportowy.toString().toLowerCase().split(",");
+            boolean add = true;
+            for (String pattern : patterns) {
+                if (pattern.isEmpty()) {
+                    break;
+                }
+                int searchMode;
+                if (pattern.startsWith("%") && pattern.endsWith("%")) {
+                    searchMode = 1;
+                } else if (pattern.startsWith("%")) {
+                    searchMode = 2;
+                } else if (pattern.endsWith("%")) {
+                    searchMode = 3;
+                } else {
+                    searchMode = 4;
+                }
+                pattern = pattern.replace("%", "");
+                boolean foundInColumn = false;
+                for (String rowColumn : rowColumns) {
+                    switch (searchMode) {
+                        case 1: {
+                            if (rowColumn.contains(pattern)) {
+                                foundInColumn = true;
+                            }
+                            break;
+                        }
+                        case 2: {
+                            if (rowColumn.endsWith(pattern)) {
+                                foundInColumn = true;
+                            }
+                            break;
+                        }
+                        case 3: {
+                            if (rowColumn.startsWith(pattern)) {
+                                foundInColumn = true;
+                            }
+                            break;
+                        }
+                        case 4: {
+                            if (rowColumn.equals(pattern)) {
+                                foundInColumn = true;
+                            }
+                            break;
+                        }
+                    }
+                    if (foundInColumn) {
+                        break;
+                    }
+                }
+                if (!foundInColumn) {
+                    add = false;
+                    break;
+                }
+            }
+            if (add) {
+                obiekty.add(obiektSportowy);
+            }
+        }
+        tableView.getItems().clear();
+        tableView.setItems(obiekty);
     }
     
     private void showObiektySportowe() {

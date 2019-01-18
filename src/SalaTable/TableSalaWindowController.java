@@ -1,8 +1,5 @@
 package SalaTable;
 
-import SalaTable.*;
-import PracownikTable.*;
-import SalaTable.AddSalaController;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -18,6 +15,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
@@ -36,6 +34,8 @@ public class TableSalaWindowController implements Initializable {
     private Button AddData;
     @FXML
     private ComboBox selectTableView;
+    @FXML
+    private TextField searchTextBox;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -94,6 +94,83 @@ public class TableSalaWindowController implements Initializable {
                 showSala();
             }
         }
+    }
+    
+    @FXML
+    private void searchSala() throws IOException {
+        String input = searchTextBox.getText().toLowerCase();
+        if (input.isEmpty()) {
+            showSala();
+            return;
+        }
+        ObservableList<SQLObject> sqlList = SportsCenter.dBManager.selectFromTable("sala");
+        ObservableList<Sala> sale = FXCollections.observableArrayList();
+        String[] patterns = input.split(",");
+        for (int i = 0; i < patterns.length; i++) {
+            patterns[i] = patterns[i].trim();
+        }
+        for (SQLObject sQLObject : sqlList) {
+            Sala sala = (Sala) sQLObject;
+            String[] rowColumns = sala.toString().toLowerCase().split(",");
+            boolean add = true;
+            for (String pattern : patterns) {
+                if (pattern.isEmpty()) {
+                    break;
+                }
+                int searchMode;
+                if (pattern.startsWith("%") && pattern.endsWith("%")) {
+                    searchMode = 1;
+                } else if (pattern.startsWith("%")) {
+                    searchMode = 2;
+                } else if (pattern.endsWith("%")) {
+                    searchMode = 3;
+                } else {
+                    searchMode = 4;
+                }
+                pattern = pattern.replace("%", "");
+                boolean foundInColumn = false;
+                for (String rowColumn : rowColumns) {
+                    switch (searchMode) {
+                        case 1: {
+                            if (rowColumn.contains(pattern)) {
+                                foundInColumn = true;
+                            }
+                            break;
+                        }
+                        case 2: {
+                            if (rowColumn.endsWith(pattern)) {
+                                foundInColumn = true;
+                            }
+                            break;
+                        }
+                        case 3: {
+                            if (rowColumn.startsWith(pattern)) {
+                                foundInColumn = true;
+                            }
+                            break;
+                        }
+                        case 4: {
+                            if (rowColumn.equals(pattern)) {
+                                foundInColumn = true;
+                            }
+                            break;
+                        }
+                    }
+                    if (foundInColumn) {
+                        break;
+                    }
+                }
+                if (!foundInColumn) {
+                    add = false;
+                    break;
+                }
+            }
+            if (add) {
+                sale.add(sala);
+            }
+        }
+        tableView.getItems().clear();
+        tableView.setItems(sale);
     }
     
     private void showSala() {

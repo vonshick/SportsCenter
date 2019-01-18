@@ -107,23 +107,73 @@ public class TablePracownikWindowController implements Initializable {
     @FXML
     private void searchPracownik() throws IOException {
         String input = searchTextBox.getText().toLowerCase();
+        if (input.isEmpty()) {
+            showPracownicy();
+            return;
+        }
         ObservableList<SQLObject> sqlList = SportsCenter.dBManager.selectFromTable("pracownik");
         ObservableList<Pracownik> pracownicy = FXCollections.observableArrayList();
-        String []parts = input.split(",");
-        for (int i = 0; i < parts.length; i++) {
-            parts[i] = parts[i].trim();
+        String[] patterns = input.split(",");
+        for (int i = 0; i < patterns.length; i++) {
+            patterns[i] = patterns[i].trim();
         }
         for (SQLObject sQLObject : sqlList) {
             Pracownik pracownik = (Pracownik) sQLObject;
-            String rowToString = pracownik.toString().toLowerCase();
+            String[] rowColumns = pracownik.toString().toLowerCase().split(",");
             boolean add = true;
-            for (int i = 0; i < parts.length; i++) {
-                if (!rowToString.contains(parts[i])) {
+            for (String pattern : patterns) {
+                if (pattern.isEmpty()) {
+                    break;
+                }
+                int searchMode;
+                if (pattern.startsWith("%") && pattern.endsWith("%")) {
+                    searchMode = 1;
+                } else if (pattern.startsWith("%")) {
+                    searchMode = 2;
+                } else if (pattern.endsWith("%")) {
+                    searchMode = 3;
+                } else {
+                    searchMode = 4;
+                }
+                pattern = pattern.replace("%", "");
+                boolean foundInColumn = false;
+                for (String rowColumn : rowColumns) {
+                    switch (searchMode) {
+                        case 1: {
+                            if (rowColumn.contains(pattern)) {
+                                foundInColumn = true;
+                            }
+                            break;
+                        }
+                        case 2: {
+                            if (rowColumn.endsWith(pattern)) {
+                                foundInColumn = true;
+                            }
+                            break;
+                        }
+                        case 3: {
+                            if (rowColumn.startsWith(pattern)) {
+                                foundInColumn = true;
+                            }
+                            break;
+                        }
+                        case 4: {
+                            if (rowColumn.equals(pattern)) {
+                                foundInColumn = true;
+                            }
+                            break;
+                        }
+                    }
+                    if (foundInColumn) {
+                        break;
+                    }
+                }
+                if (!foundInColumn) {
                     add = false;
                     break;
                 }
             }
-            if(add) {
+            if (add) {
                 pracownicy.add(pracownik);
             }
         }

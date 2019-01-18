@@ -33,7 +33,6 @@ public class AddZawodyController implements Initializable {
     @FXML
     private void save(ActionEvent event) throws IOException, SQLException {
         String[] providedData = {name.getText(), date.getText(), disciplin.getText(), price.getText(), IDSportObject.getText()};
-        System.out.println("data:" + providedData[1] + "end");
         if(ValidateData.isAnyEmpty(providedData)){
             AlertBox.showAlert("None of fields can be empty");
         } else if (!ValidateData.isDate(providedData[1])) {

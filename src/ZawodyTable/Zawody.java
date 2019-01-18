@@ -29,11 +29,6 @@ public class Zawody extends SQLObject {
     }
 
     @Override
-    public String getSth() {
-        return name;
-    }
-    
-    @Override
     public String toString() {
         return this.name + "," + this.date + "," + this.disciplin + "," + this.price + "," + this.IDSportObject;
     }

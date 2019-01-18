@@ -1,6 +1,5 @@
 package WyposazenieTable;
 
-import PracownikTable.*;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import sportscenter.SQLObject;
@@ -43,6 +42,11 @@ public class Wyposazenie extends SQLObject {
         System.out.println("count "+count);
         System.out.println("buildingId "+buildingId);
         System.out.println("hallId: "+hallId);
+    }
+    
+    @Override
+    public String toString() {
+        return this.id + "," + this.name + "," + this.sport + "," + this.count + "," + this.buildingId + "," + this.hallId;
     }
 
     public int getId() {

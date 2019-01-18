@@ -17,8 +17,8 @@ public class Trener extends SQLObject {
     }
 
     @Override
-    public String getSth() {
-        return PESEL;
+    public String toString() {
+        return this.PESEL + "," + this.disciplin;
     }
     
     public String getPESEL() {

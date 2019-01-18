@@ -29,11 +29,6 @@ public class Pracownik extends SQLObject {
         this.profession = rs.getString(4);
         this.salary = rs.getFloat(5);
     }
-
-    @Override
-    public String getSth() {
-        return PESEL;
-    }
     
     @Override
     public String toString() {

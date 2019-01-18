@@ -15,6 +15,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
@@ -33,6 +34,8 @@ public class TableKarnetWindowController implements Initializable {
     private Button AddData;
     @FXML
     private ComboBox selectTableView;
+    @FXML
+    private TextField searchTextBox;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -87,7 +90,6 @@ public class TableKarnetWindowController implements Initializable {
         if(event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) {
             Karnet karnet = (Karnet) tableView.getSelectionModel().getSelectedItem();
             if(karnet != null) {
-                System.out.println("Wybrano " + karnet.getSth());
                 FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/KarnetTable/EditKarnet.fxml"));
                 Parent root = (Parent) fxmlLoader.load();
                 EditKarnetController controller = fxmlLoader.<EditKarnetController>getController();
@@ -99,6 +101,83 @@ public class TableKarnetWindowController implements Initializable {
                 showKarnety();
             }
         }
+    }
+    
+    @FXML
+    private void searchKarnet() throws IOException {
+        String input = searchTextBox.getText().toLowerCase();
+        if (input.isEmpty()) {
+            showKarnety();
+            return;
+        }
+        ObservableList<SQLObject> sqlList = SportsCenter.dBManager.selectFromTable("karnet");
+        ObservableList<Karnet> karnety = FXCollections.observableArrayList();
+        String[] patterns = input.split(",");
+        for (int i = 0; i < patterns.length; i++) {
+            patterns[i] = patterns[i].trim();
+        }
+        for (SQLObject sQLObject : sqlList) {
+            Karnet karnet = (Karnet) sQLObject;
+            String[] rowColumns = karnet.toString().toLowerCase().split(",");
+            boolean add = true;
+            for (String pattern : patterns) {
+                if (pattern.isEmpty()) {
+                    break;
+                }
+                int searchMode;
+                if (pattern.startsWith("%") && pattern.endsWith("%")) {
+                    searchMode = 1;
+                } else if (pattern.startsWith("%")) {
+                    searchMode = 2;
+                } else if (pattern.endsWith("%")) {
+                    searchMode = 3;
+                } else {
+                    searchMode = 4;
+                }
+                pattern = pattern.replace("%", "");
+                boolean foundInColumn = false;
+                for (String rowColumn : rowColumns) {
+                    switch (searchMode) {
+                        case 1: {
+                            if (rowColumn.contains(pattern)) {
+                                foundInColumn = true;
+                            }
+                            break;
+                        }
+                        case 2: {
+                            if (rowColumn.endsWith(pattern)) {
+                                foundInColumn = true;
+                            }
+                            break;
+                        }
+                        case 3: {
+                            if (rowColumn.startsWith(pattern)) {
+                                foundInColumn = true;
+                            }
+                            break;
+                        }
+                        case 4: {
+                            if (rowColumn.equals(pattern)) {
+                                foundInColumn = true;
+                            }
+                            break;
+                        }
+                    }
+                    if (foundInColumn) {
+                        break;
+                    }
+                }
+                if (!foundInColumn) {
+                    add = false;
+                    break;
+                }
+            }
+            if (add) {
+                karnety.add(karnet);
+            }
+        }
+        tableView.getItems().clear();
+        tableView.setItems(karnety);
     }
     
     private void showKarnety() {

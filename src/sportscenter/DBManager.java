@@ -24,6 +24,7 @@ import UczestnikTable.Uczestnik;
 import WyposazenieTable.DBManagerWyposazenie;
 import WyposazenieTable.TableWyposazenieWindowController;
 import WyposazenieTable.Wyposazenie;
+import ZawodyTable.DBManagerZawody;
 import ZawodyTable.TableZawodyWindowController;
 import ZawodyTable.Zawody;
 import java.io.IOException;
@@ -51,7 +52,7 @@ public class DBManager {
     private DBManagerKarnet dBManagerKarnet;
     private DBManagerSala dbManagerSala;
     private DBManagerUczestnik dbManagerUczestnik;
-
+    private DBManagerZawody dBManagerZawody;
     
 //    private TablePracownikWindowController MainWindowController;
 
@@ -65,7 +66,7 @@ public class DBManager {
         this.dBManagerKarnet = new DBManagerKarnet(this);
         this.dbManagerSala = new DBManagerSala(this);
         this.dbManagerUczestnik = new DBManagerUczestnik(this);
-
+        this.dBManagerZawody = new DBManagerZawody(this);
     }
     
     public void changeScene(String table) throws IOException {
@@ -245,6 +246,9 @@ public class DBManager {
         return dbManagerUczestnik;
     }
     
+    public DBManagerZawody getdBManagerZawody() {
+        return dBManagerZawody;
+    }
 }
 //public <T extends SQLObject> ObservableList<T> selectAllGeneric(Class<T> classType, T obj) throws InstantiationException, IllegalAccessException {
 //        ObservableList<T> queryResult = FXCollections.observableArrayList();

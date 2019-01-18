@@ -34,6 +34,8 @@ public class DBManagerSala {
 
         try {
             //drop foreign key constraints on other tables
+            SportsCenter.dBManager.getConnection().setAutoCommit(false);
+
             stmt.execute(dropConstraintWyposazenie);
             stmt.execute(dropConstraintZajecia);
 
@@ -49,17 +51,20 @@ public class DBManagerSala {
             
             stmt.execute(addConstraintZajecia);
             stmt.execute(addConstraintWyposazenie);
-//                        ( sala_obiekt_sportowy_id_ob IS NOT NULL )
-//            AND ( sala_nr_sali IS NOT NULL 
             
             SportsCenter.dBManager.getConnection().commit();
+            SportsCenter.dBManager.getConnection().setAutoCommit(true);
+
             System.out.println("Hall update success");
 
         } catch (SQLException e) {
             e.printStackTrace();
             System.out.println("Hall update error");
+            SportsCenter.dBManager.getConnection().rollback();
             stmt.execute(addConstraintZajecia);
             stmt.execute(addConstraintWyposazenie);
+            SportsCenter.dBManager.getConnection().commit();
+            SportsCenter.dBManager.getConnection().setAutoCommit(true);
         }
     }
     

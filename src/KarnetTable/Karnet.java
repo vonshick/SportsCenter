@@ -2,7 +2,9 @@ package KarnetTable;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
 import sportscenter.SQLObject;
+import sportscenter.ValidateData;
 
 public class Karnet extends SQLObject {
     private int IDClient;
@@ -18,8 +20,12 @@ public class Karnet extends SQLObject {
         this.IDClient = rs.getInt(1);
         this.IDActivity = rs.getInt(2);
         this.price = rs.getFloat(3);
-        this.dateStart = rs.getString(4);
-        this.dateEnd = rs.getString(5);
+        try {
+            this.dateStart = (ValidateData.stringToDate(rs.getString(4))).toString();
+            this.dateEnd = (ValidateData.stringToDate(rs.getString(5))).toString();
+        } catch (ParseException ex) {
+            System.out.println("Parsing date failed, wrong format");
+        }
     }
     
     @Override

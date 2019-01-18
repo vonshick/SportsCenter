@@ -68,6 +68,7 @@ public class EditSalaController implements Initializable {
             }
         } 
         building.setItems(FXCollections.observableArrayList(choices));
+        building.getSelectionModel().select(currentBuilding);
         name.setText(sala.getHallId());
     }
 

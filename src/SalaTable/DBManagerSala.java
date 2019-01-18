@@ -17,24 +17,58 @@ public class DBManagerSala {
         this.dBManager = dBManager;
     }
 
-    public void editSala(String oldHallId, int oldBuildingId, String newHallId, int newBuildingId) {
-        //TO DO
-//        try {
-//            PreparedStatement pstmt ;
-//            pstmt = SportsCenter.dBManager.getConnection().prepareStatement("update sala set nr_sali = ?, obiekt_sportowy_id_obiektu = ? where nr_sali = ?, obiekt_sportowy_id_obiektu = ?");
-//
-//            pstmt.setString(1, newHallId);
-//            pstmt.setInt(2, newBuildingId);
-//            pstmt.setString(3, oldHallId);
-//            pstmt.setInt(4, oldBuildingId);
-//            pstmt.executeQuery();
-//                SportsCenter.dBManager.getConnection().commit();
-//            System.out.println("Hall update success");
-//
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//            System.out.println("Hall update error");
-//        }
+    public void editSala(String oldHallId, int oldBuildingId, String newHallId, int newBuildingId) throws SQLException {
+        Statement stmt = SportsCenter.dBManager.getConnection().createStatement();
+        String dropConstraintWyposazenie = "ALTER TABLE wyposazenie DROP CONSTRAINT wyposazenie_sala_fk";
+        String dropConstraintZajecia = "ALTER TABLE zajecia DROP CONSTRAINT zajecia_sala_fk";
+        String addConstraintWyposazenie = "ALTER TABLE wyposazenie\n" +
+            "    ADD CONSTRAINT wyposazenie_sala_fk FOREIGN KEY ( sala_obiekt_sportowy_id_ob,\n" +
+            "    sala_nr_sali )\n" +
+            "        REFERENCES sala ( obiekt_sportowy_id_obiektu,\n" +
+            "        nr_sali )";
+        String addConstraintZajecia = "ALTER TABLE zajecia\n" +
+            "    ADD CONSTRAINT zajecia_sala_fk FOREIGN KEY ( sala_obiekt_sportowy_id_ob,\n" +
+            "    sala_nr_sali )\n" +
+            "        REFERENCES sala ( obiekt_sportowy_id_obiektu,\n" +
+            "        nr_sali )";
+
+        try {
+            //drop foreign key constraints on other tables
+            stmt.execute(dropConstraintWyposazenie);
+            stmt.execute(dropConstraintZajecia);
+
+            PreparedStatement pstmt ;
+            pstmt = SportsCenter.dBManager.getConnection().prepareStatement("update sala set nr_sali = ?, obiekt_sportowy_id_obiektu = ? where nr_sali = ? and obiekt_sportowy_id_obiektu = ?");
+            executePreparedStatement(pstmt, newHallId, newBuildingId, oldHallId, oldBuildingId);
+
+            pstmt = SportsCenter.dBManager.getConnection().prepareStatement("update zajecia set sala_nr_sali = ?, sala_obiekt_sportowy_id_ob = ? where sala_nr_sali = ? and sala_obiekt_sportowy_id_ob = ?");
+            executePreparedStatement(pstmt, newHallId, newBuildingId, oldHallId, oldBuildingId);
+
+            pstmt = SportsCenter.dBManager.getConnection().prepareStatement("update wyposazenie set sala_nr_sali = ?, sala_obiekt_sportowy_id_ob = ? where sala_nr_sali = ? and sala_obiekt_sportowy_id_ob = ?");
+            executePreparedStatement(pstmt, newHallId, newBuildingId, oldHallId, oldBuildingId);
+            
+            stmt.execute(addConstraintZajecia);
+            stmt.execute(addConstraintWyposazenie);
+//                        ( sala_obiekt_sportowy_id_ob IS NOT NULL )
+//            AND ( sala_nr_sali IS NOT NULL 
+            
+            SportsCenter.dBManager.getConnection().commit();
+            System.out.println("Hall update success");
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Hall update error");
+            stmt.execute(addConstraintZajecia);
+            stmt.execute(addConstraintWyposazenie);
+        }
+    }
+    
+    private void executePreparedStatement(PreparedStatement pstmt, String newHallId, int newBuildingId, String oldHallId, int oldBuildingId) throws SQLException{
+            pstmt.setString(1, newHallId);
+            pstmt.setInt(2, newBuildingId);
+            pstmt.setString(3, oldHallId);
+            pstmt.setInt(4, oldBuildingId);
+            pstmt.executeQuery();
     }
 
     public HashMap<String,Integer> generateBuildingsMap(){

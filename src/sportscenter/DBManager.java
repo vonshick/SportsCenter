@@ -21,6 +21,7 @@ import TrenerTable.Trener;
 import WyposazenieTable.DBManagerWyposazenie;
 import WyposazenieTable.TableWyposazenieWindowController;
 import WyposazenieTable.Wyposazenie;
+import ZawodyTable.DBManagerZawody;
 import ZawodyTable.TableZawodyWindowController;
 import ZawodyTable.Zawody;
 import java.io.IOException;
@@ -47,6 +48,7 @@ public class DBManager {
     private DBManagerKlient dbManagerKlient;
     private DBManagerKarnet dBManagerKarnet;
     private DBManagerSala dbManagerSala;
+    private DBManagerZawody dBManagerZawody;
     
     
 //    private TablePracownikWindowController MainWindowController;
@@ -60,7 +62,7 @@ public class DBManager {
         this.dbManagerKlient = new DBManagerKlient(this);
         this.dBManagerKarnet = new DBManagerKarnet(this);
         this.dbManagerSala = new DBManagerSala(this);
-
+        this.dBManagerZawody = new DBManagerZawody(this);
     }
     
     public void changeScene(String table) throws IOException {
@@ -226,6 +228,10 @@ public class DBManager {
 
     public DBManagerSala getDbManagerSala() {
         return dbManagerSala;
+    }
+
+    public DBManagerZawody getdBManagerZawody() {
+        return dBManagerZawody;
     }
 }
 //public <T extends SQLObject> ObservableList<T> selectAllGeneric(Class<T> classType, T obj) throws InstantiationException, IllegalAccessException {

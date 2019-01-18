@@ -75,33 +75,33 @@ public class TableZawodyWindowController implements Initializable {
 
     @FXML
     private void openNewZawodyWindow() throws IOException{
-//        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/ZawodyTable/AddZawody.fxml"));
-//        Parent root = (Parent) fxmlLoader.load();
-//        AddZawodyController controller = fxmlLoader.<AddZawodyController>getController();
-//        Stage stage = new Stage();
-//        stage.setTitle("Dodaj Zawody");
-//        stage.setScene(new Scene(root));
-//        stage.showAndWait();
-//        showZawody();
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/ZawodyTable/AddZawody.fxml"));
+        Parent root = (Parent) fxmlLoader.load();
+        AddZawodyController controller = fxmlLoader.<AddZawodyController>getController();
+        Stage stage = new Stage();
+        stage.setTitle("Dodaj Zawody");
+        stage.setScene(new Scene(root));
+        stage.showAndWait();
+        showZawody();
     }
     
     @FXML
     private void selectRowZawody(MouseEvent event) throws IOException {
-//        if(event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) {
-//            Zawody zawody = (Zawody) tableView.getSelectionModel().getSelectedItem();
-//            if(zawody != null) {
-//                System.out.println("Wybrano " + zawody.getSth());
-//                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/ZawodyTable/EditZawody.fxml"));
-//                Parent root = (Parent) fxmlLoader.load();
-//                EditZawodyController controller = fxmlLoader.<EditZawodyController>getController();
-//                controller.setZawody(zawody);
-//                Stage stage = new Stage();
-//                stage.setTitle("Edytuj Zawody");
-//                stage.setScene(new Scene(root));
-//                stage.showAndWait();
-//                showZawody();
-//            }
-//        }
+        if(event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) {
+            Zawody zawody = (Zawody) tableView.getSelectionModel().getSelectedItem();
+            if(zawody != null) {
+                System.out.println("Wybrano " + zawody.getSth());
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/ZawodyTable/EditZawody.fxml"));
+                Parent root = (Parent) fxmlLoader.load();
+                EditZawodyController controller = fxmlLoader.<EditZawodyController>getController();
+                controller.setZawody(zawody);
+                Stage stage = new Stage();
+                stage.setTitle("Edytuj Zawody");
+                stage.setScene(new Scene(root));
+                stage.showAndWait();
+                showZawody();
+            }
+        }
     }
     
     @FXML

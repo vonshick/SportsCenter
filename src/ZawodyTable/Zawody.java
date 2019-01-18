@@ -2,7 +2,9 @@ package ZawodyTable;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
 import sportscenter.SQLObject;
+import sportscenter.ValidateData;
 
 public class Zawody extends SQLObject {
     private String name;
@@ -16,7 +18,11 @@ public class Zawody extends SQLObject {
     
     public Zawody(ResultSet rs) throws SQLException {
         this.name = rs.getString(1);
-        this.date = rs.getString(2);
+        try {
+            this.date = (ValidateData.stringToDate(rs.getString(2))).toString();
+        } catch (ParseException ex) {
+            System.out.println("Parsing date failed, wrong format");
+        }
         this.disciplin = rs.getString(3);
         this.price = rs.getFloat(4);
         this.IDSportObject = rs.getInt(5);

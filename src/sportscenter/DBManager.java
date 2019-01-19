@@ -225,6 +225,11 @@ public class DBManager {
         return primaryStage;
     }
 
+    public DBManagerZajecia getdBManagerZajecia() {
+        return dBManagerZajecia;
+    }
+    
+
     public void setPrimaryStage(Stage primaryStage) {
         this.primaryStage = primaryStage;
     }

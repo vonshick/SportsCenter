@@ -1,5 +1,7 @@
 package sportscenter;
 
+import GUI.AlertBox;
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import javafx.scene.control.ChoiceBox;
@@ -51,5 +53,17 @@ public class ValidateData {
     }
     public static boolean ifValueNotSelected(ChoiceBox choiceBox){
         return choiceBox.getSelectionModel().isEmpty();
+    }
+    
+        public static void printSQLException(SQLException ex, String message) {
+            for (Throwable e : ex) {
+                if (e instanceof SQLException) {   
+                    if(((SQLException)e).getErrorCode() == 1){
+                        AlertBox.showAlert("Error while inserting/updating data\nValue of '"+message+"' field must be unique");
+                    }else{
+                        AlertBox.showAlert("Error: "+e.getMessage());
+                    }
+                }
+            }
     }
 }

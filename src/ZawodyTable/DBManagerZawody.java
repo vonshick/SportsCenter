@@ -24,9 +24,10 @@ public class DBManagerZawody {
             pstmt.setString(6, oldName);
             pstmt.executeQuery();
             SportsCenter.dBManager.getConnection().commit();
-            System.out.println("Zawody updated!");
+            System.out.println("Competition updated!");
         } catch (SQLException e) {
-            System.out.println("Zawody update error");
+            ValidateData.printSQLException(e, "Nazwa");
+            System.out.println("Competition update error");
         }
     }
     
@@ -41,6 +42,7 @@ public class DBManagerZawody {
             pstmt.executeUpdate();
             System.out.println("Zawody added!");
         } catch (SQLException e) {
+            ValidateData.printSQLException(e, "Nazwa");
             System.out.println("Zawody inserting error");
         }
     }

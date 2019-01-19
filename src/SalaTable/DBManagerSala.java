@@ -58,7 +58,7 @@ public class DBManagerSala {
             System.out.println("Hall update success");
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            ValidateData.printSQLException(e, "Nazwa");
             System.out.println("Hall update error");
             SportsCenter.dBManager.getConnection().rollback();
             stmt.execute(addConstraintZajecia);
@@ -102,6 +102,7 @@ public class DBManagerSala {
             pstmt.executeUpdate();
             System.out.println("Hall added!");
         }catch(SQLException e ){
+            ValidateData.printSQLException(e, "Nazwa");
             System.out.println("Hall inserting error");
         }
     }

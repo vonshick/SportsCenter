@@ -194,7 +194,6 @@ public class DBManager {
                         break;
                     case "wyposazenie":
                         sqlList.add(new Wyposazenie(rs));
-                    case "zajecia":
                         break;
                     case "v_zajecia":
                         sqlList.add(new Zajecia(rs));

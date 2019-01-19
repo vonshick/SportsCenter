@@ -40,7 +40,7 @@ public class TableZajeciaWindowController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         this.dbManager = SportsCenter.dBManager;
-        AddData.setText("Dodaj Wyposażenie");
+        AddData.setText("Dodaj zajęcia");
         selectTableView.setItems(FXCollections.observableArrayList("karnety", "klienci", "obiekty sportowe", "pracownicy", "sale", "trenerzy", "uczestnicy", "wyposazenie", "zajecia", "zawody"));
         selectTableView.getSelectionModel().select("zajecia");
 

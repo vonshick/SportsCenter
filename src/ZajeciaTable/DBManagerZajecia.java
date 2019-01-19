@@ -33,29 +33,41 @@ public class DBManagerZajecia {
 //    sala_nr_sali                 VARCHAR2(50)
 //);
 
-    public void editZajecia(int id, String name, String sport, String count, int buildingId, String hallId) {
+    public void insertNewZajecia(String dayOfWeek, String startHour, 
+                            String startMinute, 
+                            String endHour, String endMinute, String sport, 
+                            Float price, String coachPESEL,
+                            int buildingId, String hallId) {
         try {
             PreparedStatement pstmt ;
-            pstmt = SportsCenter.dBManager.getConnection().prepareStatement("update zajecia set nazwa = ?, dyscyplina = ?, ilosc = ?, obiekt_sportowy_id_obiektu = ?, sala_obiekt_sportowy_id_ob = ?, sala_nr_sali = ? where id_wyposazenia = ?");
-
-            pstmt.setString(1, name);
+            pstmt = SportsCenter.dBManager.getConnection().prepareStatement("INSERT INTO zajecia VALUES("
+                    + "seq_id_zajec.nextval, ? , "
+                    + "to_timestamp('"+startHour+":"+startMinute+":00','HH24:MI:SS') , "
+                    + "to_timestamp('"+endHour+":"+endMinute+":00','HH24:MI:SS'), "
+                    + "?, ?, ?, ?, ?, ?)");            
+            pstmt.setString(1, dayOfWeek);
             pstmt.setString(2, sport);
-            pstmt.setInt(3, Integer.parseInt(count));
+            pstmt.setFloat(3, price);
             if(hallId.equals("")){
-                pstmt.setInt(4, buildingId);
-                pstmt.setNull(5, java.sql.Types.INTEGER);
-                pstmt.setNull(6, java.sql.Types.VARCHAR);
+                pstmt.setString(4, coachPESEL);
             }else{
-                pstmt.setNull(4, java.sql.Types.INTEGER);
-                pstmt.setInt(5, buildingId);
-                pstmt.setString(6, hallId);
+                pstmt.setNull(4, java.sql.Types.VARCHAR);
             }
-            pstmt.setInt(7, id);
+            if(hallId.equals("")){
+                pstmt.setInt(5, buildingId);
+                pstmt.setNull(6, java.sql.Types.INTEGER);
+                pstmt.setNull(7, java.sql.Types.VARCHAR);
+            }else{
+                pstmt.setNull(5, java.sql.Types.INTEGER);
+                pstmt.setInt(6, buildingId);
+                pstmt.setString(7, hallId);
+            }
             pstmt.executeQuery();
             SportsCenter.dBManager.getConnection().commit();
-            System.out.println("Equipment updated!");
+            System.out.println("Classes inserted!");
         } catch (SQLException e) {
-            System.out.println("Equipment update error");
+            e.printStackTrace();
+            System.out.println("Classes inserting error");
         }
     }
    
@@ -75,6 +87,23 @@ public class DBManagerZajecia {
         System.out.println("Error while filling buildings list" + ex.toString());
         }  
         return buildings;
+    }
+    
+    public HashMap<String,String> generateCoachessMap(){
+        Statement stmt;
+        ResultSet rs;
+        HashMap<String, String> coaches = new HashMap<String, String>();
+        try {
+            stmt = SportsCenter.connection.getConn().createStatement();
+            rs  = stmt.executeQuery("SELECT nazwisko, trener_pesel FROM v_zajecia");
+            while (rs.next()) {
+                String coachName = rs.getString(1);
+                coaches.put(coachName, rs.getString(2));
+            }
+        } catch (SQLException ex) {
+        System.out.println("Error while filling coaches list" + ex.toString());
+        }  
+        return coaches;   
     }
     
     public ArrayList<String> generateHallsList(String buildingName){
@@ -97,29 +126,42 @@ public class DBManagerZajecia {
 
     }
     
-    public void insertNewZajecia(String name, String sport, String count, int building, String hall) throws IOException {
+    public void editZajecia(int id, String dayOfWeek, String startHour, 
+                            String startMinute, 
+                            String endHour, String endMinute, String sport, 
+                            Float price, String coachPESEL,
+                            int buildingId, String hallId) throws IOException, SQLException {
         try {
             PreparedStatement pstmt;
-            if (hall.equals("")){
-                pstmt = SportsCenter.dBManager.getConnection().prepareStatement("INSERT INTO zajecia"
-                        + "(id_wyposazenia, nazwa, dyscyplina, ilosc, obiekt_sportowy_id_obiektu)"
-                        + " VALUES(seq_id_wyposazenia.nextval, ?, ?, ?, ?)");
-            } else {
-                pstmt = SportsCenter.dBManager.getConnection().prepareStatement("INSERT INTO zajecia"
-                        + "(id_wyposazenia, nazwa, dyscyplina, ilosc, sala_obiekt_sportowy_id_ob, sala_nr_sali)"
-                        + " VALUES(seq_id_wyposazenia.nextval, ?, ?, ?, ?, ?)");
-            }
-            pstmt.setString(1, name);
+            pstmt = SportsCenter.dBManager.getConnection().prepareStatement("update zajecia set "
+                    + "dzien_tygodnia = ?, godzin_rozp = to_timestamp('"+startHour+":"+startMinute+":00','HH24:MI:SS'), "
+                    + "godzina_zakon = to_timestamp('"+endHour+":"+endMinute+":00','HH24:MI:SS'), "
+                    + "dyscyplina = ? "
+                    + "cena = ?, trener_pesel = ?, "
+                    + "obiekt_sportowy_id_obiektu = ?, "
+                    + "sala_obiekt_sportowy_id_ob = ?, sala_nr_sali = ? "
+                    + "where id_zajec = ?");
+            pstmt.setString(1, dayOfWeek);
             pstmt.setString(2, sport);
-            pstmt.setInt(3, Integer.parseInt(count));
-            pstmt.setInt(4, building);
-            if (!hall.equals("")){
-                pstmt.setString(5, hall);
+            pstmt.setFloat(3, price);
+            if(hallId.equals("")){
+                pstmt.setString(4, coachPESEL);
+            }else{
+                pstmt.setNull(4, java.sql.Types.VARCHAR);
             }
-            pstmt.executeUpdate();
-            System.out.println("Equipment added!");
+            if(hallId.equals("")){
+                pstmt.setInt(5, buildingId);
+                pstmt.setNull(6, java.sql.Types.INTEGER);
+                pstmt.setNull(7, java.sql.Types.VARCHAR);
+            }else{
+                pstmt.setNull(5, java.sql.Types.INTEGER);
+                pstmt.setInt(6, buildingId);
+                pstmt.setString(7, hallId);
+            }
+            pstmt.setInt(8, id);
+            System.out.println("Classes edited!");
         } catch (SQLException e) {
-            System.out.println("Equipment inserting error");
+            System.out.println("Classes editing error");
             e.printStackTrace();
         }
     }

@@ -61,7 +61,7 @@ public class AddKarnetController implements Initializable {
         sqlList = SportsCenter.dBManager.selectFromTable("zajecia");
         List<Integer> idZajecia = new ArrayList<>();
         for (SQLObject sQLObject : sqlList) {
-            idZajecia.add(((Zajecia) sQLObject).getID());
+            idZajecia.add(((Zajecia) sQLObject).getId());
         }
         idActivity.getItems().addAll(idZajecia);
     }

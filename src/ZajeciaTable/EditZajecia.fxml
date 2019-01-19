@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="350.0" prefWidth="495.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ZajeciaTable.EditZajeciaController">
+   <children>
+      <Label layoutX="56.0" layoutY="32.0" prefHeight="15.0" prefWidth="100.0" text="Dzień tygodnia" />
+      <Label layoutX="18.0" layoutY="69.0" text="Godzina rozpoczęcia" />
+      <Button fx:id="button" layoutX="220.0" layoutY="305.0" mnemonicParsing="false" onAction="#handleButtonAction" text="Dodaj" />
+      <Accordion />
+      <ChoiceBox fx:id="building" layoutX="174.0" layoutY="186.0" prefHeight="25.0" prefWidth="275.0" />
+      <ChoiceBox fx:id="hall" layoutX="173.0" layoutY="229.0" prefHeight="25.0" prefWidth="275.0" />
+      <Label layoutX="16.0" layoutY="108.0" text="Godzina zakończenia" />
+      <Label layoutX="96.0" layoutY="191.0" text="Budynek" />
+      <Label layoutX="118.0" layoutY="234.0" text="Sala" />
+      <ChoiceBox fx:id="dayOfWeek" layoutX="174.0" layoutY="27.0" prefHeight="25.0" prefWidth="275.0" />
+      <ChoiceBox fx:id="startHour" layoutX="173.0" layoutY="64.0" prefHeight="25.0" prefWidth="50.0" />
+      <ChoiceBox fx:id="startMinute" layoutX="231.0" layoutY="64.0" prefHeight="25.0" prefWidth="50.0" />
+      <ChoiceBox fx:id="endHour" layoutX="173.0" layoutY="103.0" prefHeight="25.0" prefWidth="50.0" />
+      <ChoiceBox fx:id="endMinute" layoutX="231.0" layoutY="103.0" prefHeight="25.0" prefWidth="50.0" />
+      <ChoiceBox fx:id="coach" layoutX="173.0" layoutY="144.0" prefHeight="25.0" prefWidth="275.0" />
+      <Label layoutX="110.0" layoutY="149.0" text="Trener" />
+      <Label layoutX="75.0" layoutY="274.0" text="Dyscyplina" />
+      <TextField fx:id="sport" layoutX="173.0" layoutY="269.0" prefHeight="25.0" prefWidth="275.0" />
+   </children>
+</AnchorPane>

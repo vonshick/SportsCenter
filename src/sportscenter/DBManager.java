@@ -24,6 +24,8 @@ import UczestnikTable.Uczestnik;
 import WyposazenieTable.DBManagerWyposazenie;
 import WyposazenieTable.TableWyposazenieWindowController;
 import WyposazenieTable.Wyposazenie;
+import ZajeciaTable.DBManagerZajecia;
+import ZajeciaTable.TableZajeciaWindowController;
 import ZajeciaTable.Zajecia;
 import ZawodyTable.DBManagerZawody;
 import ZawodyTable.TableZawodyWindowController;
@@ -54,7 +56,8 @@ public class DBManager {
     private DBManagerSala dbManagerSala;
     private DBManagerUczestnik dbManagerUczestnik;
     private DBManagerZawody dBManagerZawody;
-    
+    private DBManagerZajecia dBManagerZajecia;
+
 //    private TablePracownikWindowController MainWindowController;
 
     public DBManager(Connection connection) {
@@ -68,6 +71,8 @@ public class DBManager {
         this.dbManagerSala = new DBManagerSala(this);
         this.dbManagerUczestnik = new DBManagerUczestnik(this);
         this.dBManagerZawody = new DBManagerZawody(this);
+        this.dBManagerZajecia = new DBManagerZajecia(this);
+
     }
     
     public void changeScene(String table) throws IOException {
@@ -136,6 +141,13 @@ public class DBManager {
                 primaryStage.setTitle("Tabela Uczestnicy");
                 break;
             }
+            case "zajecia": {
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/ZajeciaTable/TableZajeciaWindow.fxml"));
+                root = (Parent) fxmlLoader.load();
+                TableZajeciaWindowController controller = fxmlLoader.<TableZajeciaWindowController>getController();
+                primaryStage.setTitle("Tabela Zajecia");
+                break;
+            }
             default: {
                 System.out.println("Bad ID, not changing view.");
                 return;
@@ -183,6 +195,8 @@ public class DBManager {
                     case "wyposazenie":
                         sqlList.add(new Wyposazenie(rs));
                     case "zajecia":
+                        break;
+                    case "v_zajecia":
                         sqlList.add(new Zajecia(rs));
                         break;
                     case "zawody":
@@ -211,6 +225,11 @@ public class DBManager {
     public Stage getPrimaryStage() {
         return primaryStage;
     }
+
+    public DBManagerZajecia getdBManagerZajecia() {
+        return dBManagerZajecia;
+    }
+    
 
     public void setPrimaryStage(Stage primaryStage) {
         this.primaryStage = primaryStage;

@@ -29,8 +29,8 @@ public class Karnet extends SQLObject {
     }
     
     @Override
-    public String getSth() {
-        return Integer.toString(IDClient);
+    public String toString() {
+        return this.IDClient + "," + this.IDActivity + "," + this.price + "," + this.dateStart + "," + this.dateEnd;
     }
 
     public int getIDClient() {

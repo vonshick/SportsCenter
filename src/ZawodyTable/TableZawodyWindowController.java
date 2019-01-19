@@ -90,7 +90,6 @@ public class TableZawodyWindowController implements Initializable {
         if(event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) {
             Zawody zawody = (Zawody) tableView.getSelectionModel().getSelectedItem();
             if(zawody != null) {
-                System.out.println("Wybrano " + zawody.getSth());
                 FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/ZawodyTable/EditZawody.fxml"));
                 Parent root = (Parent) fxmlLoader.load();
                 EditZawodyController controller = fxmlLoader.<EditZawodyController>getController();
@@ -107,18 +106,68 @@ public class TableZawodyWindowController implements Initializable {
     @FXML
     private void searchZawody() throws IOException {
         String input = searchTextBox.getText().toLowerCase();
+        if(input.isEmpty()) {
+            showZawody();
+            return;
+        }
         ObservableList<SQLObject> sqlList = SportsCenter.dBManager.selectFromTable("zawody");
         ObservableList<Zawody> zawodyList = FXCollections.observableArrayList();
-        String[] parts = input.split(",");
-        for (int i = 0; i < parts.length; i++) {
-            parts[i] = parts[i].trim();
+        String[] patterns = input.split(",");
+        for (int i = 0; i < patterns.length; i++) {
+            patterns[i] = patterns[i].trim();
         }
         for (SQLObject sQLObject : sqlList) {
             Zawody zawody = (Zawody) sQLObject;
-            String rowToString = zawody.toString().toLowerCase();
+            String[] rowColumns = zawody.toString().toLowerCase().split(",");
             boolean add = true;
-            for (int i = 0; i < parts.length; i++) {
-                if (!rowToString.contains(parts[i])) {
+            for (String pattern : patterns) {
+                if (pattern.isEmpty()) {
+                    break;
+                }
+                int searchMode;
+                if (pattern.startsWith("%") && pattern.endsWith("%")) {
+                    searchMode = 1;
+                } else if (pattern.startsWith("%")) {
+                    searchMode = 2;
+                } else if (pattern.endsWith("%")) {
+                    searchMode = 3;
+                } else {
+                    searchMode = 4;
+                }
+                pattern = pattern.replace("%", "");
+                boolean foundInColumn = false;
+                for (String rowColumn : rowColumns) {
+                    switch(searchMode) {
+                        case 1: {
+                            if (rowColumn.contains(pattern)) {
+                                foundInColumn = true;
+                            }
+                            break;
+                        }
+                        case 2: {
+                            if (rowColumn.endsWith(pattern)) {
+                                foundInColumn = true;
+                            }
+                            break;
+                        }
+                        case 3: {
+                            if (rowColumn.startsWith(pattern)) {
+                                foundInColumn = true;
+                            }
+                            break;
+                        }
+                        case 4: {
+                            if (rowColumn.equals(pattern)) {
+                                foundInColumn = true;
+                            }
+                            break;
+                        }
+                    }
+                    if(foundInColumn) {
+                        break;
+                    }
+                }
+                if (!foundInColumn) {
                     add = false;
                     break;
                 }

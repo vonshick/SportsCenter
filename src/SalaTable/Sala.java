@@ -14,11 +14,15 @@ public class Sala extends SQLObject {
         this.hallId = hallId;
         this.buildingId = buildingId;
     }
-
     
     public Sala(ResultSet rs) throws SQLException {
         this.hallId = rs.getString(1);
         this.buildingId = rs.getInt(2);
+    }
+    
+    @Override
+    public String toString() {
+        return this.hallId + "," + this.buildingId;
     }
 
     public String getHallId() {
@@ -36,10 +40,5 @@ public class Sala extends SQLObject {
     public void setBuildingId(int buildingId) {
         this.buildingId = buildingId;
     }
-
- 
-
-
-    
     
 }

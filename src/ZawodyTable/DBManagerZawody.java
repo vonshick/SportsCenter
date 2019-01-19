@@ -18,7 +18,6 @@ public class DBManagerZawody {
             PreparedStatement pstmt = SportsCenter.dBManager.getConnection().prepareStatement("update zawody set NAZWA = ?, DATA = ?, DYSCYPLINA = ?, OPLATA_STARTOWA = ?, OBIEKT_SPORTOWY_ID_OBIEKTU = ? where NAZWA = ?");
             pstmt.setString(1, name);
             pstmt.setDate(2, ValidateData.stringToDate(date));
-            System.out.println("Setting date to: " + ValidateData.stringToDate(date).toString());
             pstmt.setString(3, disciplin);
             pstmt.setFloat(4, Float.parseFloat(price));
             pstmt.setInt(5, Integer.parseInt(IDSportObject));

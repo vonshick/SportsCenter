@@ -26,6 +26,11 @@ public class Uczestnik extends SQLObject {
         this.name = rs.getString(3);
         this.status = rs.getInt(4);
     }
+    
+    @Override
+    public String toString() {
+        return this.PESEL + "," + this.surname + "," + this.name + "," + this.status;
+    }
 
     public String getPESEL() {
         return PESEL;

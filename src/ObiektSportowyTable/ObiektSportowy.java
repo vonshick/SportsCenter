@@ -25,8 +25,8 @@ public class ObiektSportowy extends SQLObject {
     }
     
     @Override
-    public String getSth() {
-        return nazwa;
+    public String toString() {
+        return this.idObiektu + "," + this.lokalizacja + "," + this.nazwa + "," + this.typObiektu;
     }
 
     public String getIdObiektu() {

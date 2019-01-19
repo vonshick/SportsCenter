@@ -24,6 +24,7 @@ import UczestnikTable.Uczestnik;
 import WyposazenieTable.DBManagerWyposazenie;
 import WyposazenieTable.TableWyposazenieWindowController;
 import WyposazenieTable.Wyposazenie;
+import ZajeciaTable.Zajecia;
 import ZawodyTable.DBManagerZawody;
 import ZawodyTable.TableZawodyWindowController;
 import ZawodyTable.Zawody;
@@ -182,6 +183,7 @@ public class DBManager {
                     case "wyposazenie":
                         sqlList.add(new Wyposazenie(rs));
                     case "zajecia":
+                        sqlList.add(new Zajecia(rs));
                         break;
                     case "zawody":
                         sqlList.add(new Zawody(rs));

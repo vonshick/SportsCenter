@@ -10,7 +10,14 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.TextField;
 import GUI.AlertBox;
+import KlientTable.Klient;
+import ZajeciaTable.Zajecia;
+import java.util.ArrayList;
+import java.util.List;
+import javafx.collections.ObservableList;
+import javafx.scene.control.ComboBox;
 import sportscenter.DBManager;
+import sportscenter.SQLObject;
 import sportscenter.SportsCenter;
 import sportscenter.ValidateData;
 
@@ -19,9 +26,9 @@ public class AddKarnetController implements Initializable {
     private DBManager dbManager;
     
     @FXML
-    private TextField idClient;
+    private ComboBox idClient;
     @FXML
-    private TextField idActivity;
+    private ComboBox idActivity;
     @FXML
     private TextField price;
     @FXML
@@ -31,7 +38,7 @@ public class AddKarnetController implements Initializable {
 
     @FXML
     private void handleButtonAction(ActionEvent event) throws IOException, SQLException {
-        String[] providedData = {idClient.getText(), idActivity.getText(), price.getText(), dateStart.getText(), dateEnd.getText()};
+        String[] providedData = { idClient.getSelectionModel().getSelectedItem().toString(), idActivity.getSelectionModel().getSelectedItem().toString(), price.getText(), dateStart.getText(), dateEnd.getText()};
         if(ValidateData.isAnyEmpty(providedData)){
             AlertBox.showAlert("Wszystkie pola muszą być wypełnione!");
         } else {
@@ -43,6 +50,20 @@ public class AddKarnetController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         this.dbManager = SportsCenter.dBManager;
-    }    
+        GUI.AutoCompleteComboBoxListener<String> idClientAutoComplete = new GUI.AutoCompleteComboBoxListener<>(idClient);
+        ObservableList<SQLObject> sqlList = SportsCenter.dBManager.selectFromTable("klient");
+        List<Integer> idKlients = new ArrayList<>();
+        for (SQLObject sQLObject : sqlList) {
+            idKlients.add(((Klient) sQLObject).getID());
+        }
+        idClient.getItems().addAll(idKlients);
+        GUI.AutoCompleteComboBoxListener<String> idActivityAutoComplete = new GUI.AutoCompleteComboBoxListener<>(idActivity);
+        sqlList = SportsCenter.dBManager.selectFromTable("zajecia");
+        List<Integer> idZajecia = new ArrayList<>();
+        for (SQLObject sQLObject : sqlList) {
+            idZajecia.add(((Zajecia) sQLObject).getID());
+        }
+        idActivity.getItems().addAll(idZajecia);
+    }
 }
 

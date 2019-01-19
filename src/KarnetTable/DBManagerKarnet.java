@@ -4,6 +4,8 @@ import java.io.IOException;
 import sportscenter.*;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class DBManagerKarnet {
     
@@ -41,9 +43,20 @@ public class DBManagerKarnet {
             pstmt.setString(4, dateStart);
             pstmt.setString(5, dateEnd);
             pstmt.executeUpdate();
-            System.out.println("Karnet added!");
         } catch (SQLException e) {
             System.out.println("Karnet inserting error");
+        }
+    }
+    
+    public void deleteKarnet(int idClient, int idActivity) {
+        try {
+            PreparedStatement pstmt = SportsCenter.dBManager.getConnection().prepareStatement("DELETE FROM karnet WHERE KLIENT_ID_KLIENTA = ? AND ZAJECIA_ID_ZAJEC = ?");
+            pstmt.setInt(1, idClient);
+            pstmt.setInt(2, idActivity);
+            pstmt.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(DBManagerKarnet.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Karnet deleting error");
         }
     }
     

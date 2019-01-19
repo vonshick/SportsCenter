@@ -25,13 +25,7 @@ public class AddZajeciaController implements Initializable {
     private DBManager dbManager;
     private Map<String, Integer> buildings;
     private Map<String, String> coaches;
-    /*
-    !!!!!!!!!
-    !!!!!!!!!
-    DODAJ CENE!
-    !!!!!!!!!
-    !!!!!!!!!
-    */
+
     @FXML
     private TextField sport;
     @FXML

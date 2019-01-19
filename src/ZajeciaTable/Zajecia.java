@@ -20,11 +20,11 @@ public class Zajecia extends SQLObject {
     
     public Zajecia(){}
 
-    public Zajecia(int id, String dayOfWeek, String startHour, String endtHour, String sport, Float price, String coachPESEL, String coachName, int buildingId, String hallId) {
+    public Zajecia(int id, String dayOfWeek, String startHour, String endHour, String sport, Float price, String coachPESEL, String coachName, int buildingId, String hallId) {
         this.id = id;
         this.dayOfWeek = dayOfWeek;
         this.startHour = startHour;
-        this.endHour = endtHour;
+        this.endHour = endHour;
         this.sport = sport;
         this.price = price;
         this.coachName = coachName;
@@ -42,8 +42,12 @@ public class Zajecia extends SQLObject {
         this.price = rs.getFloat(6);
         this.coachPESEL = rs.getString(7);
         this.coachName = rs.getString(8);
-        this.buildingId = rs.getInt(9);
-        this.hallId = rs.getString(10);
+        if(rs.getString(11) == null){
+            this.buildingId = rs.getInt(9);
+        }else{
+            this.buildingId = rs.getInt(10);
+        }
+        this.hallId = rs.getString(11);
     }
     
     public int getId() {

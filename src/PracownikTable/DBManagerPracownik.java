@@ -19,43 +19,44 @@ import javafx.stage.WindowEvent;
 public class DBManagerPracownik {
     
     private DBManager dBManager;
-
     public DBManagerPracownik(DBManager dBManager) {
         this.dBManager = dBManager;
     }
     
-    public void editPracownik(String oldPESEL, String name, String surname, String newPESEL, String profession, String salary) {
+    public void editPracownik(String oldPESEL, String name, String surname, String newPESEL, String profession, Float salary) {
         try {
             PreparedStatement pstmt = SportsCenter.dBManager.getConnection().prepareStatement("update pracownik set pesel = ?, nazwisko = ?, imie = ?, funkcja = ?, placa = ? where pesel = ?");
             pstmt.setString(1, newPESEL);
             pstmt.setString(2, surname);
             pstmt.setString(3, name);
             pstmt.setString(4, profession);
-            pstmt.setFloat(5, Float.parseFloat(salary));
+            pstmt.setFloat(5, salary);
             pstmt.setString(6, oldPESEL);
             pstmt.executeQuery();
             SportsCenter.dBManager.getConnection().commit();
             System.out.println("Employee updated!");
         } catch (SQLException e) {
+            ValidateData.printSQLException(e, "PESEL");
             System.out.println("Employee update error");
         }
     }
     
-    public void insertNewPracownik(String name, String surname, String PESEL, String profession, String salary, ActionEvent event) throws IOException {
+    public void insertNewPracownik(String name, String surname, String PESEL, String profession, Float salary, ActionEvent event) throws IOException {
         try {
             PreparedStatement pstmt = SportsCenter.dBManager.getConnection().prepareStatement("INSERT INTO pracownik VALUES(?, ?, ?, ?, ?)");
-            SportsCenter.dBManager.getConnection().setAutoCommit(false); // if coach adding fails we have to rollback
+            SportsCenter.dBManager.getConnection().setAutoCommit(false); // if coachadding fails we have to rollback
             pstmt.setString(1, PESEL);
             pstmt.setString(2, surname);
             pstmt.setString(3, name);
             pstmt.setString(4, profession);
-            pstmt.setFloat(5, Float.parseFloat(salary));
+            pstmt.setFloat(5, salary);
             pstmt.executeUpdate();
             System.out.println("Employee added!");
             if (profession.toLowerCase().equals("trener") || profession.toLowerCase().equals("trenerka")) {
                 openAddTrenerWindow(event, PESEL);
             }
         } catch (SQLException e) {
+            ValidateData.printSQLException(e, "PESEL");
             System.out.println("Employee inserting error");
         }
     }

@@ -194,7 +194,6 @@ public class DBManager {
                         break;
                     case "wyposazenie":
                         sqlList.add(new Wyposazenie(rs));
-                    case "zajecia":
                         break;
                     case "v_zajecia":
                         sqlList.add(new Zajecia(rs));
@@ -226,10 +225,9 @@ public class DBManager {
         return primaryStage;
     }
 
-    public DBManagerZajecia getdBManagerZajecia() {
+    public DBManagerZajecia getDbManagerZajecia() {
         return dBManagerZajecia;
     }
-    
 
     public void setPrimaryStage(Stage primaryStage) {
         this.primaryStage = primaryStage;
@@ -270,6 +268,8 @@ public class DBManager {
     public DBManagerZawody getdBManagerZawody() {
         return dBManagerZawody;
     }
+    
+    
 }
 //public <T extends SQLObject> ObservableList<T> selectAllGeneric(Class<T> classType, T obj) throws InstantiationException, IllegalAccessException {
 //        ObservableList<T> queryResult = FXCollections.observableArrayList();

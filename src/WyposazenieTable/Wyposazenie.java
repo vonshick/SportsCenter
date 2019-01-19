@@ -30,10 +30,8 @@ public class Wyposazenie extends SQLObject {
         this.count = rs.getInt(4);
         if(rs.getString(7) == null){
             this.buildingId = rs.getInt(5);
-            System.out.println(buildingId);
         }else{
             this.buildingId = rs.getInt(6);
-            System.out.println(buildingId);
         }
         this.hallId = rs.getString(7);
     }

@@ -114,6 +114,7 @@ public class TableTrenerWindowController implements Initializable {
                 pattern = pattern.replace("%", "");
                 boolean foundInColumn = false;
                 for (String rowColumn : rowColumns) {
+                    System.out.println(rowColumn);
                     switch (searchMode) {
                         case 1: {
                             if (rowColumn.contains(pattern)) {

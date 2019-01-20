@@ -4,22 +4,22 @@ import sportscenter.*;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-
-
-/*
-
-
-//TODO sprawdzenie wiezow pracownik - trener
-
-
-*/
-
 public class DBManagerTrener {
     
     private DBManager dBManager;
 
     public DBManagerTrener(DBManager dBManager) {
         this.dBManager = dBManager;
+    }
+    
+    public void deleteTrener(String PESEL) {
+        try {
+            PreparedStatement pstmt = SportsCenter.dBManager.getConnection().prepareStatement("DELETE FROM trener WHERE PESEL = ?");
+            pstmt.setString(1, PESEL);
+            pstmt.executeUpdate();
+        } catch (SQLException ex) {
+            ValidateData.printSQLException(ex, PESEL);
+        }
     }
     
     public void editTrener(String oldPESEL, String newPESEL, String disciplin) {
@@ -32,7 +32,7 @@ public class DBManagerTrener {
             SportsCenter.dBManager.getConnection().commit();
             System.out.println("Trener updated!");
         } catch (SQLException e) {
-            System.out.println("Trener update error");
+            ValidateData.printSQLException(e, newPESEL);
         }
     }
 

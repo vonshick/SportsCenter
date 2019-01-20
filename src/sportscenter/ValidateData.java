@@ -55,15 +55,15 @@ public class ValidateData {
         return choiceBox.getSelectionModel().isEmpty();
     }
     
-        public static void printSQLException(SQLException ex, String message) {
-            for (Throwable e : ex) {
-                if (e instanceof SQLException) {   
-                    if(((SQLException)e).getErrorCode() == 1){
-                        AlertBox.showAlert("Error while inserting/updating data\nValue of '"+message+"' field must be unique");
-                    }else{
-                        AlertBox.showAlert("Error: "+e.getMessage());
-                    }
+    public static void printSQLException(SQLException ex, String message) {
+        for (Throwable e : ex) {
+            if (e instanceof SQLException) {   
+                if(((SQLException)e).getErrorCode() == 1){
+                    AlertBox.showAlert("Error while inserting/updating data\nValue of '"+message+"' field must be unique");
+                }else{
+                    AlertBox.showAlert("Error: "+e.getMessage());
                 }
             }
+        }
     }
 }

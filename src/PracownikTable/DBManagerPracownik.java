@@ -7,7 +7,6 @@ import sportscenter.*;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.event.ActionEvent;
@@ -26,31 +25,30 @@ public class DBManagerPracownik {
     }
     
     public void deletePracownik(String PESEL) {
-        if(isForeignKey(PESEL)) {
-            GUI.AlertBox.showAlert("Naruszenie więzów intgralności: By usunąć pracownika, najpierw usuń powiązanego z nim trenera!");
-        } else {
-            try {
-                PreparedStatement pstmt = SportsCenter.dBManager.getConnection().prepareStatement("DELETE FROM pracownik WHERE PESEL = ?");
-                pstmt.setString(1, PESEL);
-                pstmt.executeUpdate();
-            } catch (SQLException ex) {
-                System.out.println("Pracownik deleting error");
-            }
+//        if(isForeignKey(PESEL)) {
+//            GUI.AlertBox.showAlert("Naruszenie więzów intgralności: By usunąć pracownika, najpierw usuń powiązanego z nim trenera!");
+//        } else {
+        try {
+            PreparedStatement pstmt = SportsCenter.dBManager.getConnection().prepareStatement("DELETE FROM pracownik WHERE PESEL = ?");
+            pstmt.setString(1, PESEL);
+            pstmt.executeUpdate();
+        } catch (SQLException ex) {
+            ValidateData.printSQLException(ex, PESEL);
         }
+//        }
     }
     
-    public boolean isForeignKey(String PESEL) {
-        try {
-            PreparedStatement pstmt = SportsCenter.dBManager.getConnection().prepareStatement("SELECT * FROM trener WHERE PESEL =  ?");
-            pstmt.setString(1, PESEL);
-            ResultSet rs = pstmt.executeQuery();
-            return rs.next();
-        } catch (SQLException ex) {
-            System.out.println("isForeignKey error");
-            System.out.println(ex.getMessage());
-            return true;
-        }
-    }
+//    public boolean isForeignKey(String PESEL) {
+//        try {
+//            PreparedStatement pstmt = SportsCenter.dBManager.getConnection().prepareStatement("SELECT * FROM trener WHERE PESEL =  ?");
+//            pstmt.setString(1, PESEL);
+//            ResultSet rs = pstmt.executeQuery();
+//            return rs.next();
+//        } catch (SQLException ex) {
+//            System.out.println("isForeignKey error");
+//            return true;
+//        }
+//    }
     
     public void editPracownik(String oldPESEL, String name, String surname, String newPESEL, String profession, Float salary) {
         try {
@@ -90,7 +88,7 @@ public class DBManagerPracownik {
         }
     }
     
-    private void openAddTrenerWindow(ActionEvent event, String PESEL) throws IOException {
+    public void openAddTrenerWindow(ActionEvent event, String PESEL) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/TrenerTable/AddTrener.fxml"));
         Stage stage = new Stage();
         stage.setScene(new Scene((Pane) loader.load()));

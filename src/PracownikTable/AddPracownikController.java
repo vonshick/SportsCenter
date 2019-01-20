@@ -8,7 +8,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import GUI.AlertBox;
 import sportscenter.DBManager;
@@ -33,16 +32,16 @@ public class AddPracownikController implements Initializable {
     private void handleButtonAction(ActionEvent event) throws IOException, SQLException {
         String[] providedData = { name.getText(), surname.getText(), PESEL.getText(), profession.getText(), salary.getText() };
         if(ValidateData.isAnyEmpty(providedData)){
-            AlertBox.showAlert("None of fields can be empty");
+            AlertBox.showAlert("Żadne pole nie może być puste!");
         }else if (ValidateData.isIncorrectPESEL(PESEL.getText())){
-            AlertBox.showAlert("Incorrect PESEL format");
+            AlertBox.showAlert("Niepoprawny PESEL!");
         } else {
             try{
                 Float salaryValue = Float.parseFloat(providedData[4]);
                 dbManager.getdBManagerPracownik().insertNewPracownik(providedData[0], providedData[1], providedData[2], providedData[3],salaryValue, event);
                 ((Node)(event.getSource())).getScene().getWindow().hide();
             }catch(Exception e){
-                AlertBox.showAlert("Incorrect salary format");
+                AlertBox.showAlert("Wynagrodzenie musi być liczbą!");
             }
         }
     }

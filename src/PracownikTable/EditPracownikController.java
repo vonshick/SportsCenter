@@ -11,6 +11,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import GUI.AlertBox;
+import javafx.event.ActionEvent;
 import sportscenter.DBManager;
 import sportscenter.SportsCenter;
 import sportscenter.ValidateData;
@@ -42,20 +43,24 @@ public class EditPracownikController implements Initializable {
     }
     
     @FXML
-    private void save(MouseEvent event) throws IOException, SQLException {
+    private void save(ActionEvent event) throws IOException, SQLException {
         String[] providedData = { name.getText(), surname.getText(), PESEL.getText(), profession.getText(), salary.getText() };
         if(ValidateData.isAnyEmpty(providedData)){
-            AlertBox.showAlert("None of fields can be empty");
+            AlertBox.showAlert("Żadne pole nie może być puste!");
         }else if (ValidateData.isIncorrectPESEL(PESEL.getText())){
-            AlertBox.showAlert("Incorrect PESEL format");
+            AlertBox.showAlert("Niepoprawny PESEL!");
         } else {
             try{
                 Float salaryValue = Float.parseFloat(providedData[4]);
-                System.out.println("clicked save");
                 dbManager.getdBManagerPracownik().editPracownik(pracownik.getPESEL(), name.getText(), surname.getText(), PESEL.getText(), profession.getText(), salaryValue);
+                if (!providedData[3].toLowerCase().equals(pracownik.getProfession().toLowerCase())
+                        && ((providedData[3].toLowerCase().equals("trener") && !pracownik.getProfession().toLowerCase().equals("trenerka"))
+                        || (providedData[3].toLowerCase().equals("trenerka") && !pracownik.getProfession().toLowerCase().equals("trener")))) {
+                    dbManager.getdBManagerPracownik().openAddTrenerWindow(event, providedData[2]);
+                }
                 ((Node) (event.getSource())).getScene().getWindow().hide();
             } catch(Exception e){
-                AlertBox.showAlert("Incorrect price value");
+                AlertBox.showAlert("Cena musi być liczbą!");
             }
         }
     }

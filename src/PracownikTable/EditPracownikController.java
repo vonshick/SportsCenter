@@ -49,9 +49,14 @@ public class EditPracownikController implements Initializable {
         }else if (ValidateData.isIncorrectPESEL(PESEL.getText())){
             AlertBox.showAlert("Incorrect PESEL format");
         } else {
-            System.out.println("clicked save");
-            dbManager.getdBManagerPracownik().editPracownik(pracownik.getPESEL(), name.getText(), surname.getText(), PESEL.getText(), profession.getText(), salary.getText());
-            ((Node) (event.getSource())).getScene().getWindow().hide();
+            try{
+                Float salaryValue = Float.parseFloat(providedData[4]);
+                System.out.println("clicked save");
+                dbManager.getdBManagerPracownik().editPracownik(pracownik.getPESEL(), name.getText(), surname.getText(), PESEL.getText(), profession.getText(), salaryValue);
+                ((Node) (event.getSource())).getScene().getWindow().hide();
+            } catch(Exception e){
+                AlertBox.showAlert("Incorrect price value");
+            }
         }
     }
 

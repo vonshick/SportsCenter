@@ -37,8 +37,13 @@ public class AddPracownikController implements Initializable {
         }else if (ValidateData.isIncorrectPESEL(PESEL.getText())){
             AlertBox.showAlert("Incorrect PESEL format");
         } else {
-            dbManager.getdBManagerPracownik().insertNewPracownik(providedData[0], providedData[1], providedData[2], providedData[3], providedData[4], event);
-            ((Node)(event.getSource())).getScene().getWindow().hide();
+            try{
+                Float salaryValue = Float.parseFloat(providedData[4]);
+                dbManager.getdBManagerPracownik().insertNewPracownik(providedData[0], providedData[1], providedData[2], providedData[3],salaryValue, event);
+                ((Node)(event.getSource())).getScene().getWindow().hide();
+            }catch(Exception e){
+                AlertBox.showAlert("Incorrect salary format");
+            }
         }
     }
     

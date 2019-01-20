@@ -55,7 +55,6 @@ public class DBManagerKarnet {
             pstmt.setInt(2, idActivity);
             pstmt.executeUpdate();
         } catch (SQLException ex) {
-            Logger.getLogger(DBManagerKarnet.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println("Karnet deleting error");
         }
     }

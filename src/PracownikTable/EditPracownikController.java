@@ -32,7 +32,15 @@ public class EditPracownikController implements Initializable {
     private TextField salary;
     @FXML
     private Button save;
-
+    @FXML
+    private Button delete;
+    
+    @FXML
+    private void delete(MouseEvent event) throws IOException, SQLException {
+        dbManager.getdBManagerPracownik().deletePracownik(pracownik.getPESEL());
+        ((Node) (event.getSource())).getScene().getWindow().hide();
+    }
+    
     @FXML
     private void save(MouseEvent event) throws IOException, SQLException {
         String[] providedData = { name.getText(), surname.getText(), PESEL.getText(), profession.getText(), salary.getText() };

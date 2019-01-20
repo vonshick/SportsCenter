@@ -5,7 +5,9 @@ import TrenerTable.AddTrenerController;
 import java.io.IOException;
 import sportscenter.*;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.event.ActionEvent;
@@ -22,6 +24,33 @@ public class DBManagerPracownik {
 
     public DBManagerPracownik(DBManager dBManager) {
         this.dBManager = dBManager;
+    }
+    
+    public void deletePracownik(String PESEL) {
+        if(isForeignKey(PESEL)) {
+            GUI.AlertBox.showAlert("Naruszenie więzów intgralności: By usunąć pracownika, najpierw usuń powiązanego z nim trenera!");
+        } else {
+            try {
+                PreparedStatement pstmt = SportsCenter.dBManager.getConnection().prepareStatement("DELETE FROM pracownik WHERE PESEL = ?");
+                pstmt.setString(1, PESEL);
+                pstmt.executeUpdate();
+            } catch (SQLException ex) {
+                System.out.println("Pracownik deleting error");
+            }
+        }
+    }
+    
+    public boolean isForeignKey(String PESEL) {
+        try {
+            PreparedStatement pstmt = SportsCenter.dBManager.getConnection().prepareStatement("SELECT * FROM trener WHERE PESEL =  ?");
+            pstmt.setString(1, PESEL);
+            ResultSet rs = pstmt.executeQuery();
+            return rs.next();
+        } catch (SQLException ex) {
+            System.out.println("isForeignKey error");
+            System.out.println(ex.getMessage());
+            return true;
+        }
     }
     
     public void editPracownik(String oldPESEL, String name, String surname, String newPESEL, String profession, String salary) {

@@ -79,7 +79,8 @@ public class TablePracownikWindowController implements Initializable {
         Parent root = (Parent) fxmlLoader.load();
         AddPracownikController controller = fxmlLoader.<AddPracownikController>getController();
         Stage stage = new Stage();
-        stage.setTitle("Add new employee");
+        stage.setResizable(false);
+        stage.setTitle("Dodaj Pracownika");
         stage.setScene(new Scene(root));
         stage.showAndWait();
         showPracownicy();
@@ -97,6 +98,7 @@ public class TablePracownikWindowController implements Initializable {
                 controller.setPracownik(pracownik);
                 Stage stage = new Stage();
                 stage.setTitle("Edytuj Pracownika");
+                stage.setResizable(false);
                 stage.setScene(new Scene(root));
                 stage.showAndWait();
                 showPracownicy();

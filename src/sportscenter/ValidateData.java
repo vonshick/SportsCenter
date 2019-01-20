@@ -4,7 +4,11 @@ import GUI.AlertBox;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Label;
+import javafx.scene.layout.Region;
 
 public class ValidateData {
     public static boolean isIncorrectPESEL(String PESEL) {
@@ -55,13 +59,16 @@ public class ValidateData {
         return choiceBox.getSelectionModel().isEmpty();
     }
     
-    public static void printSQLException(SQLException ex, String message) {
-        for (Throwable e : ex) {
-            if (e instanceof SQLException) {   
-                if(((SQLException)e).getErrorCode() == 1){
-                    AlertBox.showAlert("Error while inserting/updating data\nValue of '"+message+"' field must be unique");
-                }else{
-                    AlertBox.showAlert("Error: "+e.getMessage());
+        public static void printSQLException(SQLException ex, String message) {
+            for (Throwable e : ex) {
+                if (e instanceof SQLException) {   
+                    if(((SQLException)e).getErrorCode() == 1){
+                        AlertBox.showAlert("Error while inserting/updating data\nValue of '"+message+"' field must be unique");
+                    }else{
+                        Alert alert = new Alert(AlertType.ERROR, e.getMessage());
+                        alert.getDialogPane().getChildren().stream().filter(node -> node instanceof Label).forEach(node -> ((Label)node).setMinHeight(Region.USE_PREF_SIZE));
+                        alert.show();
+                    }
                 }
             }
         }

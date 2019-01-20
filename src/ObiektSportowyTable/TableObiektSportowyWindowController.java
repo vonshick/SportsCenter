@@ -1,5 +1,7 @@
 package ObiektSportowyTable;
 
+import TrenerTable.EditTrenerController;
+import TrenerTable.Trener;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -50,11 +52,12 @@ public class TableObiektSportowyWindowController implements Initializable {
         TableColumn<ObiektSportowy, String> idColumn = new TableColumn<>("idObiektu");
         idColumn.setCellValueFactory(new PropertyValueFactory<>("idObiektu"));
 
+        TableColumn<ObiektSportowy, String> nazwaColumn = new TableColumn<>("nazwa");
+        nazwaColumn.setCellValueFactory(new PropertyValueFactory<>("nazwa"));
+        
         TableColumn<ObiektSportowy, String> lokalizacjaColumn = new TableColumn<>("lokalizacja");
         lokalizacjaColumn.setCellValueFactory(new PropertyValueFactory<>("lokalizacja"));
 
-        TableColumn<ObiektSportowy, String> nazwaColumn = new TableColumn<>("nazwa");
-        nazwaColumn.setCellValueFactory(new PropertyValueFactory<>("nazwa"));
 
         TableColumn<ObiektSportowy, String> typObiektuColumn = new TableColumn<>("typObiektu");
         typObiektuColumn.setCellValueFactory(new PropertyValueFactory<>("typObiektu"));
@@ -88,6 +91,25 @@ public class TableObiektSportowyWindowController implements Initializable {
         stage.setScene(new Scene(root));
         stage.showAndWait();
         showObiektySportowe();
+    }
+    
+    @FXML
+    private void selectRowObiektSportowy (MouseEvent event) throws IOException {
+        if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) {
+            ObiektSportowy obiektSportowy = (ObiektSportowy) tableView.getSelectionModel().getSelectedItem();
+            if (obiektSportowy != null) {
+                System.out.println("Wybrano " + obiektSportowy.getNazwa());
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/ObiektSportowyTable/EditObiektSportowy.fxml"));
+                Parent root = (Parent) fxmlLoader.load();
+                EditObiektSportowyController controller = fxmlLoader.<EditObiektSportowyController>getController();
+                controller.setObiektSportowy(obiektSportowy);
+                Stage stage = new Stage();
+                stage.setTitle("Edytuj Obiekt Sportowy");
+                stage.setScene(new Scene(root));
+                stage.showAndWait();
+                showObiektySportowe();
+            }
+        }
     }
     
     @FXML

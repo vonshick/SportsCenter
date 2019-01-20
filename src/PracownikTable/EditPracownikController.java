@@ -51,7 +51,9 @@ public class EditPracownikController implements Initializable {
             AlertBox.showAlert("Niepoprawny PESEL!");
         } else {
             try{
-                Float salaryValue = Float.parseFloat(providedData[4]);
+                Float salaryValue = Float.parseFloat(salary.getText());
+                System.out.println(salary.getText());
+                System.out.println("clicked save");
                 dbManager.getdBManagerPracownik().editPracownik(pracownik.getPESEL(), name.getText(), surname.getText(), PESEL.getText(), profession.getText(), salaryValue);
                 if (!providedData[3].toLowerCase().equals(pracownik.getProfession().toLowerCase())
                         && ((providedData[3].toLowerCase().equals("trener") && !pracownik.getProfession().toLowerCase().equals("trenerka"))

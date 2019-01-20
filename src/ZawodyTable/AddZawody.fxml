@@ -12,12 +12,12 @@
         <TextField fx:id="date" layoutX="122.0" layoutY="79.0" prefHeight="25.0" prefWidth="275.0" text="2019-02-15" />
         <TextField fx:id="disciplin" layoutX="122.0" layoutY="123.0" prefHeight="25.0" prefWidth="275.0" text="squash" />
         <TextField fx:id="price" layoutX="122.0" layoutY="165.0" prefHeight="25.0" prefWidth="275.0" text="60" />
-        <TextField fx:id="IDSportObject" layoutX="122.0" layoutY="207.0" prefHeight="25.0" prefWidth="275.0" text="1" />
         <Label layoutX="57.0" layoutY="42.0" text="Nazwa" />
         <Label layoutX="62.0" layoutY="83.0" text="Data" />
         <Label layoutX="47.0" layoutY="127.0" text="Dyscyplina" />
         <Label layoutX="61.0" layoutY="169.0" text="Cena" />
         <Label layoutX="47.0" layoutY="211.0" text="ID Obiektu" />
         <Button fx:id="save" layoutX="195.0" layoutY="259.0" mnemonicParsing="false" onAction="#save" text="Zapisz" />
+      <ComboBox fx:id="IDSportObject" layoutX="120.0" layoutY="207.0" prefHeight="25.0" prefWidth="275.0" />
     </children>
 </AnchorPane>

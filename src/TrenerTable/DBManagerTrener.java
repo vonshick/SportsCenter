@@ -48,6 +48,7 @@ public class DBManagerTrener {
         } catch (SQLException e) {
             SportsCenter.dBManager.getConnection().rollback();
             SportsCenter.dBManager.getConnection().setAutoCommit(true);
+            ValidateData.printSQLException(e, PESEL);
             System.out.println("Coach inserting error");
         }
     }

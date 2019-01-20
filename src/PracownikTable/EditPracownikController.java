@@ -42,12 +42,14 @@ public class EditPracownikController implements Initializable {
             AlertBox.showAlert("Incorrect PESEL format");
         } else {
             try{
-                Float salaryValue = Float.parseFloat(providedData[4]);
+                Float salaryValue = Float.parseFloat(salary.getText());
+                System.out.println(salary.getText());
                 System.out.println("clicked save");
                 dbManager.getdBManagerPracownik().editPracownik(pracownik.getPESEL(), name.getText(), surname.getText(), PESEL.getText(), profession.getText(), salaryValue);
                 ((Node) (event.getSource())).getScene().getWindow().hide();
             } catch(Exception e){
-                AlertBox.showAlert("Incorrect price value");
+                e.printStackTrace();
+                AlertBox.showAlert("Incorrect salary value");
             }
         }
     }

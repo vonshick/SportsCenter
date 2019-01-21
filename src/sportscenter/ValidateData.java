@@ -59,18 +59,32 @@ public class ValidateData {
         return choiceBox.getSelectionModel().isEmpty();
     }
     
-        public static void printSQLException(SQLException ex, String message) {
+//    java.sql.SQLException: The Network Adapter could not establish the connection
+//    java.sql.SQLException: ORA-01017: invalid username/password; logon denied
+    public static void printSQLException(SQLException ex, String message) {
             for (Throwable e : ex) {
-                if (e instanceof SQLException) {   
+                if (e instanceof SQLException) {
+                    System.out.println(((SQLException)e).getErrorCode());
                     if(((SQLException)e).getErrorCode() == 1){
-                        AlertBox.showAlert("Error while inserting/updating data\nValue of '"+message+"' field must be unique");
-                    }else{
-                        Alert alert = new Alert(AlertType.ERROR, e.getMessage());
+                        showErrorPane("Error while inserting/updating data\nValue of '"+message+"' field must be unique");
+                    } else if (((SQLException)e).getErrorCode() == 1017){
+                        AlertBox.showAlert("Invalid username or password");
+                    } else if (((SQLException)e).getErrorCode() == 12505){
+                        Alert alert = new Alert(AlertType.ERROR, "The Network Adapter could not establish the connection");
                         alert.getDialogPane().getChildren().stream().filter(node -> node instanceof Label).forEach(node -> ((Label)node).setMinHeight(Region.USE_PREF_SIZE));
-                        alert.show();
+                        alert.showAndWait();
+                    }
+                    else{
+                        showErrorPane(e.getMessage());
                     }
                 }
             }
         }
+    
+    private static void showErrorPane(String message){
+        Alert alert = new Alert(AlertType.ERROR, message);
+        alert.getDialogPane().getChildren().stream().filter(node -> node instanceof Label).forEach(node -> ((Label)node).setMinHeight(Region.USE_PREF_SIZE));
+        alert.showAndWait();
     }
+}
 

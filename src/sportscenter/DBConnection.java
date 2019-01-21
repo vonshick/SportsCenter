@@ -36,8 +36,7 @@ public class DBConnection {
                     connectionProps);
             System.out.println("Połączono z bazą danych");
         } catch (SQLException ex) {
-            Logger.getLogger(Connection.class.getName()).log(Level.SEVERE,
-                    "nie udało się połączyć z bazą danych", ex);
+            ValidateData.printSQLException(ex, "connection");
             System.exit(-1);
         }
         return conn;

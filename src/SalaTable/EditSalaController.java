@@ -10,12 +10,11 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import GUI.AlertBox;
-import WyposazenieTable.Wyposazenie;
 import java.util.ArrayList;
 import javafx.collections.FXCollections;
+import javafx.scene.control.ComboBox;
 import sportscenter.DBManager;
 import sportscenter.SportsCenter;
 import sportscenter.ValidateData;
@@ -27,19 +26,21 @@ public class EditSalaController implements Initializable {
     @FXML
     private TextField name;
     @FXML
-    private ChoiceBox building;
+    private ComboBox building;
     @FXML
     private Button button;
     @FXML
     private void handleButtonAction(ActionEvent event) throws IOException, SQLException {
-       String[] providedData = {name.getText(), (String) building.getSelectionModel().getSelectedItem()};
-        if(ValidateData.isAnyEmpty(providedData)){
-            AlertBox.showAlert("None of fields can be empty");
-        } else if (ValidateData.ifValueNotSelected(building)){
-            AlertBox.showAlert("None building was chosen");
-        } else{
-            dbManager.getDbManagerSala().editSala(sala.getHallId(), sala.getBuildingId(), providedData[0], buildings.get(providedData[1]));
-            ((Node)(event.getSource())).getScene().getWindow().hide();
+        try {
+            String[] providedData = {name.getText(), building.getSelectionModel().getSelectedItem().toString()};
+            if (ValidateData.isAnyEmpty(providedData)) {
+                AlertBox.showAlert("None of fields can be empty");
+            } else {
+                dbManager.getDbManagerSala().editSala(sala.getHallId(), sala.getBuildingId(), providedData[0], buildings.get(providedData[1]));
+                ((Node) (event.getSource())).getScene().getWindow().hide();
+            }
+        } catch (NullPointerException e) {
+            AlertBox.showAlert("Pole Budynek nie może być puste!");
         }
     }
     
@@ -59,7 +60,7 @@ public class EditSalaController implements Initializable {
     }
     
     private void initializeValues(){
-        ArrayList<String> choices = new ArrayList<String>();
+        ArrayList<String> choices = new ArrayList<>();
         String currentBuilding = "";
         for (Map.Entry<String, Integer> entry : buildings.entrySet()){   
             choices.add(entry.getKey());
@@ -67,7 +68,8 @@ public class EditSalaController implements Initializable {
                 currentBuilding = entry.getKey();
             }
         } 
-        building.setItems(FXCollections.observableArrayList(choices));
+        GUI.AutoCompleteComboBoxListener<String> buildingAutoComplete = new GUI.AutoCompleteComboBoxListener<>(building);
+        building.getItems().addAll(choices);
         building.getSelectionModel().select(currentBuilding);
         name.setText(sala.getHallId());
     }

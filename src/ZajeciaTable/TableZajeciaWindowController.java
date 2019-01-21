@@ -1,10 +1,5 @@
 package ZajeciaTable;
 
-import TrenerTable.Trener;
-import WyposazenieTable.Wyposazenie;
-import ZajeciaTable.Zajecia;
-import ZajeciaTable.*;
-import ZajeciaTable.AddZajeciaController;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Date;

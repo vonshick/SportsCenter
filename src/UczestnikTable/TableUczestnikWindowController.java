@@ -91,7 +91,7 @@ public class TableUczestnikWindowController implements Initializable {
                 FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/UczestnikTable/EditUczestnik.fxml"));
                 Parent root = (Parent) fxmlLoader.load();
                 EditUczestnikController controller = fxmlLoader.<EditUczestnikController>getController();
-                controller.initializeEditWindow(uczestnik);
+                controller.setUczestnik(uczestnik);
                 Stage stage = new Stage();
                 stage.setTitle("Edytuj Uczestnika");
                 stage.setScene(new Scene(root));

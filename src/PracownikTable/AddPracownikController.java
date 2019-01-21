@@ -33,7 +33,7 @@ public class AddPracownikController implements Initializable {
         String[] providedData = { name.getText(), surname.getText(), PESEL.getText(), profession.getText(), salary.getText() };
         if(ValidateData.isAnyEmpty(providedData)){
             AlertBox.showAlert("Żadne pole nie może być puste!");
-        }else if (ValidateData.isIncorrectPESEL(PESEL.getText())){
+        }else if (ValidateData.isIncorrectPESEL(providedData[2])){
             AlertBox.showAlert("Niepoprawny PESEL!");
         } else {
             try{

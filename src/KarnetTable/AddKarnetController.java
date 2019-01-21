@@ -38,12 +38,16 @@ public class AddKarnetController implements Initializable {
 
     @FXML
     private void handleButtonAction(ActionEvent event) throws IOException, SQLException {
-        String[] providedData = { idClient.getSelectionModel().getSelectedItem().toString(), idActivity.getSelectionModel().getSelectedItem().toString(), price.getText(), dateStart.getText(), dateEnd.getText()};
-        if(ValidateData.isAnyEmpty(providedData)){
-            AlertBox.showAlert("Wszystkie pola muszą być wypełnione!");
-        } else {
-            dbManager.getdBManagerKarnet().insertNewKarnet(providedData[0], providedData[1], providedData[2], providedData[3], providedData[4]);
-            ((Node)(event.getSource())).getScene().getWindow().hide();
+        try {
+            String[] providedData = {idClient.getSelectionModel().getSelectedItem().toString(), idActivity.getSelectionModel().getSelectedItem().toString(), price.getText(), dateStart.getText(), dateEnd.getText()};
+            if (ValidateData.isAnyEmpty(providedData)) {
+                AlertBox.showAlert("Wszystkie pola muszą być wypełnione!");
+            } else {
+                dbManager.getdBManagerKarnet().insertNewKarnet(providedData[0], providedData[1], providedData[2], providedData[3], providedData[4]);
+                ((Node) (event.getSource())).getScene().getWindow().hide();
+            }
+        } catch (NullPointerException e) {
+            AlertBox.showAlert("Pola ID Obiektu i ID Klienta nie mogą być puste!");
         }
     }
     
@@ -58,7 +62,7 @@ public class AddKarnetController implements Initializable {
         }
         idClient.getItems().addAll(idKlients);
         GUI.AutoCompleteComboBoxListener<String> idActivityAutoComplete = new GUI.AutoCompleteComboBoxListener<>(idActivity);
-        sqlList = SportsCenter.dBManager.selectFromTable("zajecia");
+        sqlList = SportsCenter.dBManager.selectFromTable("v_zajecia");
         List<Integer> idZajecia = new ArrayList<>();
         for (SQLObject sQLObject : sqlList) {
             idZajecia.add(((Zajecia) sQLObject).getId());

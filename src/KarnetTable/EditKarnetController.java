@@ -27,14 +27,10 @@ public class EditKarnetController implements Initializable {
     private Karnet karnet;
     private DBManager dbManager;
     
-//    @FXML
-//    private ComboBox idClient;
-//    @FXML
-//    private ComboBox idActivity;
     @FXML
-    private TextField idClient;
+    private ComboBox idClient;
     @FXML
-    private TextField idActivity;
+    private ComboBox idActivity;
     @FXML
     private TextField price;
     @FXML
@@ -54,13 +50,17 @@ public class EditKarnetController implements Initializable {
     
     @FXML
     private void save(MouseEvent event) throws IOException, SQLException {
-        String[] providedData = { idClient.getText(), idActivity.getText(), price.getText(), dateStart.getText(), dateEnd.getText() };
-        if(ValidateData.isAnyEmpty(providedData)){
-            AlertBox.showAlert("Wszystkie pola muszą być wypełnione!");
-        } else {
-            System.out.println("clicked save");
-            dbManager.getdBManagerKarnet().editKarnet(karnet.getIDClient(), karnet.getIDActivity(), providedData[0], providedData[1], providedData[2], providedData[3], providedData[4]);
-            ((Node) (event.getSource())).getScene().getWindow().hide();
+        try {
+            String[] providedData = {idClient.getSelectionModel().getSelectedItem().toString(), idActivity.getSelectionModel().getSelectedItem().toString(), price.getText(), dateStart.getText(), dateEnd.getText()};
+            if (ValidateData.isAnyEmpty(providedData)) {
+                AlertBox.showAlert("Wszystkie pola muszą być wypełnione!");
+            } else {
+                System.out.println("clicked save");
+                dbManager.getdBManagerKarnet().editKarnet(karnet.getIDClient(), karnet.getIDActivity(), providedData[0], providedData[1], providedData[2], providedData[3], providedData[4]);
+                ((Node) (event.getSource())).getScene().getWindow().hide();
+            }
+        } catch (NullPointerException e) {
+            AlertBox.showAlert("Pola ID Obiektu i ID Klienta nie mogą być puste!");
         }
     }
 
@@ -72,26 +72,22 @@ public class EditKarnetController implements Initializable {
 
     public void setKarnet(Karnet karnet) {
         this.karnet = karnet;
-        
-//        GUI.AutoCompleteComboBoxListener<String> idClientAutoComplete = new GUI.AutoCompleteComboBoxListener<>(idClient);
-//        ObservableList<SQLObject> sqlList = SportsCenter.dBManager.selectFromTable("klient");
-//        List<Integer> idKlients = new ArrayList<>();
-//        for (SQLObject sQLObject : sqlList) {
-//            idKlients.add(((Klient) sQLObject).getID());
-//        }
-//        idClient.getItems().addAll(idKlients);
-//        GUI.AutoCompleteComboBoxListener<String> idActivityAutoComplete = new GUI.AutoCompleteComboBoxListener<>(idActivity);
-//        sqlList = SportsCenter.dBManager.selectFromTable("zajecia");
-//        List<Integer> idZajecia = new ArrayList<>();
-//        for (SQLObject sQLObject : sqlList) {
-//            idZajecia.add(((Zajecia) sQLObject).getID());
-//        }
-//        idActivity.getItems().addAll(idZajecia);
-//        idClient.getSelectionModel().select((Integer.toString(karnet.getIDClient())));
-//        idActivity.getSelectionModel().select(Integer.toString(karnet.getIDActivity()));
-        
-        idClient.setText(Integer.toString(karnet.getIDClient()));
-        idActivity.setText(Integer.toString(karnet.getIDActivity()));
+        GUI.AutoCompleteComboBoxListener<String> idClientAutoComplete = new GUI.AutoCompleteComboBoxListener<>(idClient);
+        ObservableList<SQLObject> sqlList = SportsCenter.dBManager.selectFromTable("klient");
+        List<Integer> idKlients = new ArrayList<>();
+        for (SQLObject sQLObject : sqlList) {
+            idKlients.add(((Klient) sQLObject).getID());
+        }
+        idClient.getItems().addAll(idKlients);
+        GUI.AutoCompleteComboBoxListener<String> idActivityAutoComplete = new GUI.AutoCompleteComboBoxListener<>(idActivity);
+        sqlList = SportsCenter.dBManager.selectFromTable("v_zajecia");
+        List<Integer> idZajecia = new ArrayList<>();
+        for (SQLObject sQLObject : sqlList) {
+            idZajecia.add(((Zajecia) sQLObject).getId());
+        }
+        idActivity.getItems().addAll(idZajecia);
+        idClient.getSelectionModel().select((Integer.toString(karnet.getIDClient())));
+        idActivity.getSelectionModel().select(Integer.toString(karnet.getIDActivity()));
         price.setText(Float.toString(karnet.getPrice()));
         dateStart.setText(karnet.getDateStart());
         dateEnd.setText(karnet.getDateEnd());

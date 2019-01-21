@@ -1,6 +1,5 @@
 package ZajeciaTable;
 
-import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import sportscenter.SQLObject;
@@ -17,6 +16,10 @@ public class Zajecia extends SQLObject {
     private int buildingId;
     private String hallId;
 
+    @Override
+    public String toString() {
+        return dayOfWeek + "," + startHour + "," + endHour + "," + sport + "," + price + "," + coachPESEL + "," + coachName + "," + buildingId + "," + hallId;
+    }
     
     public Zajecia(){}
 
@@ -50,6 +53,8 @@ public class Zajecia extends SQLObject {
         this.hallId = rs.getString(11);
     }
     
+
+    
     public int getId() {
         return id;
     }
@@ -70,8 +75,6 @@ public class Zajecia extends SQLObject {
         return coachName;
     }
 
-    
-    
     public String getSport() {
         return sport;
     }

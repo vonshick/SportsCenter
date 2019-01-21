@@ -54,10 +54,15 @@ public class EditKarnetController implements Initializable {
             String[] providedData = {idClient.getSelectionModel().getSelectedItem().toString(), idActivity.getSelectionModel().getSelectedItem().toString(), price.getText(), dateStart.getText(), dateEnd.getText()};
             if (ValidateData.isAnyEmpty(providedData)) {
                 AlertBox.showAlert("Wszystkie pola muszą być wypełnione!");
+            } else if (!ValidateData.isDate(providedData[3]) || !ValidateData.isDate(providedData[4])) {
+                AlertBox.showAlert("Zły format daty!");
             } else {
-                System.out.println("clicked save");
-                dbManager.getdBManagerKarnet().editKarnet(karnet.getIDClient(), karnet.getIDActivity(), providedData[0], providedData[1], providedData[2], providedData[3], providedData[4]);
-                ((Node) (event.getSource())).getScene().getWindow().hide();
+                try {
+                    dbManager.getdBManagerKarnet().editKarnet(karnet.getIDClient(), karnet.getIDActivity(), providedData[0], providedData[1], Float.parseFloat(providedData[2]), providedData[3], providedData[4]);
+                    ((Node) (event.getSource())).getScene().getWindow().hide();
+                } catch (NumberFormatException numberFormatException) {
+                    AlertBox.showAlert("Cena musi być liczbą!");
+                }
             }
         } catch (NullPointerException e) {
             AlertBox.showAlert("Pola ID Obiektu i ID Klienta nie mogą być puste!");

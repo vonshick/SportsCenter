@@ -5,16 +5,6 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-
-
-/*
-
-
-//TODO sprawdzenie wiezow pracownik - trener
-
-
-*/
-
 public class DBManagerTrener {
     
     private DBManager dBManager;

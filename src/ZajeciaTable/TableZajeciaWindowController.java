@@ -110,7 +110,7 @@ public class TableZajeciaWindowController implements Initializable {
                 FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/ZajeciaTable/EditZajecia.fxml"));
                 Parent root = (Parent) fxmlLoader.load();
                 EditZajeciaController controller = fxmlLoader.<EditZajeciaController>getController();
-                controller.initializeEditWindow(zajecia);
+                controller.setZajecia(zajecia);
                 Stage stage = new Stage();
                 stage.setTitle("Edytuj Zajecia");
                 stage.setScene(new Scene(root));

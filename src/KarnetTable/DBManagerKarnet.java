@@ -16,13 +16,13 @@ public class DBManagerKarnet {
         this.dBManager = dBManager;
     }
 
-    public void editKarnet(int idClientOld, int idActivityOld, String idClient, String idActivity, String price, String dateStart, String dateEnd) {
+    public void editKarnet(int idClientOld, int idActivityOld, String idClient, String idActivity, Float price, String dateStart, String dateEnd) {
         try {
             //PreparedStatement pstmt = SportsCenter.dBManager.getConnection().prepareStatement("update karnet set KLIENT_ID_KLIENTA = ?, ZAJECIA_ID_ZAJEC = ?, cena = ?, data_rozp = ?, data_zakon = ? where KLIENT_ID_KLIENTA = ? AND ZAJECIA_ID_ZAJEC = ?");
             PreparedStatement pstmt = SportsCenter.dBManager.getConnection().prepareStatement("update karnet set cena = ?, data_rozp = ?, data_zakon = ? where KLIENT_ID_KLIENTA = ? AND ZAJECIA_ID_ZAJEC = ?");
             //pstmt.setInt(1, Integer.parseInt(idClient));
             //pstmt.setInt(2, Integer.parseInt(idActivity));
-            pstmt.setFloat(1, Float.parseFloat(price));
+            pstmt.setFloat(1, price);
             pstmt.setDate(2, java.sql.Date.valueOf(dateStart));
             pstmt.setDate(3, java.sql.Date.valueOf(dateEnd));
             pstmt.setInt(4, idClientOld);
@@ -49,12 +49,12 @@ public class DBManagerKarnet {
         }
     }
     
-    public void insertNewKarnet(String idClient, String idActivity, String price, String dateStart, String dateEnd) throws IOException {
+    public void insertNewKarnet(String idClient, String idActivity, Float price, String dateStart, String dateEnd) throws IOException {
         try {
             PreparedStatement pstmt = SportsCenter.dBManager.getConnection().prepareStatement("INSERT INTO karnet VALUES(?, ?, ?, ?, ?)");
             pstmt.setInt(1, Integer.parseInt(idClient));
             pstmt.setInt(2, Integer.parseInt(idActivity));
-            pstmt.setFloat(3, Float.parseFloat(price));
+            pstmt.setFloat(3, price);
             pstmt.setString(4, dateStart);
             pstmt.setString(5, dateEnd);
             pstmt.executeUpdate();

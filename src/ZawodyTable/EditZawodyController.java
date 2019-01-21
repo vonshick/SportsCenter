@@ -39,6 +39,14 @@ public class EditZawodyController implements Initializable {
     private ComboBox IDSportObject;
     @FXML
     private Button save;
+    @FXML
+    private Button delete;
+    
+    @FXML
+    private void delete(MouseEvent event) throws IOException, SQLException {
+        dbManager.getdBManagerZawody().deleteZawody(zawody.getName());
+        ((Node) (event.getSource())).getScene().getWindow().hide();
+    }
 
     @FXML
     private void save(MouseEvent event) throws IOException, SQLException {

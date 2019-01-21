@@ -47,7 +47,7 @@ public class EditZajeciaController implements Initializable {
     private ComboBox building;
     @FXML
     private ComboBox hall;
-    
+
     @FXML
     private void handleButtonAction(ActionEvent event) throws IOException, SQLException {
         try {
@@ -56,12 +56,14 @@ public class EditZajeciaController implements Initializable {
                 startHour.getSelectionModel().getSelectedItem().toString(), startMinute.getSelectionModel().getSelectedItem().toString(),
                 endHour.getSelectionModel().getSelectedItem().toString(), endMinute.getSelectionModel().getSelectedItem().toString()};
             String coachLocal = coaches.get(providedData[2]);
+            if (coachLocal == null) {
+                AlertBox.showAlert("Podaj istniejącego trenera!");
+                return;
+            }
             try {
                 int buildingLocal = buildings.get(providedData[3]);
-                if (ValidateData.isAnyEmpty(providedData)) {
+                if (ValidateData.isAnyEmpty(providedData) && coachLocal != null) {
                     AlertBox.showAlert("Pola Dyscyplina i Cena muszą być wypełnione!");
-                } else if (coachLocal == null) {
-                    AlertBox.showAlert("Podaj istniejącego trenera!");
                 } else {
                     String hallId = "";
                     if (!hall.getSelectionModel().isEmpty()) {

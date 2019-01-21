@@ -17,18 +17,15 @@ public class DBManagerZajecia {
         this.dBManager = dBManager;
     }
     
-    //    CREATE TABLE zajecia (
-//    id_zajec                     INTEGER NOT NULL,
-//    dzien_tygodnia               VARCHAR2(20) NOT NULL,
-//    godzina_rozp                 DATE NOT NULL,
-//    godzina_zakon                DATE NOT NULL,
-//    dyscyplina                   VARCHAR2(50) NOT NULL,
-//    cena                         NUMBER(6,2) NOT NULL,
-//    trener_pesel                 VARCHAR2(11),
-//    obiekt_sportowy_id_obiektu   INTEGER,
-//    sala_obiekt_sportowy_id_ob   INTEGER,
-//    sala_nr_sali                 VARCHAR2(50)
-//);
+    void deleteZajecia(int id) {
+        try {
+            PreparedStatement pstmt = SportsCenter.dBManager.getConnection().prepareStatement("DELETE FROM zajecia WHERE ID_ZAJEC = ?");
+            pstmt.setInt(1, id);
+            pstmt.executeUpdate();
+        } catch (SQLException ex) {
+            System.out.println("Zajecia deleting error");
+        }
+    }
 
     public void insertNewZajecia(String dayOfWeek, String startHour, 
                             String startMinute, 
@@ -63,7 +60,6 @@ public class DBManagerZajecia {
             SportsCenter.dBManager.getConnection().commit();
             System.out.println("Classes inserted!");
         } catch (SQLException e) {
-            e.printStackTrace();
             System.out.println("Classes inserting error");
         }
     }
@@ -72,7 +68,7 @@ public class DBManagerZajecia {
     public HashMap<String,Integer> generateBuildingsMap(){
         Statement stmt;
         ResultSet rs;
-        HashMap<String, Integer> buildings = new HashMap<String, Integer>();
+        HashMap<String, Integer> buildings = new HashMap<>();
         try {
             stmt = SportsCenter.connection.getConn().createStatement();
             rs  = stmt.executeQuery("SELECT nazwa, id_obiektu FROM obiekt_sportowy");
@@ -89,7 +85,7 @@ public class DBManagerZajecia {
     public HashMap<String,String> generateCoachessMap(){
         Statement stmt;
         ResultSet rs;
-        HashMap<String, String> coaches = new HashMap<String, String>();
+        HashMap<String, String> coaches = new HashMap<>();
         try {
             stmt = SportsCenter.connection.getConn().createStatement();
             rs  = stmt.executeQuery("SELECT nazwisko, pesel FROM trener NATURAL JOIN pracownik");
@@ -106,14 +102,14 @@ public class DBManagerZajecia {
     public ArrayList<String> generateHallsList(String buildingName){
         Statement stmt;
         ResultSet rs;
-        ArrayList<String> hallIds = new ArrayList<String>();
+        ArrayList<String> hallIds = new ArrayList<>();
         hallIds.add("");
         try {
             stmt = SportsCenter.connection.getConn().createStatement();
             rs = stmt.executeQuery("SELECT nr_sali FROM sala "
                     + "WHERE obiekt_sportowy_id_obiektu = "
                     + "(SELECT id_obiektu FROM obiekt_sportowy WHERE nazwa = '"+buildingName+"')");
-            ArrayList<String> choices = new ArrayList<String>();
+            ArrayList<String> choices = new ArrayList<>();
             while (rs.next()) {
                  hallIds.add(rs.getString(1));
             }
@@ -169,5 +165,5 @@ public class DBManagerZajecia {
     public DBManager getdBManager() {
         return dBManager;
     }
-    
+
 }

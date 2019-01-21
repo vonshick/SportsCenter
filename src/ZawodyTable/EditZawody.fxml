@@ -18,7 +18,6 @@
         <Label layoutX="51.0" layoutY="128.0" text="Dyscyplina" />
         <Label layoutX="66.0" layoutY="169.0" text="Cena" />
         <Label layoutX="51.0" layoutY="211.0" text="ID Obiektu" />
-        <Button fx:id="save" layoutX="171.0" layoutY="260.0" mnemonicParsing="false" onMouseClicked="#save" text="Zapisz" />
-        <Button fx:id="delete" layoutX="231.0" layoutY="260.0" mnemonicParsing="false" onMouseClicked="#delete" text="Usuń" />
+        <Button fx:id="save" layoutX="198.0" layoutY="259.0" mnemonicParsing="false" onMouseClicked="#save" text="Zapisz" />
     </children>
 </AnchorPane>

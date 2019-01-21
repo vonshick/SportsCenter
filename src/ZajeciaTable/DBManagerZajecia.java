@@ -1,6 +1,5 @@
 package ZajeciaTable;
 
-import ZajeciaTable.*;
 import java.io.IOException;
 import sportscenter.*;
 import java.sql.PreparedStatement;
@@ -9,8 +8,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
-import javafx.collections.FXCollections;
-import javafx.event.ActionEvent;
 
 public class DBManagerZajecia {
     
@@ -110,6 +107,7 @@ public class DBManagerZajecia {
         Statement stmt;
         ResultSet rs;
         ArrayList<String> hallIds = new ArrayList<String>();
+        hallIds.add("");
         try {
             stmt = SportsCenter.connection.getConn().createStatement();
             rs = stmt.executeQuery("SELECT nr_sali FROM sala "

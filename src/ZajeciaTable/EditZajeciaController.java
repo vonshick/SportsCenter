@@ -15,10 +15,8 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
-import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
-import javafx.scene.input.MouseEvent;
 import sportscenter.DBManager;
 import sportscenter.SportsCenter;
 import sportscenter.ValidateData;
@@ -49,15 +47,7 @@ public class EditZajeciaController implements Initializable {
     private ComboBox building;
     @FXML
     private ComboBox hall;
-    @FXML
-    private Button delete;
 
-    @FXML
-    private void delete(MouseEvent event) throws IOException, SQLException {
-        dbManager.getDbManagerZajecia().deleteZajecia(zajecia.getId());
-        ((Node) (event.getSource())).getScene().getWindow().hide();
-    }
-    
     @FXML
     private void handleButtonAction(ActionEvent event) throws IOException, SQLException {
         try {

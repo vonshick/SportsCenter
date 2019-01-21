@@ -1,6 +1,5 @@
 package UczestnikTable;
 
-import UczestnikTable.*;
 import java.io.IOException;
 import sportscenter.*;
 import java.sql.PreparedStatement;
@@ -8,7 +7,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class DBManagerUczestnik {
     
@@ -33,7 +31,6 @@ public class DBManagerUczestnik {
             System.out.println("Competitor update success");
 
         } catch (SQLException e) {
-            e.printStackTrace();
             System.out.println("Competitor update error");
         }
     }
@@ -41,7 +38,7 @@ public class DBManagerUczestnik {
     public ArrayList<String> generateCompetitionsList(){
         Statement stmt;
         ResultSet rs;
-        ArrayList<String> competitions = new ArrayList<String>();
+        ArrayList<String> competitions = new ArrayList<>();
         try {
             stmt = SportsCenter.connection.getConn().createStatement();
             rs  = stmt.executeQuery("SELECT nazwa FROM zawody");
@@ -69,7 +66,6 @@ public class DBManagerUczestnik {
             System.out.println("Competitor inserting error");
         }
     }
-    
     
     public DBManager getdBManager() {
         return dbManager;

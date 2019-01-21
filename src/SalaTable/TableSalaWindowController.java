@@ -71,7 +71,7 @@ public class TableSalaWindowController implements Initializable {
         Parent root = (Parent) fxmlLoader.load();
         AddSalaController controller = fxmlLoader.<AddSalaController>getController();
         Stage stage = new Stage();
-        stage.setTitle("Add new sala");
+        stage.setTitle("Dodaj Sale");
         stage.setScene(new Scene(root));
         stage.showAndWait();
         showSala();

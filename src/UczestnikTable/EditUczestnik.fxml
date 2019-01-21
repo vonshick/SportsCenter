@@ -19,6 +19,6 @@
       <Accordion />
       <TextField fx:id="name" layoutX="135.0" layoutY="133.0" prefHeight="25.0" prefWidth="275.0" text="Zdzislaw" />
       <TextField fx:id="surname" layoutX="135.0" layoutY="93.0" prefHeight="25.0" prefWidth="275.0" text="Kaluzny" />
-      <ChoiceBox fx:id="competition" layoutX="135.0" layoutY="172.0" prefHeight="25.0" prefWidth="275.0" />
+      <ComboBox fx:id="competition" layoutX="135.0" layoutY="172.0" prefHeight="25.0" prefWidth="275.0" />
    </children>
 </AnchorPane>

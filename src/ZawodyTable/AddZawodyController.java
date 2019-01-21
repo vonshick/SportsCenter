@@ -10,7 +10,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.TextField;
 import GUI.AlertBox;
-import KlientTable.Klient;
 import ObiektSportowyTable.ObiektSportowy;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -63,9 +62,9 @@ public class AddZawodyController implements Initializable {
         this.dbManager = SportsCenter.dBManager;
         GUI.AutoCompleteComboBoxListener<String> autoComplete = new GUI.AutoCompleteComboBoxListener<>(IDSportObject);
         ObservableList<SQLObject> sqlList = SportsCenter.dBManager.selectFromTable("obiekt_sportowy");
-        List<Integer> idObject = new ArrayList<>();
+        List<String> idObject = new ArrayList<>();
         for (SQLObject sQLObject : sqlList) {
-            idObject.add(Integer.parseInt(((ObiektSportowy) sQLObject).getIdObiektu()));
+            idObject.add(((ObiektSportowy) sQLObject).getIdObiektu());
         }
         IDSportObject.getItems().addAll(idObject);
     }    

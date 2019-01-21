@@ -70,7 +70,7 @@ public class EditTrenerController implements Initializable {
 
     public void setTrener(Trener trener) {
         this.trener = trener;
-        GUI.AutoCompleteComboBoxListener<String> idClientAutoComplete = new GUI.AutoCompleteComboBoxListener<>(PESEL);
+        GUI.AutoCompleteComboBoxListener<String> autoComplete = new GUI.AutoCompleteComboBoxListener<>(PESEL);
         ObservableList<SQLObject> sqlList = SportsCenter.dBManager.selectFromTable("pracownik");
         List<String> pracownikPESEL = new ArrayList<>();
         for (SQLObject sQLObject : sqlList) {

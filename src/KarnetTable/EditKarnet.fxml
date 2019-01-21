@@ -8,8 +8,8 @@
 
 <AnchorPane id="AnchorPane" prefHeight="315.0" prefWidth="445.5" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="KarnetTable.EditKarnetController">
     <children>
-        <TextField fx:id="idClient" layoutX="120.0" layoutY="39.0" prefHeight="25.0" prefWidth="275.0" />
-        <TextField fx:id="idActivity" layoutX="120.0" layoutY="79.0" prefHeight="25.0" prefWidth="275.0" />
+        <ComboBox fx:id="idClient" layoutX="120.0" layoutY="39.0" prefHeight="25.0" prefWidth="275.0" />
+        <ComboBox fx:id="idActivity" layoutX="120.0" layoutY="79.0" prefHeight="25.0" prefWidth="275.0" />
         <TextField fx:id="price" layoutX="122.0" layoutY="123.0" prefHeight="25.0" prefWidth="275.0" />
         <TextField fx:id="dateStart" layoutX="122.0" layoutY="165.0" prefHeight="25.0" prefWidth="275.0" />
         <TextField fx:id="dateEnd" layoutX="122.0" layoutY="208.0" prefHeight="25.0" prefWidth="275.0" />

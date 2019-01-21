@@ -11,11 +11,11 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import GUI.AlertBox;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.scene.control.ComboBox;
 import sportscenter.DBManager;
 import sportscenter.SportsCenter;
 import sportscenter.ValidateData;
@@ -30,26 +30,27 @@ public class AddWyposazenieController implements Initializable {
     @FXML
     private TextField count;
     @FXML
-    private ChoiceBox building;
+    private ComboBox building;
     @FXML
-    private ChoiceBox hall;
+    private ComboBox hall;
     @FXML
     private void handleButtonAction(ActionEvent event) throws IOException, SQLException {
-       String[] providedData = {name.getText()};
-        if(ValidateData.isAnyEmpty(providedData)){
-            AlertBox.showAlert("Name field can not be empty");
-        } else if (!ValidateData.isNumber(count.getText())){
-            AlertBox.showAlert("'Count' value should be an integer");
-        } else if (ValidateData.ifValueNotSelected(building)){
-            AlertBox.showAlert("None building was chosen");
-        }  else {
-            String hallId = "";
-            if (!ValidateData.ifValueNotSelected(hall)){
-                hallId = (String) hall.getSelectionModel().getSelectedItem();
+        try {
+            String[] providedData = {name.getText(), count.getText(), building.getSelectionModel().getSelectedItem().toString()};
+            if (ValidateData.isAnyEmpty(providedData)) {
+                AlertBox.showAlert("Pole Nazwa, Ilość i Budynek nie mogą być puste!");
+            } else if (!ValidateData.isNumber(providedData[1])) {
+                AlertBox.showAlert("W pole 'Ilość' należy wpisać liczbę całkowitą!");
+            } else {
+                String hallId = "";
+                if (!hall.getSelectionModel().isEmpty()) {
+                    hallId = hall.getSelectionModel().getSelectedItem().toString();
+                }
+                dbManager.getDbManagerWyposazenie().insertNewWyposazenie(providedData[0], sport.getText(), providedData[1], buildings.get(providedData[2]), hallId);
+                ((Node) (event.getSource())).getScene().getWindow().hide();
             }
-            dbManager.getDbManagerWyposazenie().insertNewWyposazenie(providedData[0], sport.getText(), count.getText(), 
-                    getBuildingId(), hallId);
-            ((Node)(event.getSource())).getScene().getWindow().hide();
+        } catch (NullPointerException e) {
+            AlertBox.showAlert("Pole Budynek nie może być puste!");
         }
     }
     
@@ -57,27 +58,26 @@ public class AddWyposazenieController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         this.dbManager = SportsCenter.dBManager;
         buildings = dbManager.getDbManagerWyposazenie().generateBuildingsMap();
-        ArrayList<String> choices = new ArrayList<String>();
+        ArrayList<String> choices = new ArrayList<>();
         for (Map.Entry<String, Integer> entry : buildings.entrySet()){   
             choices.add(entry.getKey());
         }
-        building.setItems(FXCollections.observableArrayList(choices));
+        building.getItems().addAll(choices);
+        GUI.AutoCompleteComboBoxListener<String> autoCompleteBuilding = new GUI.AutoCompleteComboBoxListener<>(building);
+        GUI.AutoCompleteComboBoxListener<String> autoCompleteHall = new GUI.AutoCompleteComboBoxListener<>(hall);
         addChangeListener();
     }    
     
     private void addChangeListener(){
         building.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
             @Override
-            public void changed(ObservableValue<? extends Number> observableValue, Number index1, Number index2) {
-                String buildingName = (String) building.getItems().get((Integer) index2);
-                ArrayList<String> choices = dbManager.getDbManagerWyposazenie().generateHallsList(buildingName);
-                hall.setItems(FXCollections.observableArrayList(choices));
+            public void changed(ObservableValue<? extends Number> observableValue, Number indexOld, Number indexNew) {
+                String buildingName = building.getItems().get((Integer) indexNew).toString();
+                hall.getItems().clear();
+                hall.getItems().addAll(dbManager.getDbManagerWyposazenie().generateHallsList(buildingName));
             }
         }); 
     }
-    
-    private int getBuildingId(){
-        return buildings.get((String) building.getSelectionModel().getSelectedItem());
-    }
+
 }
 

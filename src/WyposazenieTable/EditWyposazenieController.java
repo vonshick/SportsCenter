@@ -61,6 +61,8 @@ public class EditWyposazenieController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         this.dbManager = SportsCenter.dBManager;
         buildings = dbManager.getDbManagerWyposazenie().generateBuildingsMap();
+        GUI.AutoCompleteComboBoxListener<String> autoCompleteBuilding = new GUI.AutoCompleteComboBoxListener<>(building);
+        GUI.AutoCompleteComboBoxListener<String> autoCompleteHall = new GUI.AutoCompleteComboBoxListener<>(hall);
     }
     
     public void setWyposazenie(Wyposazenie wyposazenie) {

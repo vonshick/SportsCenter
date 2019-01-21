@@ -48,10 +48,10 @@ public class DBManagerZajecia {
             pstmt.setString(1, dayOfWeek);
             pstmt.setString(2, sport);
             pstmt.setFloat(3, price);
-            if(hallId.equals("")){
-                pstmt.setString(4, coachPESEL);
-            }else{
+            if(coachPESEL.equals("")){
                 pstmt.setNull(4, java.sql.Types.VARCHAR);
+            }else{
+                pstmt.setString(4, coachPESEL);
             }
             if(hallId.equals("")){
                 pstmt.setInt(5, buildingId);
@@ -133,21 +133,22 @@ public class DBManagerZajecia {
                             int buildingId, String hallId) throws IOException, SQLException {
         try {
             PreparedStatement pstmt;
-            pstmt = SportsCenter.dBManager.getConnection().prepareStatement("update zajecia set "
-                    + "dzien_tygodnia = ?, godzin_rozp = to_timestamp('"+startHour+":"+startMinute+":00','HH24:MI:SS'), "
+            String query = "update zajecia set "
+                    + "dzien_tygodnia = ?, godzina_rozp = to_timestamp('"+startHour+":"+startMinute+":00','HH24:MI:SS'), "
                     + "godzina_zakon = to_timestamp('"+endHour+":"+endMinute+":00','HH24:MI:SS'), "
-                    + "dyscyplina = ? "
+                    + "dyscyplina = ?, "
                     + "cena = ?, trener_pesel = ?, "
                     + "obiekt_sportowy_id_obiektu = ?, "
                     + "sala_obiekt_sportowy_id_ob = ?, sala_nr_sali = ? "
-                    + "where id_zajec = ?");
+                    + "where id_zajec = ?";
+            pstmt = SportsCenter.dBManager.getConnection().prepareStatement(query);
             pstmt.setString(1, dayOfWeek);
             pstmt.setString(2, sport);
             pstmt.setFloat(3, price);
-            if(hallId.equals("")){
-                pstmt.setString(4, coachPESEL);
-            }else{
+            if(coachPESEL.equals("")){
                 pstmt.setNull(4, java.sql.Types.VARCHAR);
+            }else{
+                pstmt.setString(4, coachPESEL);
             }
             if(hallId.equals("")){
                 pstmt.setInt(5, buildingId);
@@ -159,6 +160,7 @@ public class DBManagerZajecia {
                 pstmt.setString(7, hallId);
             }
             pstmt.setInt(8, id);
+            pstmt.executeQuery();
             System.out.println("Classes edited!");
         } catch (SQLException e) {
             System.out.println("Classes editing error");

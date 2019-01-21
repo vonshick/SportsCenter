@@ -100,7 +100,7 @@ public class TableZajeciaWindowController implements Initializable {
         Parent root = (Parent) fxmlLoader.load();
         AddZajeciaController controller = fxmlLoader.<AddZajeciaController>getController();
         Stage stage = new Stage();
-        stage.setTitle("Add new equipment");
+        stage.setTitle("Add new classes");
         stage.setScene(new Scene(root));
         stage.showAndWait();
         showZajecia();

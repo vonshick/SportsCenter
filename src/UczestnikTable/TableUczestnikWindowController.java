@@ -46,6 +46,9 @@ public class TableUczestnikWindowController implements Initializable {
 
         tableView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
                 
+        TableColumn<Uczestnik, Integer> idColumn = new TableColumn<>("ID");
+        idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));  
+        
         TableColumn<Uczestnik, String> peselColumn = new TableColumn<>("PESEL");
         peselColumn.setCellValueFactory(new PropertyValueFactory<>("PESEL"));   
         
@@ -58,7 +61,11 @@ public class TableUczestnikWindowController implements Initializable {
         TableColumn<Uczestnik, Integer> statusColumn = new TableColumn<>("Status");
         statusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
         
-        tableView.getColumns().addAll(peselColumn, surnameColumn, nameColumn, statusColumn);
+        TableColumn<Uczestnik, String> competitionColumn = new TableColumn<>("Zawody");
+        competitionColumn.setCellValueFactory(new PropertyValueFactory<>("competition"));
+        
+        
+        tableView.getColumns().addAll(idColumn, peselColumn, surnameColumn, nameColumn, competitionColumn, statusColumn);
         showUczestnik();
     }
     

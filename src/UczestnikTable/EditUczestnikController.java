@@ -42,7 +42,7 @@ public class EditUczestnikController implements Initializable {
             } else if(ValidateData.isIncorrectPESEL(providedData[0])) {
                 AlertBox.showAlert("Niepoprawny PESEL!");
             } else {
-                dbManager.getDbManagerUczestnik().editUczestnik(uczestnik.getPESEL(), providedData[0], providedData[1], providedData[2], providedData[3], getStatus());
+                dbManager.getDbManagerUczestnik().editUczestnik(uczestnik.getId(), providedData[0], providedData[1], providedData[2], providedData[3], getStatus());
                 ((Node) (event.getSource())).getScene().getWindow().hide();
             }
         } catch (NullPointerException e) {

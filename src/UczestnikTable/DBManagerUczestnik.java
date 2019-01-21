@@ -16,21 +16,23 @@ public class DBManagerUczestnik {
         this.dbManager = dbManager;
     }
 
-    public void editUczestnik(String OldPESEL, String newPESEL, String surname, String name, String competition, int status) {
+    public void editUczestnik(int id, String PESEL, String surname, String name, String competition, int status) {
         try {
             PreparedStatement pstmt ;
-            pstmt = SportsCenter.dBManager.getConnection().prepareStatement("update uczestnik set PESEL = ?, nazwisko = ?, imie = ?, oplacony = ? where PESEL = ?");
+            pstmt = SportsCenter.dBManager.getConnection().prepareStatement("update uczestnik set PESEL = ?, nazwisko = ?, imie = ?, oplacony = ?, zawody_nazwa = ? where id_uczestnika = ?");
 
-            pstmt.setString(1, newPESEL);
+            pstmt.setString(1, PESEL);
             pstmt.setString(2, surname);
             pstmt.setString(3, name);
             pstmt.setInt(4, status);
-            pstmt.setString(5, OldPESEL);
+            pstmt.setString(5, competition);
+            pstmt.setInt(6, id);
             pstmt.executeQuery();
             dbManager.getConnection().commit();
             System.out.println("Competitor update success");
 
         } catch (SQLException e) {
+            e.printStackTrace();
             System.out.println("Competitor update error");
         }
     }
@@ -55,14 +57,16 @@ public class DBManagerUczestnik {
     
     public void insertNewUczestnik(String PESEL, String surname, String name, String competition, int status) throws IOException {
         try{
-            PreparedStatement pstmt = SportsCenter.dBManager.getConnection().prepareStatement("INSERT INTO uczestnik VALUES(?, ?, ?, ?)");
+            PreparedStatement pstmt = SportsCenter.dBManager.getConnection().prepareStatement("INSERT INTO uczestnik VALUES(seq_id_uczestnika.nextval, ?, ?, ?, ?, ?)");
             pstmt.setString(1, PESEL);
             pstmt.setString(2, surname);
             pstmt.setString(3, name);
             pstmt.setInt(4, status);
+            pstmt.setString(5, competition);
             pstmt.executeUpdate();
             System.out.println("Competitor added!");
         }catch(SQLException e ){
+                        e.printStackTrace();
             System.out.println("Competitor inserting error");
         }
     }

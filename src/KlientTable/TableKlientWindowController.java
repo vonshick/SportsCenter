@@ -97,6 +97,7 @@ public class TableKlientWindowController implements Initializable {
             delete.setDisable(false);
         }
         if(event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) {
+            delete.setDisable(true);
             Klient klient = (Klient) tableView.getSelectionModel().getSelectedItem();
             if(klient != null) {
                 System.out.println("Wybrano " + klient.getSurname());

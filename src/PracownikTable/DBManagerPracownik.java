@@ -141,6 +141,18 @@ public class DBManagerPracownik {
         ((Node) (event.getSource())).getScene().getWindow().hide();
     }
     
+    public float countAnnualTax(String PESEL) throws SQLException{
+        PreparedStatement pstmt = SportsCenter.dBManager.getConnection().prepareStatement("SELECT podatek(?) FROM DUAL");
+        pstmt.setString(1, PESEL);
+        
+        ResultSet rs = pstmt.executeQuery();
+        float tax = (float) 0;
+        if(rs.next()){
+            tax = rs.getFloat(1);
+        }
+        return tax;
+    }
+    
     public DBManager getdBManager() {
         return dBManager;
     }

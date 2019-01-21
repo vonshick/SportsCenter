@@ -2,6 +2,7 @@ package KarnetTable;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -10,7 +11,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
@@ -103,6 +107,17 @@ public class TableKarnetWindowController implements Initializable {
         }
     }
     
+    @FXML
+    private void removeOldPasses() throws SQLException{
+        Alert alert = new Alert(AlertType.CONFIRMATION, 
+                "Czy na pewno chcesz usunąć wszystkie przeterminowane karnety?", ButtonType.YES, ButtonType.CANCEL);
+        alert.showAndWait();
+        if (alert.getResult()==ButtonType.YES){
+            dbManager.getdBManagerKarnet().removeOldPasses();
+            System.out.println("JESTEM");
+            showKarnety();
+        }
+    }
     @FXML
     private void searchKarnet() throws IOException {
         String input = searchTextBox.getText().toLowerCase();

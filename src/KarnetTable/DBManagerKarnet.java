@@ -1,11 +1,14 @@
 package KarnetTable;
 
 import java.io.IOException;
+import java.sql.CallableStatement;
 import sportscenter.*;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 
 public class DBManagerKarnet {
     
@@ -31,6 +34,21 @@ public class DBManagerKarnet {
             System.out.println("Karnet updated!");
         } catch (SQLException e) {
             System.out.println("Karnet update error");
+        }
+    }
+    
+    public void removeOldPasses() throws SQLException{
+        try{
+            CallableStatement cstmt = SportsCenter.dBManager.getConnection().prepareCall("{call usun_stare_karnety}");
+            cstmt.executeQuery();
+            SportsCenter.dBManager.getConnection().commit();
+            Alert alert = new Alert(Alert.AlertType.INFORMATION, 
+                "Usunięto przeterminowane karnety", ButtonType.OK);
+            alert.showAndWait();
+        } catch (SQLException ex){
+            SportsCenter.dBManager.getConnection().rollback();
+            ex.printStackTrace();
+            ValidateData.printSQLException(ex, "");
         }
     }
     

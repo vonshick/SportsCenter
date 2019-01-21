@@ -59,8 +59,6 @@ public class ValidateData {
         return choiceBox.getSelectionModel().isEmpty();
     }
     
-//    java.sql.SQLException: The Network Adapter could not establish the connection
-//    java.sql.SQLException: ORA-01017: invalid username/password; logon denied
     public static void printSQLException(SQLException ex, String message) {
             for (Throwable e : ex) {
                 if (e instanceof SQLException) {

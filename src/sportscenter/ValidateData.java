@@ -63,17 +63,27 @@ public class ValidateData {
             for (Throwable e : ex) {
                 if (e instanceof SQLException) {
                     System.out.println(((SQLException)e).getErrorCode());
-                    if(((SQLException)e).getErrorCode() == 1){
-                        showErrorPane("Error while inserting/updating data\nValue of '"+message+"' field must be unique");
-                    } else if (((SQLException)e).getErrorCode() == 1017){
-                        AlertBox.showAlert("Invalid username or password");
-                    } else if (((SQLException)e).getErrorCode() == 12505){
-                        Alert alert = new Alert(AlertType.ERROR, "The Network Adapter could not establish the connection");
-                        alert.getDialogPane().getChildren().stream().filter(node -> node instanceof Label).forEach(node -> ((Label)node).setMinHeight(Region.USE_PREF_SIZE));
-                        alert.showAndWait();
-                    }
-                    else{
-                        showErrorPane(e.getMessage());
+                    switch (((SQLException)e).getErrorCode()) {
+                        case 1:
+                            showErrorPane("Error while inserting/updating data\nValue of '"+message+"' field must be unique");
+                            break;
+                        case 1017:
+                            AlertBox.showAlert("Invalid username or password");
+                            break;
+                        case 12505:
+                            Alert alert = new Alert(AlertType.ERROR, "The Network Adapter could not establish the connection");
+                            alert.getDialogPane().getChildren().stream().filter(node -> node instanceof Label).forEach(node -> ((Label)node).setMinHeight(Region.USE_PREF_SIZE));
+                            alert.showAndWait();
+                            break;
+                        case 2292:
+                            AlertBox.showAlert("Nie można usunąć danych, naruszenie więzów integralności (klucz obcy)!");
+                            break;
+                        case 22911:
+                            AlertBox.showAlert("Nie znaleziono podanego ID (klucz nadrzędny)");
+                            break;
+                        default:
+                            showErrorPane(e.getMessage());
+                            break;
                     }
                 }
             }

@@ -66,8 +66,8 @@ public class AddZajeciaController implements Initializable {
                             providedTimeData[0], providedTimeData[1], providedTimeData[2], providedTimeData[3], providedTimeData[4],
                             providedData[0], Float.parseFloat(providedData[1]), coaches.get(providedData[2]), buildings.get(providedData[3]), hallId );
                     ((Node) (event.getSource())).getScene().getWindow().hide();
-                } catch (Exception e) {
-                    AlertBox.showAlert("Incorrect price value");
+                } catch (NumberFormatException e) {
+                    AlertBox.showAlert("Cena musi być liczbą!");
                 }
             }
         } catch (NullPointerException e) {

@@ -46,11 +46,13 @@ public class AddZawodyController implements Initializable {
                 AlertBox.showAlert("Incorrect date format");
             } else {
                 try {
-                    dbManager.getdBManagerZawody().insertNewZawody(providedData[0], providedData[1], providedData[2], providedData[3], providedData[4]);
+                    dbManager.getdBManagerZawody().insertNewZawody(providedData[0], ValidateData.stringToDate(providedData[1]), providedData[2], Float.parseFloat(providedData[3]), Integer.parseInt(providedData[4]));
+                    ((Node) (event.getSource())).getScene().getWindow().hide();
+                } catch (NumberFormatException ex) {
+                    AlertBox.showAlert("Cena musi być liczbą!");
                 } catch (ParseException ex) {
-                    System.out.println("Parsing date failed, wrong format");
+                    AlertBox.showAlert("Zły format daty!");
                 }
-                ((Node) (event.getSource())).getScene().getWindow().hide();
             }
         } catch (NullPointerException e) {
             AlertBox.showAlert("Pole ID Obiektu nie może być puste!");

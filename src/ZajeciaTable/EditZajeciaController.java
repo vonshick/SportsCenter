@@ -1,6 +1,5 @@
 package ZajeciaTable;
 
-import ZajeciaTable.*;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -17,6 +16,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ComboBox;
 import sportscenter.DBManager;
 import sportscenter.SportsCenter;
 import sportscenter.ValidateData;
@@ -42,53 +42,37 @@ public class EditZajeciaController implements Initializable {
     @FXML
     private ChoiceBox endMinute;
     @FXML
-    private ChoiceBox coach;
+    private ComboBox coach;
     @FXML
-    private ChoiceBox building;
+    private ComboBox building;
     @FXML
-    private ChoiceBox hall;
+    private ComboBox hall;
     
     @FXML
     private void handleButtonAction(ActionEvent event) throws IOException, SQLException {
-        String[] providedData = {sport.getText(), price.getText()};
-        if(ValidateData.isAnyEmpty(providedData)){
-            AlertBox.showAlert("Name field can not be empty");
-        } else if (ValidateData.ifValueNotSelected(building)){
-            AlertBox.showAlert("None building was chosen");
-        } else if (ValidateData.ifValueNotSelected(dayOfWeek)){
-            AlertBox.showAlert("None day of week was chosen");
-        } else if (ValidateData.ifValueNotSelected(startHour)){
-            AlertBox.showAlert("Start hour was not chosen");
-        } else if (ValidateData.ifValueNotSelected(startMinute)){
-            AlertBox.showAlert("Start hour was not chosen");
-        } else if (ValidateData.ifValueNotSelected(endHour)){
-            AlertBox.showAlert("End hour was not chosen");
-        } else if (ValidateData.ifValueNotSelected(endMinute)){
-            AlertBox.showAlert("End hour was not chosen");
-        }  else {
-            String hallId = "";
-            if (!ValidateData.ifValueNotSelected(hall)){
-                hallId = (String) hall.getSelectionModel().getSelectedItem();
+        try {
+            String[] providedData = {sport.getText(), price.getText(), coach.getSelectionModel().getSelectedItem().toString(), building.getSelectionModel().getSelectedItem().toString()};
+            String[] providedTimeData = {dayOfWeek.getSelectionModel().getSelectedItem().toString(),
+                startHour.getSelectionModel().getSelectedItem().toString(), startMinute.getSelectionModel().getSelectedItem().toString(),
+                endHour.getSelectionModel().getSelectedItem().toString(), endMinute.getSelectionModel().getSelectedItem().toString()};
+            if (ValidateData.isAnyEmpty(providedData)) {
+                AlertBox.showAlert("Pola Dyscyplina i Cena muszą być wypełnione!");
+            } else {
+                String hallId = "";
+                if (!hall.getSelectionModel().isEmpty()) {
+                    hallId = hall.getSelectionModel().getSelectedItem().toString();
+                }
+                try {
+                    dbManager.getDbManagerZajecia().editZajecia( zajecia.getId(),
+                            providedTimeData[0], providedTimeData[1], providedTimeData[2], providedTimeData[3], providedTimeData[4],
+                            providedData[0], Float.parseFloat(providedData[1]), coaches.get(providedData[2]), buildings.get(providedData[3]), hallId);
+                    ((Node) (event.getSource())).getScene().getWindow().hide();
+                } catch (Exception e) {
+                    AlertBox.showAlert("Incorrect price value");
+                }
             }
-            String coachPESEL = "";
-            if (!ValidateData.ifValueNotSelected(coach)){
-               coachPESEL = getCoachPESEL();
-            }
-            try{
-                Float priceValue = Float.parseFloat(providedData[1]);
-                dbManager.getDbManagerZajecia().editZajecia(
-                        zajecia.getId(),
-                        (String) dayOfWeek.getSelectionModel().getSelectedItem(),
-                        (String) startHour.getSelectionModel().getSelectedItem(),
-                        (String) startMinute.getSelectionModel().getSelectedItem(),
-                        (String) endHour.getSelectionModel().getSelectedItem(),
-                        (String) endMinute.getSelectionModel().getSelectedItem(),
-                        providedData[0], priceValue,
-                        getCoachPESEL(), getBuildingId(), hallId);
-                ((Node)(event.getSource())).getScene().getWindow().hide();
-            } catch(Exception e){
-                AlertBox.showAlert("Incorrect price value");
-            }
+        } catch (NullPointerException e) {
+            AlertBox.showAlert("Wszystkie pola (oprócz opcjonalnego pola 'Sala') muszą być wypełnione!");
         }
     }
 
@@ -98,17 +82,12 @@ public class EditZajeciaController implements Initializable {
         buildings = dbManager.getDbManagerZajecia().generateBuildingsMap();
         coaches = dbManager.getDbManagerZajecia().generateCoachessMap();
     }
-
-    public void initializeEditWindow(Zajecia zajecia){
-        setZajecia(zajecia);
+        
+    public void setZajecia(Zajecia zajecia) {
+        this.zajecia = zajecia;
         initializeChoiceBoxes();
         setFieldsValues();
         addChangeListener();
-    }
-    
-        
-    private void setZajecia(Zajecia zajecia) {
-        this.zajecia = zajecia;
     }
     
     private void initializeChoiceBoxes(){
@@ -196,14 +175,5 @@ public class EditZajeciaController implements Initializable {
             }
         }); 
     }
-    
-    private int getBuildingId(){
-        return buildings.get((String) building.getSelectionModel().getSelectedItem());
-    }
-    
-    private String getCoachPESEL(){
-        return coaches.get((String) coach.getSelectionModel().getSelectedItem());
-    }
-
     
 }

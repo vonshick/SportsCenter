@@ -3,7 +3,6 @@ package ZawodyTable;
 import sportscenter.*;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.text.ParseException;
 
 public class DBManagerZawody {
     
@@ -13,14 +12,14 @@ public class DBManagerZawody {
         this.dBManager = dBManager;
     }
     
-    public void editZawody(String oldName, String name, String date, String disciplin, String price, String IDSportObject) throws ParseException {
+    public void editZawody(String oldName, String name, java.sql.Date date, String disciplin, Float price, Integer IDSportObject)  {
         try {
             PreparedStatement pstmt = SportsCenter.dBManager.getConnection().prepareStatement("update zawody set NAZWA = ?, DATA = ?, DYSCYPLINA = ?, OPLATA_STARTOWA = ?, OBIEKT_SPORTOWY_ID_OBIEKTU = ? where NAZWA = ?");
             pstmt.setString(1, name);
-            pstmt.setDate(2, ValidateData.stringToDate(date));
+            pstmt.setDate(2, date);
             pstmt.setString(3, disciplin);
-            pstmt.setFloat(4, Float.parseFloat(price));
-            pstmt.setInt(5, Integer.parseInt(IDSportObject));
+            pstmt.setFloat(4, price);
+            pstmt.setInt(5, IDSportObject);
             pstmt.setString(6, oldName);
             pstmt.executeQuery();
             SportsCenter.dBManager.getConnection().commit();
@@ -31,14 +30,14 @@ public class DBManagerZawody {
         }
     }
     
-    public void insertNewZawody(String name, String date, String disciplin, String price, String IDSportObject) throws ParseException {
+    public void insertNewZawody(String name, java.sql.Date date, String disciplin, Float price, Integer IDSportObject) {
         try {
             PreparedStatement pstmt = SportsCenter.dBManager.getConnection().prepareStatement("INSERT INTO zawody VALUES(?, ?, ?, ?, ?)");
             pstmt.setString(1, name);
-            pstmt.setDate(2, ValidateData.stringToDate(date));
+            pstmt.setDate(2, date);
             pstmt.setString(3, disciplin);
-            pstmt.setFloat(4, Float.parseFloat(price));
-            pstmt.setInt(5, Integer.parseInt(IDSportObject));
+            pstmt.setFloat(4, price);
+            pstmt.setInt(5, IDSportObject);
             pstmt.executeUpdate();
             System.out.println("Zawody added!");
         } catch (SQLException e) {

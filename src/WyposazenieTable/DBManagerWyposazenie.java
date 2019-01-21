@@ -67,6 +67,7 @@ public class DBManagerWyposazenie {
         Statement stmt;
         ResultSet rs;
         ArrayList<String> hallIds = new ArrayList<String>();
+        hallIds.add("");
         try {
             stmt = SportsCenter.connection.getConn().createStatement();
             rs = stmt.executeQuery("SELECT nr_sali FROM sala "

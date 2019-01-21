@@ -15,8 +15,8 @@
       <TextField fx:id="name" layoutX="135.0" layoutY="27.0" prefHeight="25.0" prefWidth="275.0" text="Pilka" />
       <TextField fx:id="sport" layoutX="135.0" layoutY="73.0" prefHeight="25.0" prefWidth="275.0" text="Pilka nozna" />
       <TextField fx:id="count" layoutX="135.0" layoutY="117.0" prefHeight="25.0" prefWidth="275.0" text="3" />
-      <ChoiceBox fx:id="building" layoutX="135.0" layoutY="165.0" prefHeight="25.0" prefWidth="275.0" />
-      <ChoiceBox fx:id="hall" layoutX="135.0" layoutY="213.0" prefHeight="25.0" prefWidth="275.0" />
+      <ComboBox fx:id="building" layoutX="135.0" layoutY="165.0" prefHeight="25.0" prefWidth="275.0" />
+      <ComboBox fx:id="hall" layoutX="135.0" layoutY="213.0" prefHeight="25.0" prefWidth="275.0" />
       <Label layoutX="70.0" layoutY="122.0" text="Ilość" />
       <Label layoutX="41.0" layoutY="170.0" text="Budynek" />
       <Label layoutX="71.0" layoutY="218.0" text="Sala" />

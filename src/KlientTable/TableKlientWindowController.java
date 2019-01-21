@@ -1,7 +1,9 @@
 package KlientTable;
 
+import KarnetTable.Karnet;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -27,7 +29,6 @@ import sportscenter.SportsCenter;
 public class TableKlientWindowController implements Initializable {
     
     private DBManager dbManager;
-    
     @FXML
     private TableView tableView;
     @FXML
@@ -36,6 +37,8 @@ public class TableKlientWindowController implements Initializable {
     private ComboBox selectTableView;
     @FXML
     private TextField searchTextBox;
+    @FXML 
+    private Button delete;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -60,12 +63,21 @@ public class TableKlientWindowController implements Initializable {
     }
     
     @FXML
+     private void deleteKlient() throws SQLException{
+        Klient klient  = (Klient) tableView.getSelectionModel().getSelectedItem();
+        dbManager.getDbManagerKlient().deleteKlient(klient.getID());
+        delete.setDisable(true);
+        showKlienci();
+     }
+    
+    @FXML
     private void changeTableView() throws IOException {
         String selected = selectTableView.getSelectionModel().getSelectedItem().toString();
         if (selected != null && !selected.equals("klienci")) {
             dbManager.changeScene(selected);
         }
     }
+    
 
     @FXML
     private void openNewKlientWindow() throws IOException{
@@ -80,7 +92,10 @@ public class TableKlientWindowController implements Initializable {
     }
     
     @FXML
-    private void selectRowKlient(MouseEvent event) throws IOException {
+    private void selectRowKlient(MouseEvent event) throws IOException {       
+        if(event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 1) {
+            delete.setDisable(false);
+        }
         if(event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) {
             Klient klient = (Klient) tableView.getSelectionModel().getSelectedItem();
             if(klient != null) {

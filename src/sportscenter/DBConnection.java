@@ -1,45 +1,38 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package database_connection;
+package sportscenter;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.util.Properties;
 import java.sql.*;
-import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- *
- * @author student
- */
 public class DBConnection {
-
-    public static void main(String[] args) throws SQLException {
-        Connection conn = null;
+    private Connection conn;
+    private String address;
+    private String port;
+    private String sid;
+    private String username;
+    private String password;
+    
+    public DBConnection(String address, String port, String sid){
+        this.address = address;
+        this.port = port;
+        this.sid = sid;
+    }
+    
+    public void authenticateUser(String username, String password){
+       this.username = username;
+       this.password = password;
+    }
+    
+    public Connection connect(){
         Properties connectionProps = new Properties();
-        
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Pass username:");
-        String user = scanner.nextLine();
-        System.out.println("Pass password:");
-        String password = scanner.nextLine();
-        System.out.println("Pass address:");
-        String address = scanner.nextLine();
-        System.out.println("Pass port:");
-        String port = scanner.nextLine();
-        System.out.println("Pass SID:");
-        String sid = scanner.nextLine();
-
-        connectionProps.put("user", user);
+        connectionProps.put("user", username);
         connectionProps.put("password", password);
         try {
             conn = DriverManager.getConnection(
-                    "jdbc:oracle:thin:@//"+address+":"+port+"/"+sid,
+                    "jdbc:oracle:thin:@"+address+":"+port+":"+sid,
                     connectionProps);
             System.out.println("Połączono z bazą danych");
         } catch (SQLException ex) {
@@ -47,30 +40,22 @@ public class DBConnection {
                     "nie udało się połączyć z bazą danych", ex);
             System.exit(-1);
         }
-  
-        Statement stmt = null;
-        ResultSet rs = null;
-        
-                try {
-            stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
-                    ResultSet.CONCUR_READ_ONLY);
-            rs = stmt.executeQuery("SELECT imie, nazwisko, funkcja FROM pracownik");
-            rs.afterLast();
-            while (rs.previous()) {
-                System.out.println(rs.getString(1) + " " + rs.getString(2) + " pracuje jako " + rs.getString(3));
-            }
-        } catch (SQLException ex) {
-            System.out.println("Bład wykonania polecenia" + ex.toString());
-        }
-                
-        stmt.close();
-        rs.close();
+        return conn;
+    }
+    
+    public void disconnect() {
         try {
             conn.close();
+            System.out.println("Disconnected.");
         } catch (SQLException ex) {
             Logger.getLogger(DBConnection.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+    }
+
+    public Connection getConn() {
+        return conn;
+    }
+}           
 //        try {
 //            stmt = conn.createStatement();
 //            rs = stmt.executeQuery("select count(*) FROM pracownicy");
@@ -191,5 +176,5 @@ public class DBConnection {
 //            Logger.getLogger(Lab_JDBC.class.getName()).log(Level.SEVERE, null, ex);
 //        }
 //        System.out.println("Rozłączono z bazą danych");
-    }
-}
+//    }
+//}

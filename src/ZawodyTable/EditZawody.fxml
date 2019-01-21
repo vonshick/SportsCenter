@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="315.0" prefWidth="445.5" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ZawodyTable.EditZawodyController">
+    <children>
+        <TextField fx:id="name" layoutX="122.0" layoutY="38.0" prefHeight="25.0" prefWidth="275.0" text="I Mistrozstwa Ogrodow" />
+        <TextField fx:id="date" layoutX="122.0" layoutY="79.0" prefHeight="25.0" prefWidth="275.0" text="2019-02-15" />
+        <TextField fx:id="disciplin" layoutX="122.0" layoutY="123.0" prefHeight="25.0" prefWidth="275.0" text="squash" />
+        <TextField fx:id="price" layoutX="122.0" layoutY="165.0" prefHeight="25.0" prefWidth="275.0" text="60" />
+        <ComboBox fx:id="IDSportObject" layoutX="122.0" layoutY="207.0" prefHeight="25.0" prefWidth="275.0" />
+        <Label layoutX="61.0" layoutY="43.0" text="Nazwa" />
+        <Label layoutX="67.0" layoutY="83.0" text="Data" />
+        <Label layoutX="51.0" layoutY="128.0" text="Dyscyplina" />
+        <Label layoutX="66.0" layoutY="169.0" text="Cena" />
+        <Label layoutX="51.0" layoutY="211.0" text="ID Obiektu" />
+        <Button fx:id="save" layoutX="195.0" layoutY="259.0" mnemonicParsing="false" onMouseClicked="#save" text="Zapisz" />
+    </children>
+</AnchorPane>

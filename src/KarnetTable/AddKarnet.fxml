@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="315.0" prefWidth="445.5" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="KarnetTable.AddKarnetController">
+    <children>
+        <TextField fx:id="price" layoutX="122.0" layoutY="123.0" prefHeight="25.0" prefWidth="275.0" />
+        <TextField fx:id="dateStart" layoutX="122.0" layoutY="165.0" prefHeight="25.0" prefWidth="275.0" />
+        <TextField fx:id="dateEnd" layoutX="122.0" layoutY="208.0" prefHeight="25.0" prefWidth="275.0" />
+        <Label layoutX="61.0" layoutY="43.0" text="ID Klienta" />
+        <Label layoutX="65.0" layoutY="83.0" text="ID Zajec" />
+        <Label layoutX="73.0" layoutY="127.0" text="Cena" />
+        <Label layoutX="60.0" layoutY="169.0" text="Wazny od" />
+        <Label layoutX="60.0" layoutY="212.0" text="Wazny do" />
+        <Button fx:id="button" layoutX="195.0" layoutY="259.0" mnemonicParsing="false" onAction="#handleButtonAction" text="Dodaj" />
+      <ComboBox fx:id="idClient" layoutX="120.0" layoutY="39.0" prefHeight="25.0" prefWidth="275.0" />
+      <ComboBox fx:id="idActivity" layoutX="120.0" layoutY="79.0" prefHeight="25.0" prefWidth="275.0" />
+    </children>
+</AnchorPane>

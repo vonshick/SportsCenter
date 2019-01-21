@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="315.0" prefWidth="445.5" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="KlientTable.AddKlientController">
+    <children>
+        <TextField fx:id="name" layoutX="128.0" layoutY="80.0" prefHeight="25.0" prefWidth="275.0" text="Jakub" />
+        <TextField fx:id="surname" layoutX="128.0" layoutY="121.0" prefHeight="25.0" prefWidth="275.0" text="Wasik" />
+        <Label layoutX="67.0" layoutY="85.0" text="Imię" />
+        <Label layoutX="36.0" layoutY="126.0" text="Nazwisko" />
+        <Button fx:id="button" layoutX="199.0" layoutY="206.0" mnemonicParsing="false" onAction="#handleButtonAction" text="Dodaj" />
+    </children>
+</AnchorPane>

@@ -54,7 +54,7 @@ public class EditPracownikController implements Initializable {
                 Float salaryValue = Float.parseFloat(salary.getText());
                 System.out.println(salary.getText());
                 System.out.println("clicked save");
-                dbManager.getdBManagerPracownik().editPracownik(pracownik.getPESEL(), name.getText(), surname.getText(), PESEL.getText(), profession.getText(), salaryValue);
+                dbManager.getdBManagerPracownik().editPracownik(pracownik.getPESEL(), name.getText(), surname.getText(), PESEL.getText(), profession.getText(), pracownik.getProfession(), salaryValue);
                 if (!providedData[3].toLowerCase().equals(pracownik.getProfession().toLowerCase())
                         && ((providedData[3].toLowerCase().equals("trener") && !pracownik.getProfession().toLowerCase().equals("trenerka"))
                         || (providedData[3].toLowerCase().equals("trenerka") && !pracownik.getProfession().toLowerCase().equals("trener")))) {

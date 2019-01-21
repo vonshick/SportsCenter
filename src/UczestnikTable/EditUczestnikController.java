@@ -70,6 +70,7 @@ public class EditUczestnikController implements Initializable {
         name.setText(uczestnik.getName());
         name.setText(uczestnik.getName());
         status.getSelectionModel().select(setStatus());
+        competition.getSelectionModel().select(uczestnik.getCompetition());
 //        competition.getSelectionModel().select(uczestnik.get);
     }
     

@@ -37,6 +37,8 @@ public class TableKarnetWindowController implements Initializable {
     @FXML
     private Button AddData;
     @FXML
+    private Button delete;
+    @FXML
     private ComboBox selectTableView;
     @FXML
     private TextField searchTextBox;
@@ -90,8 +92,21 @@ public class TableKarnetWindowController implements Initializable {
     }
     
     @FXML
+     private void deleteKarnet(){
+        Karnet karnet = (Karnet) tableView.getSelectionModel().getSelectedItem();
+        dbManager.getdBManagerKarnet().deleteKarnet(karnet.getIDClient(), karnet.getIDActivity());
+        delete.setDisable(true);
+        showKarnety();
+     }
+     
+    @FXML
     private void selectRowKarnet(MouseEvent event) throws IOException {
+        
+        if(event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 1) {
+            delete.setDisable(false);
+        }
         if(event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) {
+            delete.setDisable(false);
             Karnet karnet = (Karnet) tableView.getSelectionModel().getSelectedItem();
             if(karnet != null) {
                 FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/KarnetTable/EditKarnet.fxml"));

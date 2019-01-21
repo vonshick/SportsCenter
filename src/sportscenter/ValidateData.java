@@ -78,7 +78,7 @@ public class ValidateData {
                         case 2292:
                             AlertBox.showAlert("Nie można usunąć danych, naruszenie więzów integralności (klucz obcy)!");
                             break;
-                        case 22911:
+                        case 2291:
                             AlertBox.showAlert("Nie znaleziono podanego ID (klucz nadrzędny)");
                             break;
                         default:

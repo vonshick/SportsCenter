@@ -162,7 +162,6 @@ public class DBManagerZajecia {
             System.out.println("Classes edited!");
         } catch (SQLException e) {
             System.out.println("Classes editing error");
-            e.printStackTrace();
         }
     }
     

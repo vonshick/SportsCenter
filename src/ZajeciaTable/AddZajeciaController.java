@@ -54,21 +54,29 @@ public class AddZajeciaController implements Initializable {
             String[] providedTimeData = { dayOfWeek.getSelectionModel().getSelectedItem().toString(),
                 startHour.getSelectionModel().getSelectedItem().toString(), startMinute.getSelectionModel().getSelectedItem().toString(),
                 endHour.getSelectionModel().getSelectedItem().toString(), endMinute.getSelectionModel().getSelectedItem().toString() };
-            if (ValidateData.isAnyEmpty(providedData)) {
-                AlertBox.showAlert("Pola Dyscyplina i Cena muszą być wypełnione!");
-            } else {
-                String hallId = "";
-                if (!hall.getSelectionModel().isEmpty()) {
-                    hallId = hall.getSelectionModel().getSelectedItem().toString();
+            String coachLocal = coaches.get(providedData[2]);
+            try {
+                int buildingLocal = buildings.get(providedData[3]);
+                if (ValidateData.isAnyEmpty(providedData)) {
+                    AlertBox.showAlert("Pola Dyscyplina i Cena muszą być wypełnione!");
+                } else if (coachLocal == null) {
+                    AlertBox.showAlert("Podaj istniejącego trenera!");
+                } else {
+                    String hallId = "";
+                    if (!hall.getSelectionModel().isEmpty()) {
+                        hallId = hall.getSelectionModel().getSelectedItem().toString();
+                    }
+                    try {
+                        dbManager.getDbManagerZajecia().insertNewZajecia(
+                                providedTimeData[0], providedTimeData[1], providedTimeData[2], providedTimeData[3], providedTimeData[4],
+                                providedData[0], Float.parseFloat(providedData[1]), coachLocal, buildingLocal, hallId);
+                        ((Node) (event.getSource())).getScene().getWindow().hide();
+                    } catch (NumberFormatException e) {
+                        AlertBox.showAlert("Cena musi być liczbą!");
+                    }
                 }
-                try {
-                    dbManager.getDbManagerZajecia().insertNewZajecia(
-                            providedTimeData[0], providedTimeData[1], providedTimeData[2], providedTimeData[3], providedTimeData[4],
-                            providedData[0], Float.parseFloat(providedData[1]), coaches.get(providedData[2]), buildings.get(providedData[3]), hallId );
-                    ((Node) (event.getSource())).getScene().getWindow().hide();
-                } catch (NumberFormatException e) {
-                    AlertBox.showAlert("Cena musi być liczbą!");
-                }
+            } catch (Exception e) {
+                AlertBox.showAlert("Podaj istniejacy budynek!");
             }
         } catch (NullPointerException e) {
             AlertBox.showAlert("Wszystkie pola (oprócz opcjonalnego pola 'Sala') muszą być wypełnione!");
@@ -135,12 +143,15 @@ public class AddZajeciaController implements Initializable {
         building.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observableValue, Number indexOld, Number indexNew) {
-                String buildingName = building.getItems().get((Integer) indexNew).toString();
-                hall.getItems().clear();
-                hall.getItems().addAll(dbManager.getDbManagerZajecia().generateHallsList(buildingName));
+                try {
+                    String buildingName = building.getItems().get((Integer) indexNew).toString();
+                    hall.getItems().clear();
+                    hall.getItems().addAll(dbManager.getDbManagerZajecia().generateHallsList(buildingName));
+                } catch (Exception e) {
+                    building.getSelectionModel().clearSelection();
+                }
             }
         }); 
     }
     
 }
-

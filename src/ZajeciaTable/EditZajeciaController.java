@@ -55,21 +55,29 @@ public class EditZajeciaController implements Initializable {
             String[] providedTimeData = {dayOfWeek.getSelectionModel().getSelectedItem().toString(),
                 startHour.getSelectionModel().getSelectedItem().toString(), startMinute.getSelectionModel().getSelectedItem().toString(),
                 endHour.getSelectionModel().getSelectedItem().toString(), endMinute.getSelectionModel().getSelectedItem().toString()};
-            if (ValidateData.isAnyEmpty(providedData)) {
-                AlertBox.showAlert("Pola Dyscyplina i Cena muszą być wypełnione!");
-            } else {
-                String hallId = "";
-                if (!hall.getSelectionModel().isEmpty()) {
-                    hallId = hall.getSelectionModel().getSelectedItem().toString();
+            String coachLocal = coaches.get(providedData[2]);
+            try {
+                int buildingLocal = buildings.get(providedData[3]);
+                if (ValidateData.isAnyEmpty(providedData)) {
+                    AlertBox.showAlert("Pola Dyscyplina i Cena muszą być wypełnione!");
+                } else if (coachLocal == null) {
+                    AlertBox.showAlert("Podaj istniejącego trenera!");
+                } else {
+                    String hallId = "";
+                    if (!hall.getSelectionModel().isEmpty()) {
+                        hallId = hall.getSelectionModel().getSelectedItem().toString();
+                    }
+                    try {
+                        dbManager.getDbManagerZajecia().editZajecia(zajecia.getId(),
+                                providedTimeData[0], providedTimeData[1], providedTimeData[2], providedTimeData[3], providedTimeData[4],
+                                providedData[0], Float.parseFloat(providedData[1]), coachLocal, buildingLocal, hallId);
+                        ((Node) (event.getSource())).getScene().getWindow().hide();
+                    } catch (Exception e) {
+                        AlertBox.showAlert("Incorrect price value");
+                    }
                 }
-                try {
-                    dbManager.getDbManagerZajecia().editZajecia( zajecia.getId(),
-                            providedTimeData[0], providedTimeData[1], providedTimeData[2], providedTimeData[3], providedTimeData[4],
-                            providedData[0], Float.parseFloat(providedData[1]), coaches.get(providedData[2]), buildings.get(providedData[3]), hallId);
-                    ((Node) (event.getSource())).getScene().getWindow().hide();
-                } catch (Exception e) {
-                    AlertBox.showAlert("Incorrect price value");
-                }
+            } catch (Exception e) {
+                AlertBox.showAlert("Podaj istniejacy budynek!");
             }
         } catch (NullPointerException e) {
             AlertBox.showAlert("Wszystkie pola (oprócz opcjonalnego pola 'Sala') muszą być wypełnione!");
@@ -81,6 +89,9 @@ public class EditZajeciaController implements Initializable {
         this.dbManager = SportsCenter.dBManager;
         buildings = dbManager.getDbManagerZajecia().generateBuildingsMap();
         coaches = dbManager.getDbManagerZajecia().generateCoachessMap();
+        GUI.AutoCompleteComboBoxListener<String> autoCompleteBuilding = new GUI.AutoCompleteComboBoxListener<>(building);
+        GUI.AutoCompleteComboBoxListener<String> autoCompleteCoach = new GUI.AutoCompleteComboBoxListener<>(coach);
+        GUI.AutoCompleteComboBoxListener<String> autoCompleteHall = new GUI.AutoCompleteComboBoxListener<>(hall);
     }
         
     public void setZajecia(Zajecia zajecia) {
@@ -124,25 +135,25 @@ public class EditZajeciaController implements Initializable {
     }
     
     private void fillBuildingCB(){
-        ArrayList<String> choices = new ArrayList<String>();
+        ArrayList<String> choices = new ArrayList<>();
         for (Map.Entry<String, Integer> entry : buildings.entrySet()){   
             choices.add(entry.getKey());
         }
-        building.setItems(FXCollections.observableArrayList(choices));
+        building.getItems().addAll(choices);
     }
     private void fillCoachCB(){
-        ArrayList<String> choices = new ArrayList<String>();
+        ArrayList<String> choices = new ArrayList<>();
         for (Map.Entry<String, String> entry : coaches.entrySet()){   
             choices.add(entry.getKey());
         }
-        coach.setItems(FXCollections.observableArrayList(choices));
+        coach.getItems().addAll(choices);
     }
     
     private void fillTimeCB(){
         String[] daysOfWeek = {"poniedzialek", "wtorek", "sroda", "czwartek", "piatek", "sobota", "niedziela"};
         dayOfWeek.setItems(FXCollections.observableArrayList(daysOfWeek));
         
-        ArrayList<String> hours = new ArrayList<String>();
+        ArrayList<String> hours = new ArrayList<>();
         for (int i = 0; i<24; i++){
             if(i<10){
                 hours.add("0"+Integer.toString(i));
@@ -150,10 +161,10 @@ public class EditZajeciaController implements Initializable {
                 hours.add(Integer.toString(i));
             }
         }
-        startHour.setItems(FXCollections.observableArrayList(hours));
-        endHour.setItems(FXCollections.observableArrayList(hours));
+        startHour.getItems().addAll(hours);
+        endHour.getItems().addAll(hours);
         
-        ArrayList<String> minutes = new ArrayList<String>();
+        ArrayList<String> minutes = new ArrayList<>();
         for (int i = 0; i<60; i++){
             if(i<10){
                 minutes.add("0"+Integer.toString(i));
@@ -161,17 +172,21 @@ public class EditZajeciaController implements Initializable {
                 minutes.add(Integer.toString(i));
             }
         }
-        startMinute.setItems(FXCollections.observableArrayList(minutes));
-        endMinute.setItems(FXCollections.observableArrayList(minutes));   
+        startMinute.getItems().addAll(minutes);
+        endMinute.getItems().addAll(minutes);   
     }
     
     private void addChangeListener(){
         building.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
             @Override
-            public void changed(ObservableValue<? extends Number> observableValue, Number index1, Number index2) {
-                String buildingName = (String) building.getItems().get((Integer) index2);
-                ArrayList<String> choices = dbManager.getDbManagerZajecia().generateHallsList(buildingName);
-                hall.setItems(FXCollections.observableArrayList(choices));
+            public void changed(ObservableValue<? extends Number> observableValue, Number oldIndex, Number newIndex) {
+                try {
+                    String buildingName = building.getItems().get((Integer) newIndex).toString();
+                    hall.getItems().clear();
+                    hall.getItems().addAll(dbManager.getDbManagerZajecia().generateHallsList(buildingName));
+                } catch (Exception e) {
+                    building.getSelectionModel().clearSelection();
+                }
             }
         }); 
     }

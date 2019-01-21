@@ -53,7 +53,7 @@ public class EditWyposazenieController implements Initializable {
                 ((Node) (event.getSource())).getScene().getWindow().hide();
             }
         } catch (NullPointerException e) {
-            AlertBox.showAlert("Pole Budynek nie może być puste!");
+            AlertBox.showAlert("Pole Budynek zawierać poprawną nazwę istniejacego budynku!");
         }
     }
 
@@ -103,9 +103,13 @@ public class EditWyposazenieController implements Initializable {
         building.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observableValue, Number indexOld, Number indexNew) {
-                String buildingName = building.getItems().get((Integer) indexNew).toString();
-                hall.getItems().clear();
-                hall.getItems().addAll(dbManager.getDbManagerWyposazenie().generateHallsList(buildingName));
+                try {
+                    String buildingName = building.getItems().get((Integer) indexNew).toString();
+                    hall.getItems().clear();
+                    hall.getItems().addAll(dbManager.getDbManagerWyposazenie().generateHallsList(buildingName));
+                } catch (Exception e) {
+                    building.getSelectionModel().clearSelection();
+                }
             }
         }); 
     }

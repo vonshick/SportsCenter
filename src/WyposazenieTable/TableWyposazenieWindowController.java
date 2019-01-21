@@ -82,7 +82,7 @@ public class TableWyposazenieWindowController implements Initializable {
         Parent root = (Parent) fxmlLoader.load();
         AddWyposazenieController controller = fxmlLoader.<AddWyposazenieController>getController();
         Stage stage = new Stage();
-        stage.setTitle("Add new equipment");
+        stage.setTitle("Dodaj Wyposazenie");
         stage.setScene(new Scene(root));
         stage.showAndWait();
         showWyposazenie();
@@ -97,7 +97,7 @@ public class TableWyposazenieWindowController implements Initializable {
                 FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/WyposazenieTable/EditWyposazenie.fxml"));
                 Parent root = (Parent) fxmlLoader.load();
                 EditWyposazenieController controller = fxmlLoader.<EditWyposazenieController>getController();
-                controller.initializeEditWindow(wyposazenie);
+                controller.setWyposazenie(wyposazenie);
                 Stage stage = new Stage();
                 stage.setTitle("Edytuj Wyposazenie");
                 stage.setScene(new Scene(root));

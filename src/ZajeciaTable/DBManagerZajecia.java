@@ -92,7 +92,7 @@ public class DBManagerZajecia {
         HashMap<String, String> coaches = new HashMap<String, String>();
         try {
             stmt = SportsCenter.connection.getConn().createStatement();
-            rs  = stmt.executeQuery("SELECT nazwisko, trener_pesel FROM v_zajecia");
+            rs  = stmt.executeQuery("SELECT nazwisko, pesel FROM trener NATURAL JOIN pracownik");
             while (rs.next()) {
                 String coachName = rs.getString(1);
                 coaches.put(coachName, rs.getString(2));

@@ -78,6 +78,7 @@ public class EditUczestnikController implements Initializable {
         choices.add("NIEOPŁACONY");
         status.setItems(FXCollections.observableArrayList(choices));
         status.getSelectionModel().select(setStatus());
+        
 //        competition.getSelectionModel().select(uczestnik.getCompetition());
 
     }

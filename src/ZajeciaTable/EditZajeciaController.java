@@ -15,8 +15,10 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
+import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
+import javafx.scene.input.MouseEvent;
 import sportscenter.DBManager;
 import sportscenter.SportsCenter;
 import sportscenter.ValidateData;
@@ -47,6 +49,14 @@ public class EditZajeciaController implements Initializable {
     private ComboBox building;
     @FXML
     private ComboBox hall;
+    @FXML
+    private Button delete;
+
+    @FXML
+    private void delete(MouseEvent event) throws IOException, SQLException {
+        dbManager.getDbManagerZajecia().deleteZajecia(zajecia.getId());
+        ((Node) (event.getSource())).getScene().getWindow().hide();
+    }
     
     @FXML
     private void handleButtonAction(ActionEvent event) throws IOException, SQLException {
@@ -56,12 +66,14 @@ public class EditZajeciaController implements Initializable {
                 startHour.getSelectionModel().getSelectedItem().toString(), startMinute.getSelectionModel().getSelectedItem().toString(),
                 endHour.getSelectionModel().getSelectedItem().toString(), endMinute.getSelectionModel().getSelectedItem().toString()};
             String coachLocal = coaches.get(providedData[2]);
+            if (coachLocal == null) {
+                AlertBox.showAlert("Podaj istniejącego trenera!");
+                return;
+            }
             try {
                 int buildingLocal = buildings.get(providedData[3]);
-                if (ValidateData.isAnyEmpty(providedData)) {
+                if (ValidateData.isAnyEmpty(providedData) && coachLocal != null) {
                     AlertBox.showAlert("Pola Dyscyplina i Cena muszą być wypełnione!");
-                } else if (coachLocal == null) {
-                    AlertBox.showAlert("Podaj istniejącego trenera!");
                 } else {
                     String hallId = "";
                     if (!hall.getSelectionModel().isEmpty()) {

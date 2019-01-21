@@ -51,7 +51,7 @@ public class DBManagerZawody {
             pstmt.setString(1, name);
             pstmt.executeUpdate();
         } catch (SQLException ex) {
-            System.out.println("Karnet deleting error");
+            System.out.println("Zawody deleting error");
         }
     }
     

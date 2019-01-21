@@ -65,7 +65,7 @@ public class ValidateData {
                     System.out.println(((SQLException)e).getErrorCode());
                     switch (((SQLException)e).getErrorCode()) {
                         case 1:
-                            showErrorPane("Error while inserting/updating data\nValue of '"+message+"' field must be unique");
+                            showErrorPane("Nie można dodać/uaktualnić danych. \nWartość pola '" + message + "' musi być unikalna!");
                             break;
                         case 1017:
                             AlertBox.showAlert("Invalid username or password");

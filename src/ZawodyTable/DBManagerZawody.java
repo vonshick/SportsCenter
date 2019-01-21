@@ -45,9 +45,18 @@ public class DBManagerZawody {
             System.out.println("Zawody inserting error");
         }
     }
+    void deleteZawody(String name) {
+        try {
+            PreparedStatement pstmt = SportsCenter.dBManager.getConnection().prepareStatement("DELETE FROM zawody WHERE NAZWA = ?");
+            pstmt.setString(1, name);
+            pstmt.executeUpdate();
+        } catch (SQLException ex) {
+            System.out.println("Karnet deleting error");
+        }
+    }
     
     public DBManager getdBManager() {
         return dBManager;
     }
-    
+
 }

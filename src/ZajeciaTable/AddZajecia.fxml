@@ -13,7 +13,7 @@
       <Button fx:id="button" layoutX="241.0" layoutY="341.0" mnemonicParsing="false" onAction="#handleButtonAction" text="Dodaj" />
       <Accordion />
       <ComboBox fx:id="building" layoutX="174.0" layoutY="186.0" prefHeight="25.0" prefWidth="275.0" />
-      <ComboBox fx:id="hall" layoutX="173.0" layoutY="229.0" prefHeight="25.0" prefWidth="275.0" />
+      <ComboBox fx:id="hall" layoutX="173.0" layoutY="229.0" prefHeight="25.0" prefWidth="275.0" promptText="(opcjonalne)" />
       <Label layoutX="16.0" layoutY="108.0" text="Godzina zakończenia" />
       <Label layoutX="96.0" layoutY="191.0" text="Budynek" />
       <Label layoutX="118.0" layoutY="234.0" text="Sala" />

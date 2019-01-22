@@ -18,12 +18,14 @@ public class DBManagerKarnet {
 
     public void editKarnet(int idClientOld, int idActivityOld, String idClient, String idActivity, Float price, String dateStart, String dateEnd) {
         try {
-            PreparedStatement pstmt = SportsCenter.dBManager.getConnection().prepareStatement("update karnet set cena = ?, data_rozp = ?, data_zakon = ? where KLIENT_ID_KLIENTA = ? AND ZAJECIA_ID_ZAJEC = ?");
-            pstmt.setFloat(1, price);
-            pstmt.setDate(2, java.sql.Date.valueOf(dateStart));
-            pstmt.setDate(3, java.sql.Date.valueOf(dateEnd));
-            pstmt.setInt(4, idClientOld);
-            pstmt.setInt(5, idActivityOld);
+            PreparedStatement pstmt = SportsCenter.dBManager.getConnection().prepareStatement("update karnet set KLIENT_ID_KLIENTA = ?, ZAJECIA_ID_ZAJEC = ?, cena = ?, data_rozp = ?, data_zakon = ? where KLIENT_ID_KLIENTA = ? AND ZAJECIA_ID_ZAJEC = ?");
+            pstmt.setInt(1, Integer.parseInt(idClient));
+            pstmt.setInt(2, Integer.parseInt(idActivity));
+            pstmt.setFloat(3, price);
+            pstmt.setDate(4, java.sql.Date.valueOf(dateStart));
+            pstmt.setDate(5, java.sql.Date.valueOf(dateEnd));
+            pstmt.setInt(6, idClientOld);
+            pstmt.setInt(7, idActivityOld);
             pstmt.executeQuery();
             SportsCenter.dBManager.getConnection().commit();
             System.out.println("Karnet updated!");

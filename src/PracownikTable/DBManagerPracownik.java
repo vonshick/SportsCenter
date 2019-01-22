@@ -51,7 +51,7 @@ public class DBManagerPracownik {
 //        }
 //    }
     
-    public void editPracownik(String oldPESEL, String name, String surname, String newPESEL, String profession, Float salary) throws SQLException {
+    public void editPracownik(String oldPESEL, String name, String surname, String newPESEL, String newProfession, String oldProfession, Float salary) throws SQLException {
         Statement stmt = SportsCenter.dBManager.getConnection().createStatement();
         String dropConstraintTrener = "ALTER TABLE trener DROP CONSTRAINT trener_pracownik_fk";
         String dropConstraintZajecia = "ALTER TABLE zajecia DROP CONSTRAINT zajecia_trener_fk";
@@ -62,7 +62,6 @@ public class DBManagerPracownik {
                     "    ADD CONSTRAINT zajecia_trener_fk FOREIGN KEY ( trener_pesel )\n" +
                     "        REFERENCES trener ( pesel )";
 
-    
         try {
             PreparedStatement pstmt = SportsCenter.dBManager.getConnection().prepareStatement("update pracownik set pesel = ?, nazwisko = ?, imie = ?, funkcja = ?, placa = ? where pesel = ?");
             SportsCenter.dBManager.getConnection().setAutoCommit(false);
@@ -71,21 +70,31 @@ public class DBManagerPracownik {
             pstmt.setString(1, newPESEL);
             pstmt.setString(2, surname);
             pstmt.setString(3, name);
-            pstmt.setString(4, profession);
+            pstmt.setString(4, newProfession);
             pstmt.setFloat(5, salary);
             pstmt.setString(6, oldPESEL);
             pstmt.executeQuery();
-            
-            pstmt = SportsCenter.dBManager.getConnection().prepareStatement("update trener set pesel = ? where pesel = ?");
-            pstmt.setString(1, newPESEL);
-            pstmt.setString(2, oldPESEL);
-            pstmt.executeQuery();
-            
-            pstmt = SportsCenter.dBManager.getConnection().prepareStatement("update zajecia set trener_pesel = ? where trener_pesel = ?");
-            pstmt.setString(1, newPESEL);
-            pstmt.setString(2, oldPESEL);
-            pstmt.executeQuery();
-            
+            if(checkIfCoachRemoved(oldProfession, newProfession)){
+                pstmt = SportsCenter.dBManager.getConnection().prepareStatement("DELETE FROM trener where pesel = ?");
+                pstmt.setString(1, oldPESEL);
+                pstmt.executeQuery();
+                
+                pstmt = SportsCenter.dBManager.getConnection().prepareStatement("update zajecia set trener_pesel = NULL where trener_pesel = ?");
+                pstmt.setString(1, oldPESEL);
+                pstmt.executeQuery();
+                
+            } else{
+                pstmt = SportsCenter.dBManager.getConnection().prepareStatement("update trener set pesel = ? where pesel = ?");
+                pstmt.setString(1, newPESEL);
+                pstmt.setString(2, oldPESEL);
+                pstmt.executeQuery();
+
+                pstmt = SportsCenter.dBManager.getConnection().prepareStatement("update zajecia set trener_pesel = ? where trener_pesel = ?");
+                pstmt.setString(1, newPESEL);
+                pstmt.setString(2, oldPESEL);
+                pstmt.executeQuery();
+            }
+
             stmt.executeQuery(addConstraintTrener);
             stmt.executeQuery(addConstraintZajecia);
             SportsCenter.dBManager.getConnection().commit();
@@ -98,6 +107,16 @@ public class DBManagerPracownik {
             SportsCenter.dBManager.getConnection().setAutoCommit(true);
             ValidateData.printSQLException(e, "PESEL");
             System.out.println("Employee update error");
+        }
+    }
+    
+    private boolean checkIfCoachRemoved(String oldProfession, String newProfession){
+        if(!(oldProfession.toLowerCase().equals("trener") || oldProfession.toLowerCase().equals("trenerka"))){
+            return false;
+        } else if (!(newProfession.toLowerCase().equals("trener") || newProfession.toLowerCase().equals("trenerka"))) {
+            return true;
+        } else {
+            return false;
         }
     }
     
@@ -139,6 +158,18 @@ public class DBManagerPracownik {
         controller.initData(PESEL);
         stage.show();
         ((Node) (event.getSource())).getScene().getWindow().hide();
+    }
+    
+    public float countAnnualTax(String PESEL) throws SQLException{
+        PreparedStatement pstmt = SportsCenter.dBManager.getConnection().prepareStatement("SELECT podatek(?) FROM DUAL");
+        pstmt.setString(1, PESEL);
+        
+        ResultSet rs = pstmt.executeQuery();
+        float tax = (float) 0;
+        if(rs.next()){
+            tax = rs.getFloat(1);
+        }
+        return tax;
     }
     
     public DBManager getdBManager() {

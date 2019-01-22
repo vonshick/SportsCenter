@@ -3,6 +3,7 @@ package ZajeciaTable;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Date;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -37,6 +38,8 @@ public class TableZajeciaWindowController implements Initializable {
     private ComboBox selectTableView;
     @FXML
     private TextField searchTextBox;
+    @FXML
+    private Button delete;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -64,10 +67,7 @@ public class TableZajeciaWindowController implements Initializable {
 
         TableColumn<Zajecia, Float> priceColumn = new TableColumn<>("Cena");
         priceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
-//        
-//        TableColumn<Zajecia, String> coachPESELColumn = new TableColumn<>("Trener PESEL");
-//        coachPESELColumn.setCellValueFactory(new PropertyValueFactory<>("coachPESEL"));
-//        
+
         TableColumn<Zajecia, String> coachNameColumn = new TableColumn<>("Trener");
         coachNameColumn.setCellValueFactory(new PropertyValueFactory<>("coachName"));
  
@@ -82,7 +82,16 @@ public class TableZajeciaWindowController implements Initializable {
     }
     
     @FXML
+    private void deleteZajecia() throws IOException, SQLException {
+        Zajecia zajecia = (Zajecia) tableView.getSelectionModel().getSelectedItem();
+        dbManager.getDbManagerZajecia().deleteZajecia(zajecia.getId());
+        delete.setDisable(true);
+        showZajecia();
+    }
+    
+    @FXML
     private void changeTableView() throws IOException {
+        delete.setDisable(true);
         String selected = selectTableView.getSelectionModel().getSelectedItem().toString();
         if (selected != null && !selected.equals("zajecia")) {
             dbManager.changeScene(selected);
@@ -90,7 +99,8 @@ public class TableZajeciaWindowController implements Initializable {
     }
 
     @FXML
-    private void openNewZajeciaWindow() throws IOException{
+    private void openNewZajeciaWindow() throws IOException {
+        delete.setDisable(true);
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/ZajeciaTable/AddZajecia.fxml"));
         Parent root = (Parent) fxmlLoader.load();
         AddZajeciaController controller = fxmlLoader.<AddZajeciaController>getController();
@@ -103,14 +113,17 @@ public class TableZajeciaWindowController implements Initializable {
     
     @FXML
     private void selectRowZajecia(MouseEvent event) throws IOException {
+        if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 1 && !tableView.getSelectionModel().isEmpty()) {
+            delete.setDisable(false);
+        }
         if(event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) {
+            delete.setDisable(true);
             Zajecia zajecia = (Zajecia) tableView.getSelectionModel().getSelectedItem();
             if(zajecia != null) {
-//                System.out.println("Wybrano " + zajecia.getName());
                 FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/ZajeciaTable/EditZajecia.fxml"));
                 Parent root = (Parent) fxmlLoader.load();
                 EditZajeciaController controller = fxmlLoader.<EditZajeciaController>getController();
-                controller.initializeEditWindow(zajecia);
+                controller.setZajecia(zajecia);
                 Stage stage = new Stage();
                 stage.setTitle("Edytuj Zajecia");
                 stage.setScene(new Scene(root));
@@ -122,6 +135,7 @@ public class TableZajeciaWindowController implements Initializable {
     
     @FXML
     private void searchZajecia() throws IOException {
+        delete.setDisable(true);
         String input = searchTextBox.getText().toLowerCase();
         if (input.isEmpty()) {
             showZajecia();
@@ -154,7 +168,6 @@ public class TableZajeciaWindowController implements Initializable {
                 pattern = pattern.replace("%", "");
                 boolean foundInColumn = false;
                 for (String rowColumn : rowColumns) {
-                    System.out.println(rowColumn);
                     switch (searchMode) {
                         case 1: {
                             if (rowColumn.contains(pattern)) {
@@ -198,7 +211,6 @@ public class TableZajeciaWindowController implements Initializable {
         tableView.setItems(zajecia);
     }
 
-    
     private void showZajecia() {
         ObservableList<SQLObject> sqlList = SportsCenter.dBManager.selectFromTable("v_zajecia");
         ObservableList<Zajecia> zajecia = FXCollections.observableArrayList();
@@ -208,5 +220,4 @@ public class TableZajeciaWindowController implements Initializable {
         tableView.getItems().clear();
         tableView.setItems(zajecia);
     }
-    
 }

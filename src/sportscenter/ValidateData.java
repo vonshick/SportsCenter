@@ -59,23 +59,29 @@ public class ValidateData {
         return choiceBox.getSelectionModel().isEmpty();
     }
     
-//    java.sql.SQLException: The Network Adapter could not establish the connection
-//    java.sql.SQLException: ORA-01017: invalid username/password; logon denied
     public static void printSQLException(SQLException ex, String message) {
             for (Throwable e : ex) {
                 if (e instanceof SQLException) {
                     System.out.println(((SQLException)e).getErrorCode());
-                    if(((SQLException)e).getErrorCode() == 1){
-                        showErrorPane("Error while inserting/updating data\nValue of '"+message+"' field must be unique");
-                    } else if (((SQLException)e).getErrorCode() == 1017){
-                        AlertBox.showAlert("Invalid username or password");
-                    } else if (((SQLException)e).getErrorCode() == 12505){
-                        Alert alert = new Alert(AlertType.ERROR, "The Network Adapter could not establish the connection");
-                        alert.getDialogPane().getChildren().stream().filter(node -> node instanceof Label).forEach(node -> ((Label)node).setMinHeight(Region.USE_PREF_SIZE));
-                        alert.showAndWait();
-                    }
-                    else{
-                        showErrorPane(e.getMessage());
+                    switch (((SQLException)e).getErrorCode()) {
+                        case 1:
+                            showErrorPane("Nie można dodać/uaktualnić danych. \nWartość pola '" + message + "' musi być unikalna!");
+                            break;
+                        case 1017:
+                            AlertBox.showAlert("Invalid username or password");
+                            break;
+                        case 12505:
+                            showErrorPane("The Network Adapter could not establish the connection");
+                            break;
+                        case 2292:
+                            showErrorPane("Nie można usunąć danych, naruszenie więzów integralności (klucz obcy)!");
+                            break;
+                        case 2291:
+                            AlertBox.showAlert("Nie znaleziono podanego ID (klucz nadrzędny)");
+                            break;
+                        default:
+                            showErrorPane(e.getMessage());
+                            break;
                     }
                 }
             }

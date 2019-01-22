@@ -2,6 +2,7 @@ package TrenerTable;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -10,6 +11,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
@@ -34,7 +36,8 @@ public class TableTrenerWindowController implements Initializable {
     private ComboBox selectTableView;
     @FXML
     private TextField searchTextBox;
-    
+    @FXML
+    private Button delete;
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         this.dbManager = SportsCenter.dBManager;
@@ -45,7 +48,7 @@ public class TableTrenerWindowController implements Initializable {
 
         TableColumn<Trener, String> peselColumn = new TableColumn<>("PESEL");
         peselColumn.setCellValueFactory(new PropertyValueFactory<>("PESEL"));
-
+        
         TableColumn<Trener, String> disciplinColumn = new TableColumn<>("Dyscyplina");
         disciplinColumn.setCellValueFactory(new PropertyValueFactory<>("disciplin"));
 
@@ -57,13 +60,27 @@ public class TableTrenerWindowController implements Initializable {
     private void changeTableView() throws IOException {
         String selected = selectTableView.getSelectionModel().getSelectedItem().toString();
         if (selected != null && !selected.equals("trenerzy")) {
+            delete.setDisable(true);
             dbManager.changeScene(selected);
         }
+    }
+    
+    @FXML
+    private void deleteTrener() throws SQLException {
+        Trener trener = (Trener) tableView.getSelectionModel().getSelectedItem();
+        dbManager.getdBManagerTrener().deleteTrener(trener.getPESEL());
+        delete.setDisable(true);
+        showTrenerzy();
     }
 
     @FXML
     private void selectRowTrener (MouseEvent event) throws IOException {
+        if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 1) {
+            delete.setDisable(false);
+        }
         if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) {
+            delete.setDisable(true);
+
             Trener trener = (Trener) tableView.getSelectionModel().getSelectedItem();
             if (trener != null) {
                 System.out.println("Wybrano " + trener.getPESEL());

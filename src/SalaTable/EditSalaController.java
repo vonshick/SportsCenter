@@ -13,7 +13,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import GUI.AlertBox;
 import java.util.ArrayList;
-import javafx.collections.FXCollections;
 import javafx.scene.control.ComboBox;
 import sportscenter.DBManager;
 import sportscenter.SportsCenter;
@@ -40,7 +39,7 @@ public class EditSalaController implements Initializable {
                 ((Node) (event.getSource())).getScene().getWindow().hide();
             }
         } catch (NullPointerException e) {
-            AlertBox.showAlert("Pole Budynek nie może być puste!");
+            AlertBox.showAlert("Pole Budynek musi zawierać poprawną nazwę obiektu!");
         }
     }
     

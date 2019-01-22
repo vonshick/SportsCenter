@@ -15,7 +15,6 @@ import PracownikTable.Pracownik;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.collections.ObservableList;
-import javafx.scene.control.ComboBox;
 import sportscenter.DBManager;
 import sportscenter.SQLObject;
 import sportscenter.SportsCenter;
@@ -27,7 +26,7 @@ public class EditTrenerController implements Initializable {
     private DBManager dbManager;
     
     @FXML
-    private ComboBox PESEL;
+    private TextField PESEL;
     @FXML
     private TextField disciplin;
     @FXML
@@ -45,11 +44,11 @@ public class EditTrenerController implements Initializable {
     private void save(MouseEvent event) throws IOException, SQLException {
         if (ifSomeEmpty()) {
             AlertBox.showAlert("None of fields can be empty");
-        } else if (ValidateData.isIncorrectPESEL(PESEL.getSelectionModel().getSelectedItem().toString())) {
+        } else if (ValidateData.isIncorrectPESEL(PESEL.getText())) {
             AlertBox.showAlert("Incorrect PESEL format");
         } else {
             System.out.println("clicked save");
-            dbManager.getdBManagerTrener().editTrener(trener.getPESEL(), PESEL.getSelectionModel().getSelectedItem().toString(), disciplin.getText());
+            dbManager.getdBManagerTrener().editTrener(trener.getPESEL(), PESEL.getText(), disciplin.getText());
             ((Node) (event.getSource())).getScene().getWindow().hide();
         }
     }
@@ -62,7 +61,7 @@ public class EditTrenerController implements Initializable {
 
     private boolean ifSomeEmpty() {
         try {
-            return (disciplin.getText().equals("") || PESEL.getSelectionModel().getSelectedItem().toString() == null);
+            return (disciplin.getText().equals("") || PESEL.getText().equals(""));
         } catch (NullPointerException ex) {
             return true;
         }
@@ -70,14 +69,7 @@ public class EditTrenerController implements Initializable {
 
     public void setTrener(Trener trener) {
         this.trener = trener;
-        GUI.AutoCompleteComboBoxListener<String> autoComplete = new GUI.AutoCompleteComboBoxListener<>(PESEL);
-        ObservableList<SQLObject> sqlList = SportsCenter.dBManager.selectFromTable("pracownik");
-        List<String> pracownikPESEL = new ArrayList<>();
-        for (SQLObject sQLObject : sqlList) {
-            pracownikPESEL.add(((Pracownik) sQLObject).getPESEL());
-        }
-        PESEL.getItems().addAll(pracownikPESEL);
-        PESEL.getSelectionModel().select(trener.getPESEL());
+        PESEL.setText(trener.getPESEL());
         disciplin.setText(trener.getDisciplin());
     }
     

@@ -2,6 +2,7 @@ package ZawodyTable;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -36,7 +37,9 @@ public class TableZawodyWindowController implements Initializable {
     private ComboBox selectTableView;
     @FXML
     private TextField searchTextBox;
-    
+    @FXML
+    private Button delete;
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         this.dbManager = SportsCenter.dBManager;
@@ -66,7 +69,16 @@ public class TableZawodyWindowController implements Initializable {
     }
     
     @FXML
+    private void deleteZawody() throws IOException, SQLException {
+        Zawody zawody = (Zawody) tableView.getSelectionModel().getSelectedItem();
+        dbManager.getdBManagerZawody().deleteZawody(zawody.getName());
+        delete.setDisable(true);
+        showZawody();
+    }
+    
+    @FXML
     private void changeTableView() throws IOException {
+        delete.setDisable(true);
         String selected = selectTableView.getSelectionModel().getSelectedItem().toString();
         if (selected != null && !selected.equals("zawody")) {
             dbManager.changeScene(selected);
@@ -75,6 +87,7 @@ public class TableZawodyWindowController implements Initializable {
 
     @FXML
     private void openNewZawodyWindow() throws IOException{
+        delete.setDisable(true);
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/ZawodyTable/AddZawody.fxml"));
         Parent root = (Parent) fxmlLoader.load();
         AddZawodyController controller = fxmlLoader.<AddZawodyController>getController();
@@ -87,7 +100,11 @@ public class TableZawodyWindowController implements Initializable {
     
     @FXML
     private void selectRowZawody(MouseEvent event) throws IOException {
+        if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 1 && !tableView.getSelectionModel().isEmpty()) {
+            delete.setDisable(false);
+        }
         if(event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) {
+            delete.setDisable(true);
             Zawody zawody = (Zawody) tableView.getSelectionModel().getSelectedItem();
             if(zawody != null) {
                 FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/ZawodyTable/EditZawody.fxml"));
@@ -105,6 +122,7 @@ public class TableZawodyWindowController implements Initializable {
     
     @FXML
     private void searchZawody() throws IOException {
+        delete.setDisable(true);
         String input = searchTextBox.getText().toLowerCase();
         if(input.isEmpty()) {
             showZawody();

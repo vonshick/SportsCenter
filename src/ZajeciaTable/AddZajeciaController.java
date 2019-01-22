@@ -1,6 +1,5 @@
 package ZajeciaTable;
 
-import ZajeciaTable.*;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -17,6 +16,7 @@ import javafx.scene.control.TextField;
 import GUI.AlertBox;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.scene.control.ComboBox;
 import sportscenter.DBManager;
 import sportscenter.SportsCenter;
 import sportscenter.ValidateData;
@@ -41,52 +41,45 @@ public class AddZajeciaController implements Initializable {
     @FXML
     private ChoiceBox endMinute;
     @FXML
-    private ChoiceBox coach;
+    private ComboBox coach;
     @FXML
-    private ChoiceBox building;
+    private ComboBox building;
     @FXML
-    private ChoiceBox hall;
+    private ComboBox hall;
     
     @FXML
     private void handleButtonAction(ActionEvent event) throws IOException, SQLException {
-        String[] providedData = {sport.getText(), price.getText()};
-        if(ValidateData.isAnyEmpty(providedData)){
-            AlertBox.showAlert("Name field can not be empty");
-        } else if (ValidateData.ifValueNotSelected(building)){
-            AlertBox.showAlert("None building was chosen");
-        } else if (ValidateData.ifValueNotSelected(dayOfWeek)){
-            AlertBox.showAlert("None day of week was chosen");
-        } else if (ValidateData.ifValueNotSelected(startHour)){
-            AlertBox.showAlert("Start hour was not chosen");
-        } else if (ValidateData.ifValueNotSelected(startMinute)){
-            AlertBox.showAlert("Start hour was not chosen");
-        } else if (ValidateData.ifValueNotSelected(endHour)){
-            AlertBox.showAlert("End hour was not chosen");
-        } else if (ValidateData.ifValueNotSelected(endMinute)){
-            AlertBox.showAlert("End hour was not chosen");
-        }  else {
-            String hallId = "";
-            if (!ValidateData.ifValueNotSelected(hall)){
-                hallId = (String) hall.getSelectionModel().getSelectedItem();
+        try {
+            String[] providedData = { sport.getText(), price.getText(), coach.getSelectionModel().getSelectedItem().toString(), building.getSelectionModel().getSelectedItem().toString() };
+            String[] providedTimeData = { dayOfWeek.getSelectionModel().getSelectedItem().toString(),
+                startHour.getSelectionModel().getSelectedItem().toString(), startMinute.getSelectionModel().getSelectedItem().toString(),
+                endHour.getSelectionModel().getSelectedItem().toString(), endMinute.getSelectionModel().getSelectedItem().toString() };
+            String coachLocal = coaches.get(providedData[2]);
+            try {
+                int buildingLocal = buildings.get(providedData[3]);
+                if (ValidateData.isAnyEmpty(providedData)) {
+                    AlertBox.showAlert("Pola Dyscyplina i Cena muszą być wypełnione!");
+                } else if (coachLocal == null) {
+                    AlertBox.showAlert("Podaj istniejącego trenera!");
+                } else {
+                    String hallId = "";
+                    if (!hall.getSelectionModel().isEmpty()) {
+                        hallId = hall.getSelectionModel().getSelectedItem().toString();
+                    }
+                    try {
+                        dbManager.getDbManagerZajecia().insertNewZajecia(
+                                providedTimeData[0], providedTimeData[1], providedTimeData[2], providedTimeData[3], providedTimeData[4],
+                                providedData[0], Float.parseFloat(providedData[1]), coachLocal, buildingLocal, hallId);
+                        ((Node) (event.getSource())).getScene().getWindow().hide();
+                    } catch (NumberFormatException e) {
+                        AlertBox.showAlert("Cena musi być liczbą!");
+                    }
+                }
+            } catch (Exception e) {
+                AlertBox.showAlert("Podaj istniejacy budynek!");
             }
-            String coachPESEL = "";
-            if (!ValidateData.ifValueNotSelected(coach)){
-               coachPESEL = getCoachPESEL();
-            }
-            try{
-                Float priceValue = Float.parseFloat(providedData[1]);
-                dbManager.getDbManagerZajecia().insertNewZajecia(
-                        (String) dayOfWeek.getSelectionModel().getSelectedItem(),
-                        (String) startHour.getSelectionModel().getSelectedItem(),
-                        (String) startMinute.getSelectionModel().getSelectedItem(),
-                        (String) endHour.getSelectionModel().getSelectedItem(),
-                        (String) endMinute.getSelectionModel().getSelectedItem(),
-                        providedData[0], priceValue,
-                        getCoachPESEL(), getBuildingId(), hallId);
-                ((Node)(event.getSource())).getScene().getWindow().hide();
-            } catch(Exception e){
-                AlertBox.showAlert("Incorrect price value");
-            }
+        } catch (NullPointerException e) {
+            AlertBox.showAlert("Wszystkie pola (oprócz opcjonalnego pola 'Sala') muszą być wypełnione!");
         }
     }
     
@@ -95,6 +88,9 @@ public class AddZajeciaController implements Initializable {
         this.dbManager = SportsCenter.dBManager;
         buildings = dbManager.getDbManagerZajecia().generateBuildingsMap();
         coaches = dbManager.getDbManagerZajecia().generateCoachessMap();
+        GUI.AutoCompleteComboBoxListener<String> autoCompleteBuilding = new GUI.AutoCompleteComboBoxListener<>(building);
+        GUI.AutoCompleteComboBoxListener<String> autoCompleteCoach = new GUI.AutoCompleteComboBoxListener<>(coach);
+        GUI.AutoCompleteComboBoxListener<String> autoCompleteHall = new GUI.AutoCompleteComboBoxListener<>(hall);
         fillChoiceBoxes();
         addChangeListener();
     }    
@@ -106,32 +102,32 @@ public class AddZajeciaController implements Initializable {
     }
     
     private void fillBuildingCB(){
-        ArrayList<String> choices = new ArrayList<String>();
+        ArrayList<String> choices = new ArrayList<>();
         for (Map.Entry<String, Integer> entry : buildings.entrySet()){   
             choices.add(entry.getKey());
         }
-        building.setItems(FXCollections.observableArrayList(choices));
+        building.getItems().addAll(choices);
     }
     private void fillCoachCB(){
-        ArrayList<String> choices = new ArrayList<String>();
+        ArrayList<String> choices = new ArrayList<>();
         for (Map.Entry<String, String> entry : coaches.entrySet()){   
             choices.add(entry.getKey());
         }
-        coach.setItems(FXCollections.observableArrayList(choices));
+        coach.getItems().addAll(choices);
     }
     
     private void fillTimeCB(){
         String[] daysOfWeek = {"poniedzialek", "wtorek", "sroda", "czwartek", "piatek", "sobota", "niedziela"};
         dayOfWeek.setItems(FXCollections.observableArrayList(daysOfWeek));
         
-        ArrayList<String> hours = new ArrayList<String>();
+        ArrayList<String> hours = new ArrayList<>();
         for (int i = 0; i<24; i++){
             hours.add(Integer.toString(i));
         }
         startHour.setItems(FXCollections.observableArrayList(hours));
         endHour.setItems(FXCollections.observableArrayList(hours));
         
-        ArrayList<String> minutes = new ArrayList<String>();
+        ArrayList<String> minutes = new ArrayList<>();
         for (int i = 0; i<60; i++){
             if(i<10){
                 minutes.add("0"+Integer.toString(i));
@@ -139,27 +135,23 @@ public class AddZajeciaController implements Initializable {
                 minutes.add(Integer.toString(i));
             }
         }
-        startMinute.setItems(FXCollections.observableArrayList(hours));
+        startMinute.setItems(FXCollections.observableArrayList(minutes));
         endMinute.setItems(FXCollections.observableArrayList(hours));   
     }
     
     private void addChangeListener(){
         building.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
             @Override
-            public void changed(ObservableValue<? extends Number> observableValue, Number index1, Number index2) {
-                String buildingName = (String) building.getItems().get((Integer) index2);
-                ArrayList<String> choices = dbManager.getDbManagerZajecia().generateHallsList(buildingName);
-                hall.setItems(FXCollections.observableArrayList(choices));
+            public void changed(ObservableValue<? extends Number> observableValue, Number indexOld, Number indexNew) {
+                try {
+                    String buildingName = building.getItems().get((Integer) indexNew).toString();
+                    hall.getItems().clear();
+                    hall.getItems().addAll(dbManager.getDbManagerZajecia().generateHallsList(buildingName));
+                } catch (Exception e) {
+                    building.getSelectionModel().clearSelection();
+                }
             }
         }); 
     }
     
-    private int getBuildingId(){
-        return buildings.get((String) building.getSelectionModel().getSelectedItem());
-    }
-    
-    private String getCoachPESEL(){
-        return coaches.get((String) coach.getSelectionModel().getSelectedItem());
-    }
 }
-

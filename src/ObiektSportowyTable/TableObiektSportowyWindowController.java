@@ -1,9 +1,8 @@
 package ObiektSportowyTable;
 
-import TrenerTable.EditTrenerController;
-import TrenerTable.Trener;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -38,15 +37,15 @@ public class TableObiektSportowyWindowController implements Initializable {
     private ComboBox selectTableView;
     @FXML
     private TextField searchTextBox;
+    @FXML
+    private Button delete;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-//        SportsCenter.manager.setMainWindowController(this);
         this.dbManager = SportsCenter.dBManager;
         AddData.setText("Dodaj Obiekt Sportwy");
         selectTableView.setItems(FXCollections.observableArrayList("karnety", "klienci", "obiekty sportowe", "pracownicy", "sale", "trenerzy", "uczestnicy", "wyposazenie", "zajecia", "zawody"));
         selectTableView.getSelectionModel().select("obiekty sportowe");
-
         tableView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         
         TableColumn<ObiektSportowy, String> idColumn = new TableColumn<>("idObiektu");
@@ -68,6 +67,7 @@ public class TableObiektSportowyWindowController implements Initializable {
     
     @FXML
     private void changeTableView() throws IOException {
+        delete.setDisable(true);
         String selected = selectTableView.getSelectionModel().getSelectedItem().toString();
         if(selected != null && !selected.equals("obiekty sportowe")) {
             dbManager.changeScene(selected);
@@ -75,16 +75,16 @@ public class TableObiektSportowyWindowController implements Initializable {
     }
     
     @FXML
-    private void selectRowObiektSporotwy(MouseEvent event) {
-        if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) {
-            ObiektSportowy obiekt = (ObiektSportowy) tableView.getSelectionModel().getSelectedItem();
-            tableView.getSelectionModel().clearSelection();
-            System.out.println("Wybrano " + obiekt.getNazwa());
-        }
-    }
-    
+     private void deleteObiektSportowy() throws SQLException{
+        ObiektSportowy obiektSportowy = (ObiektSportowy) tableView.getSelectionModel().getSelectedItem();
+        dbManager.getDbManagerObiektSportowy().deleteObiektSportowy(Integer.parseInt(obiektSportowy.getIdObiektu()));
+        delete.setDisable(true);
+        showObiektySportowe();
+     }
+     
     @FXML
     private void openNewObiektSportowyWindow() throws IOException {
+        delete.setDisable(true);
         Parent root = FXMLLoader.load(getClass().getResource("/ObiektSportowyTable/AddObiektSportowy.fxml"));
         Stage stage = new Stage();
         stage.setTitle("Add new sport facility");
@@ -95,7 +95,11 @@ public class TableObiektSportowyWindowController implements Initializable {
     
     @FXML
     private void selectRowObiektSportowy (MouseEvent event) throws IOException {
+        if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 1 && !tableView.getSelectionModel().isEmpty()) {
+            delete.setDisable(false);
+        }
         if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) {
+            delete.setDisable(true);
             ObiektSportowy obiektSportowy = (ObiektSportowy) tableView.getSelectionModel().getSelectedItem();
             if (obiektSportowy != null) {
                 System.out.println("Wybrano " + obiektSportowy.getNazwa());
@@ -114,6 +118,7 @@ public class TableObiektSportowyWindowController implements Initializable {
     
     @FXML
     private void searchObiektSportowy() throws IOException {
+        delete.setDisable(true);
         String input = searchTextBox.getText().toLowerCase();
         if (input.isEmpty()) {
             showObiektySportowe();

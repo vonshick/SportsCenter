@@ -9,8 +9,8 @@
 <AnchorPane id="AnchorPane" prefHeight="315.0" prefWidth="445.5" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="KarnetTable.AddKarnetController">
     <children>
         <TextField fx:id="price" layoutX="122.0" layoutY="123.0" prefHeight="25.0" prefWidth="275.0" />
-        <TextField fx:id="dateStart" layoutX="122.0" layoutY="165.0" prefHeight="25.0" prefWidth="275.0" />
-        <TextField fx:id="dateEnd" layoutX="122.0" layoutY="208.0" prefHeight="25.0" prefWidth="275.0" />
+        <TextField fx:id="dateStart" layoutX="122.0" layoutY="165.0" prefHeight="25.0" prefWidth="275.0" promptText="RRRR-MM-DD" />
+        <TextField fx:id="dateEnd" layoutX="122.0" layoutY="208.0" prefHeight="25.0" prefWidth="275.0" promptText="RRRR-MM-DD" />
         <Label layoutX="61.0" layoutY="43.0" text="ID Klienta" />
         <Label layoutX="65.0" layoutY="83.0" text="ID Zajec" />
         <Label layoutX="73.0" layoutY="127.0" text="Cena" />

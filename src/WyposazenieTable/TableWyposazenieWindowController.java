@@ -2,6 +2,7 @@ package WyposazenieTable;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -36,6 +37,8 @@ public class TableWyposazenieWindowController implements Initializable {
     private ComboBox selectTableView;
     @FXML
     private TextField searchTextBox;
+    @FXML
+    private Button delete;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -68,8 +71,18 @@ public class TableWyposazenieWindowController implements Initializable {
         showWyposazenie();
     }
     
+    
+    @FXML
+    private void deleteWyposazenie() throws IOException, SQLException {
+        Wyposazenie wyposazenie = (Wyposazenie) tableView.getSelectionModel().getSelectedItem();
+        dbManager.getDbManagerWyposazenie().deleteWyposazenie(wyposazenie.getId());
+        delete.setDisable(true);
+        showWyposazenie();
+    }
+    
     @FXML
     private void changeTableView() throws IOException {
+        delete.setDisable(true);
         String selected = selectTableView.getSelectionModel().getSelectedItem().toString();
         if (selected != null && !selected.equals("wyposazenie")) {
             dbManager.changeScene(selected);
@@ -77,7 +90,8 @@ public class TableWyposazenieWindowController implements Initializable {
     }
 
     @FXML
-    private void openNewWyposazenieWindow() throws IOException{
+    private void openNewWyposazenieWindow() throws IOException {
+        delete.setDisable(true);
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/WyposazenieTable/AddWyposazenie.fxml"));
         Parent root = (Parent) fxmlLoader.load();
         AddWyposazenieController controller = fxmlLoader.<AddWyposazenieController>getController();
@@ -90,7 +104,11 @@ public class TableWyposazenieWindowController implements Initializable {
     
     @FXML
     private void selectRowWyposazenie(MouseEvent event) throws IOException {
+        if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 1 && !tableView.getSelectionModel().isEmpty()) {
+            delete.setDisable(false);
+        }
         if(event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) {
+            delete.setDisable(true);
             Wyposazenie wyposazenie = (Wyposazenie) tableView.getSelectionModel().getSelectedItem();
             if(wyposazenie != null) {
                 System.out.println("Wybrano " + wyposazenie.getName());
@@ -109,6 +127,7 @@ public class TableWyposazenieWindowController implements Initializable {
     
     @FXML
     private void searchWyposazenie() throws IOException {
+        delete.setDisable(true);
         String input = searchTextBox.getText().toLowerCase();
         if (input.isEmpty()) {
             showWyposazenie();

@@ -13,6 +13,17 @@ public class DBManagerKlient {
         this.dBManager = dBManager;
     }
 
+    public void deleteKlient(int ID) throws SQLException{
+        try {
+            PreparedStatement pstmt = SportsCenter.dBManager.getConnection().prepareStatement("DELETE FROM klient where id_klienta = ?");
+            pstmt.setInt(1, ID);
+            pstmt.executeQuery();
+        } catch (SQLException e) {
+            ValidateData.printSQLException(e, "");
+            System.out.println("Employee delete error");
+        }
+    }
+    
     public void editKlient(int ID, String name, String surname) {
         try {
             PreparedStatement pstmt = SportsCenter.dBManager.getConnection().prepareStatement("update klient set nazwisko = ?, imie = ? where id_klienta = ?");
@@ -23,6 +34,7 @@ public class DBManagerKlient {
             SportsCenter.dBManager.getConnection().commit();
             System.out.println("Employee updated!");
         } catch (SQLException e) {
+            ValidateData.printSQLException(e, "");
             System.out.println("Employee update error");
         }
     }
@@ -35,6 +47,7 @@ public class DBManagerKlient {
             pstmt.executeUpdate();
             System.out.println("Client added!");
         } catch (SQLException e) {
+            ValidateData.printSQLException(e, "");
             System.out.println("Client inserting error");
         }
     }

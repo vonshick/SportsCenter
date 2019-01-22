@@ -37,7 +37,7 @@ public class AddSalaController implements Initializable {
                 ((Node) (event.getSource())).getScene().getWindow().hide();
             }
         } catch (NullPointerException e) {
-            AlertBox.showAlert("Pole Budynek nie może być puste!");
+            AlertBox.showAlert("Pole Budynek musi zawierać poprawną nazwę obiektu!");
         }
     }
     
@@ -45,7 +45,7 @@ public class AddSalaController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         dbManager = SportsCenter.dBManager;
         buildings = dbManager.getDbManagerSala().generateBuildingsMap();
-        ArrayList<String> choices = new ArrayList<String>();
+        ArrayList<String> choices = new ArrayList<>();
         for (Map.Entry<String, Integer> entry : buildings.entrySet()){   
             choices.add(entry.getKey());
         }

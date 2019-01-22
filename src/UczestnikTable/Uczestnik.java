@@ -5,33 +5,43 @@ import java.sql.SQLException;
 import sportscenter.SQLObject;
 
 public class Uczestnik extends SQLObject {
+    int id;
     private String PESEL;
     private String surname;
     private String name;
     private int status;
-
-    public Uczestnik(String PESEL, String nazwisko, String imie, int oplacony) {
+    private String competition;
+    
+    public Uczestnik(int id, String PESEL, String nazwisko, String imie, int oplacony, String competition) {
+        this.id = id;
         this.PESEL = PESEL;
         this.surname = nazwisko;
         this.name = imie;
         this.status = oplacony;
+        this.competition = competition;
     }
 
     public Uczestnik(){}
     
     
     public Uczestnik(ResultSet rs) throws SQLException {
-        this.PESEL = rs.getString(1);
-        this.surname = rs.getString(2);
-        this.name = rs.getString(3);
-        this.status = rs.getInt(4);
+        this.id = rs.getInt(1);
+        this.PESEL = rs.getString(2);
+        this.surname = rs.getString(3);
+        this.name = rs.getString(4);
+        this.status = rs.getInt(5);
+        this.competition = rs.getString(6);
     }
     
     @Override
     public String toString() {
-        return this.PESEL + "," + this.surname + "," + this.name + "," + this.status;
+        return this.id + "," + this.PESEL + "," + this.surname + "," + this.name + "," + this.status + "," + this.competition;
     }
 
+    public int getId(){
+        return id;
+    }
+    
     public String getPESEL() {
         return PESEL;
     }
@@ -48,6 +58,9 @@ public class Uczestnik extends SQLObject {
         return status;
     }
 
+    public String getCompetition(){
+        return competition;
+    }
 
 
 

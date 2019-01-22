@@ -106,6 +106,78 @@ public class DBManagerSala {
         }
     }
     
+    public void deleteSala(int buildingId, String hallId) throws SQLException{
+        Statement stmt = SportsCenter.dBManager.getConnection().createStatement();
+        String dropArcWyposazenie = "ALTER TABLE wyposazenie DROP CONSTRAINT arc_2";
+        String dropArcZajecia = "ALTER TABLE zajecia DROP CONSTRAINT arc_1";
+        String addArcWyposazenie = "ALTER TABLE wyposazenie\n" +
+"    ADD CONSTRAINT arc_2 CHECK (\n" +
+"        (\n" +
+"            ( obiekt_sportowy_id_obiektu IS NOT NULL )\n" +
+"            AND ( sala_obiekt_sportowy_id_ob IS NULL )\n" +
+"            AND ( sala_nr_sali IS NULL )\n" +
+"        )\n" +
+"        OR (\n" +
+"            ( sala_obiekt_sportowy_id_ob IS NOT NULL )\n" +
+"            AND ( sala_nr_sali IS NOT NULL )\n" +
+"            AND ( obiekt_sportowy_id_obiektu IS NULL )\n" +
+"        )\n" +
+"    )";
+        String addArcZajecia="ALTER TABLE zajecia\n" +
+"    ADD CONSTRAINT arc_1 CHECK (\n" +
+"        (\n" +
+"            ( obiekt_sportowy_id_obiektu IS NOT NULL )\n" +
+"            AND ( sala_obiekt_sportowy_id_ob IS NULL )\n" +
+"            AND ( sala_nr_sali IS NULL )\n" +
+"        )\n" +
+"        OR (\n" +
+"            ( sala_obiekt_sportowy_id_ob IS NOT NULL )\n" +
+"            AND ( sala_nr_sali IS NOT NULL )\n" +
+"            AND ( obiekt_sportowy_id_obiektu IS NULL )\n" +
+"        )\n" +
+"    )";
+
+
+        try {
+            SportsCenter.dBManager.getConnection().setAutoCommit(false);
+            
+            stmt.executeQuery(dropArcWyposazenie);
+            stmt.executeQuery(dropArcZajecia);
+            
+            PreparedStatement pstmt = SportsCenter.dBManager.getConnection().prepareStatement("DELETE FROM sala WHERE obiekt_sportowy_id_obiektu = ? AND nr_sali = ?");
+            pstmt.setInt(1, buildingId);
+            pstmt.setString(2, hallId);
+            pstmt.executeUpdate();
+            
+            pstmt = SportsCenter.dBManager.getConnection().prepareStatement("DELETE FROM zajecia WHERE sala_obiekt_sportowy_id_ob = ? AND sala_nr_sali = ?");
+            pstmt.setInt(1, buildingId);
+            pstmt.setString(2, hallId);
+            pstmt.executeUpdate();
+
+            pstmt = SportsCenter.dBManager.getConnection().prepareStatement("DELETE FROM wyposazenie WHERE sala_obiekt_sportowy_id_ob = ? AND sala_nr_sali = ?");
+            pstmt.setInt(1, buildingId);
+            pstmt.setString(2, hallId);
+            pstmt.executeUpdate();
+            
+            stmt.executeQuery(addArcWyposazenie);
+            stmt.executeQuery(addArcZajecia);
+
+            SportsCenter.dBManager.getConnection().commit();
+
+            SportsCenter.dBManager.getConnection().setAutoCommit(true);
+
+            
+        } catch (SQLException ex) {
+            SportsCenter.dBManager.getConnection().rollback();
+            ex.printStackTrace();
+            SportsCenter.dBManager.getConnection().setAutoCommit(true);
+            stmt.executeQuery(addArcWyposazenie);
+            stmt.executeQuery(addArcZajecia);
+            ValidateData.printSQLException(ex, "");
+            System.out.println("Sala deleting error");
+        }
+    }
+    
     
     public DBManager getdBManager() {
         return dBManager;

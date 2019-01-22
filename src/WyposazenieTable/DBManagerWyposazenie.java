@@ -8,8 +8,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
-import javafx.collections.FXCollections;
-import javafx.event.ActionEvent;
 
 public class DBManagerWyposazenie {
     
@@ -17,6 +15,16 @@ public class DBManagerWyposazenie {
 
     public DBManagerWyposazenie(DBManager dBManager) {
         this.dBManager = dBManager;
+    }
+    
+    void deleteWyposazenie(int id) {
+        try {
+            PreparedStatement pstmt = SportsCenter.dBManager.getConnection().prepareStatement("DELETE FROM wyposazenie WHERE id_wyposazenia = ?");
+            pstmt.setInt(1, id);
+            pstmt.executeUpdate();
+        } catch (SQLException ex) {
+            System.out.println("Wzposazenie deleting error");
+        }
     }
 
     public void editWyposazenie(int id, String name, String sport, String count, int buildingId, String hallId) {
@@ -49,7 +57,7 @@ public class DBManagerWyposazenie {
     public HashMap<String,Integer> generateBuildingsMap(){
         Statement stmt;
         ResultSet rs;
-        HashMap<String, Integer> buildings = new HashMap<String, Integer>();
+        HashMap<String, Integer> buildings = new HashMap<>();
         try {
             stmt = SportsCenter.connection.getConn().createStatement();
             rs  = stmt.executeQuery("SELECT nazwa, id_obiektu FROM obiekt_sportowy");
@@ -66,14 +74,14 @@ public class DBManagerWyposazenie {
     public ArrayList<String> generateHallsList(String buildingName){
         Statement stmt;
         ResultSet rs;
-        ArrayList<String> hallIds = new ArrayList<String>();
+        ArrayList<String> hallIds = new ArrayList<>();
         hallIds.add("");
         try {
             stmt = SportsCenter.connection.getConn().createStatement();
             rs = stmt.executeQuery("SELECT nr_sali FROM sala "
                     + "WHERE obiekt_sportowy_id_obiektu = "
                     + "(SELECT id_obiektu FROM obiekt_sportowy WHERE nazwa = '"+buildingName+"')");
-            ArrayList<String> choices = new ArrayList<String>();
+            ArrayList<String> choices = new ArrayList<>();
             while (rs.next()) {
                  hallIds.add(rs.getString(1));
             }
@@ -107,7 +115,6 @@ public class DBManagerWyposazenie {
             System.out.println("Equipment added!");
         } catch (SQLException e) {
             System.out.println("Equipment inserting error");
-            e.printStackTrace();
         }
     }
     
@@ -115,5 +122,5 @@ public class DBManagerWyposazenie {
     public DBManager getdBManager() {
         return dBManager;
     }
-    
+
 }

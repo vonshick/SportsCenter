@@ -1,7 +1,9 @@
 package SalaTable;
 
+import ObiektSportowyTable.ObiektSportowy;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -33,6 +35,8 @@ public class TableSalaWindowController implements Initializable {
     @FXML
     private Button AddData;
     @FXML
+    private Button delete;
+    @FXML
     private ComboBox selectTableView;
     @FXML
     private TextField searchTextBox;
@@ -61,6 +65,7 @@ public class TableSalaWindowController implements Initializable {
     private void changeTableView() throws IOException {
         String selected = selectTableView.getSelectionModel().getSelectedItem().toString();
         if (selected != null && !selected.equals("sale")) {
+            delete.setDisable(true);
             dbManager.changeScene(selected);
         }
     }
@@ -78,8 +83,20 @@ public class TableSalaWindowController implements Initializable {
     }
     
     @FXML
+     private void deleteSala() throws SQLException{
+        Sala sala = (Sala) tableView.getSelectionModel().getSelectedItem();
+        dbManager.getDbManagerSala().deleteSala(sala.getBuildingId(),sala.getHallId());
+        delete.setDisable(true);
+        showSala();
+     }
+    
+    @FXML
     private void selectRowSala(MouseEvent event) throws IOException {
+        if(event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 1) {
+            delete.setDisable(false);
+        }    
         if(event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) {
+            delete.setDisable(true);
             Sala sala = (Sala) tableView.getSelectionModel().getSelectedItem();
             if(sala != null) {
                 System.out.println("Wybrano " + sala.getHallId());

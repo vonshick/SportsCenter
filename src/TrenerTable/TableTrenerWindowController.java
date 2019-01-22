@@ -70,7 +70,7 @@ public class TableTrenerWindowController implements Initializable {
     }
     
     @FXML
-    private void deleteTrener(){
+    private void deleteTrener() throws SQLException{
         Trener trener = (Trener) tableView.getSelectionModel().getSelectedItem();
         dbManager.getdBManagerTrener().deleteTrener(trener.getPESEL());
         delete.setDisable(true);

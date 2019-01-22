@@ -28,6 +28,7 @@ public class DBManagerKarnet {
             SportsCenter.dBManager.getConnection().commit();
             System.out.println("Karnet updated!");
         } catch (SQLException e) {
+            ValidateData.printSQLException(e, "id_klienta lub id_aktywnosci");
             System.out.println("Karnet update error");
         }
     }
@@ -48,14 +49,14 @@ public class DBManagerKarnet {
     
     public void insertNewKarnet(String idClient, String idActivity, Float price, String dateStart, String dateEnd) throws IOException {
         try {
-            PreparedStatement pstmt = SportsCenter.dBManager.getConnection().prepareStatement("INSERT INTO karnet VALUES(?, ?, ?, ?, ?)");
+            PreparedStatement pstmt = SportsCenter.dBManager.getConnection().prepareStatement("INSERT INTO karnet "
+                    + "VALUES(?, ?, ?, TO_DATE('"+dateStart+"','YYYY-MM-DD'), TO_DATE('"+dateEnd+"','YYYY-MM-DD'))");
             pstmt.setInt(1, Integer.parseInt(idClient));
             pstmt.setInt(2, Integer.parseInt(idActivity));
             pstmt.setFloat(3, price);
-            pstmt.setString(4, dateStart);
-            pstmt.setString(5, dateEnd);
             pstmt.executeUpdate();
         } catch (SQLException e) {
+            ValidateData.printSQLException(e, "id_klienta lub id_aktywnosci");
             System.out.println("Karnet inserting error");
         }
     }

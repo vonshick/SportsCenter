@@ -9,7 +9,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-import javafx.scene.input.MouseEvent;
 import GUI.AlertBox;
 import javafx.event.ActionEvent;
 import sportscenter.DBManager;
@@ -33,14 +32,6 @@ public class EditPracownikController implements Initializable {
     private TextField salary;
     @FXML
     private Button save;
-    @FXML
-    private Button delete;
-    
-    @FXML
-    private void delete(MouseEvent event) throws IOException, SQLException {
-        dbManager.getdBManagerPracownik().deletePracownik(pracownik.getPESEL());
-        ((Node) (event.getSource())).getScene().getWindow().hide();
-    }
     
     @FXML
     private void save(ActionEvent event) throws IOException, SQLException {

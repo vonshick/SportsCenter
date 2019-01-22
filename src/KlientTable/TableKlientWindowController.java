@@ -1,6 +1,5 @@
 package KlientTable;
 
-import KarnetTable.Karnet;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -72,6 +71,7 @@ public class TableKlientWindowController implements Initializable {
     
     @FXML
     private void changeTableView() throws IOException {
+        delete.setDisable(true);
         String selected = selectTableView.getSelectionModel().getSelectedItem().toString();
         if (selected != null && !selected.equals("klienci")) {
             dbManager.changeScene(selected);
@@ -80,7 +80,8 @@ public class TableKlientWindowController implements Initializable {
     
 
     @FXML
-    private void openNewKlientWindow() throws IOException{
+    private void openNewKlientWindow() throws IOException {
+        delete.setDisable(true);
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/KlientTable/AddKlient.fxml"));
         Parent root = (Parent) fxmlLoader.load();
         AddKlientController controller = fxmlLoader.<AddKlientController>getController();
@@ -93,7 +94,7 @@ public class TableKlientWindowController implements Initializable {
     
     @FXML
     private void selectRowKlient(MouseEvent event) throws IOException {       
-        if(event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 1) {
+        if(event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 1 && !tableView.getSelectionModel().isEmpty()) {
             delete.setDisable(false);
         }
         if(event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) {
@@ -116,6 +117,7 @@ public class TableKlientWindowController implements Initializable {
     
     @FXML
     private void searchKlient() throws IOException {
+        delete.setDisable(true);
         String input = searchTextBox.getText().toLowerCase();
         if (input.isEmpty()) {
             showKlienci();

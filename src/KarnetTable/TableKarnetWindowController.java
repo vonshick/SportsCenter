@@ -73,6 +73,7 @@ public class TableKarnetWindowController implements Initializable {
     
     @FXML
     private void changeTableView() throws IOException {
+        delete.setDisable(true);
         String selected = selectTableView.getSelectionModel().getSelectedItem().toString();
         if (selected != null && !selected.equals("karnety")) {
             dbManager.changeScene(selected);
@@ -80,7 +81,8 @@ public class TableKarnetWindowController implements Initializable {
     }
 
     @FXML
-    private void openNewKarnetWindow() throws IOException{
+    private void openNewKarnetWindow() throws IOException {
+        delete.setDisable(true);
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/KarnetTable/AddKarnet.fxml"));
         Parent root = (Parent) fxmlLoader.load();
         AddKarnetController controller = fxmlLoader.<AddKarnetController>getController();
@@ -102,7 +104,7 @@ public class TableKarnetWindowController implements Initializable {
     @FXML
     private void selectRowKarnet(MouseEvent event) throws IOException {
         
-        if(event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 1) {
+        if(event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 1 && !tableView.getSelectionModel().isEmpty()) {
             delete.setDisable(false);
         }
         if(event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) {
@@ -124,6 +126,7 @@ public class TableKarnetWindowController implements Initializable {
     
     @FXML
     private void removeOldPasses() throws SQLException{
+        delete.setDisable(true);
         Alert alert = new Alert(AlertType.CONFIRMATION, 
                 "Czy na pewno chcesz usunąć wszystkie przeterminowane karnety?", ButtonType.YES, ButtonType.CANCEL);
         alert.showAndWait();
@@ -135,6 +138,7 @@ public class TableKarnetWindowController implements Initializable {
     }
     @FXML
     private void searchKarnet() throws IOException {
+        delete.setDisable(true);
         String input = searchTextBox.getText().toLowerCase();
         if (input.isEmpty()) {
             showKarnety();

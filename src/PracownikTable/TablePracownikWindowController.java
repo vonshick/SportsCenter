@@ -1,5 +1,6 @@
 package PracownikTable;
 
+import WyposazenieTable.Wyposazenie;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -42,7 +43,9 @@ public class TablePracownikWindowController implements Initializable {
     private TextField searchTextBox;
     @FXML
     private Label taxValue;
-    
+    @FXML
+    private Button delete;
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         this.dbManager = SportsCenter.dBManager;
@@ -72,7 +75,16 @@ public class TablePracownikWindowController implements Initializable {
     }
     
     @FXML
+    private void delete() throws IOException, SQLException {
+        Pracownik pracownik = (Pracownik) tableView.getSelectionModel().getSelectedItem();
+        dbManager.getdBManagerPracownik().deletePracownik(pracownik.getPESEL());
+        delete.setDisable(true);
+        showPracownicy();
+    }
+    
+    @FXML
     private void changeTableView() throws IOException {
+        delete.setDisable(true);
         String selected = selectTableView.getSelectionModel().getSelectedItem().toString();
         if (selected != null && !selected.equals("pracownicy")) {
             countTax.setDisable(true);
@@ -81,7 +93,8 @@ public class TablePracownikWindowController implements Initializable {
     }
 
     @FXML
-    private void openNewPracownikWindow() throws IOException{
+    private void openNewPracownikWindow() throws IOException {
+        delete.setDisable(true);
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/PracownikTable/AddPracownik.fxml"));
         Parent root = (Parent) fxmlLoader.load();
         AddPracownikController controller = fxmlLoader.<AddPracownikController>getController();
@@ -95,12 +108,13 @@ public class TablePracownikWindowController implements Initializable {
     
     @FXML
     private void selectRowPracownik(MouseEvent event) throws IOException {
-        if(event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 1) {
+        if(event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 1 && !tableView.getSelectionModel().isEmpty()) {
             taxValue.setText("");
             countTax.setDisable(false);
+            delete.setDisable(false);
         }
-        
         if(event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) {
+            delete.setDisable(true);
             countTax.setDisable(true);
             Pracownik pracownik = (Pracownik) tableView.getSelectionModel().getSelectedItem();
             if(pracownik != null) {
@@ -131,6 +145,7 @@ public class TablePracownikWindowController implements Initializable {
     
     @FXML
     private void searchPracownik() throws IOException {
+        delete.setDisable(true);
         String input = searchTextBox.getText().toLowerCase();
         if (input.isEmpty()) {
             showPracownicy();

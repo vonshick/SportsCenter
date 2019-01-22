@@ -20,7 +20,6 @@ public class DBManagerUczestnik {
         try {
             PreparedStatement pstmt ;
             pstmt = SportsCenter.dBManager.getConnection().prepareStatement("update uczestnik set PESEL = ?, nazwisko = ?, imie = ?, oplacony = ?, zawody_nazwa = ? where id_uczestnika = ?");
-
             pstmt.setString(1, PESEL);
             pstmt.setString(2, surname);
             pstmt.setString(3, name);
@@ -30,10 +29,8 @@ public class DBManagerUczestnik {
             pstmt.executeQuery();
             dbManager.getConnection().commit();
             System.out.println("Competitor update success");
-
         } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("Competitor update error");
+            ValidateData.printSQLException(e, "Zawody");
         }
     }
 
@@ -66,13 +63,22 @@ public class DBManagerUczestnik {
             pstmt.executeUpdate();
             System.out.println("Competitor added!");
         }catch(SQLException e ){
-                        e.printStackTrace();
-            System.out.println("Competitor inserting error");
+            ValidateData.printSQLException(e, "Zawody");
         }
     }
     
     public DBManager getdBManager() {
         return dbManager;
+    }
+
+    void deleteUczestnik(int id) {
+        try {
+            PreparedStatement pstmt = SportsCenter.dBManager.getConnection().prepareStatement("DELETE FROM uczestnik WHERE id_uczestnika = ?");
+            pstmt.setInt(1, id);
+            pstmt.executeUpdate();
+        } catch (SQLException ex) {
+            System.out.println("Wzposazenie deleting error");
+        }
     }
     
 }

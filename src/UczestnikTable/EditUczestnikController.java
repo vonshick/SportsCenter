@@ -37,6 +37,7 @@ public class EditUczestnikController implements Initializable {
     private void handleButtonAction(ActionEvent event) throws IOException, SQLException {
         try {
             String[] providedData = {PESEL.getText(), surname.getText(), name.getText(), competition.getSelectionModel().getSelectedItem().toString()};
+            System.out.println(competition.getSelectionModel().getSelectedItem().toString());
             if (ValidateData.isAnyEmpty(providedData)) {
                 AlertBox.showAlert("None of fields can be empty");
             } else if(ValidateData.isIncorrectPESEL(providedData[0])) {

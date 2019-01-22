@@ -2,6 +2,7 @@ package UczestnikTable;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -36,6 +37,8 @@ public class TableUczestnikWindowController implements Initializable {
     private ComboBox selectTableView;
     @FXML
     private TextField searchTextBox;
+    @FXML
+    private Button delete;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -70,7 +73,16 @@ public class TableUczestnikWindowController implements Initializable {
     }
     
     @FXML
+    private void delete() throws IOException, SQLException {
+        Uczestnik uczestnik = (Uczestnik) tableView.getSelectionModel().getSelectedItem();
+        dbManager.getDbManagerUczestnik().deleteUczestnik(uczestnik.getId());
+        delete.setDisable(true);
+        showUczestnik();
+    }
+    
+    @FXML
     private void changeTableView() throws IOException {
+        delete.setDisable(true);
         String selected = selectTableView.getSelectionModel().getSelectedItem().toString();
         if (selected != null && !selected.equals("uczestnicy")) {
             dbManager.changeScene(selected);
@@ -78,7 +90,8 @@ public class TableUczestnikWindowController implements Initializable {
     }
 
     @FXML
-    private void openNewUczestnikWindow() throws IOException{
+    private void openNewUczestnikWindow() throws IOException {
+        delete.setDisable(true);
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/UczestnikTable/AddUczestnik.fxml"));
         Parent root = (Parent) fxmlLoader.load();
         AddUczestnikController controller = fxmlLoader.<AddUczestnikController>getController();
@@ -91,7 +104,11 @@ public class TableUczestnikWindowController implements Initializable {
     
     @FXML
     private void selectRowUczestnik(MouseEvent event) throws IOException {
+        if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 1 && !tableView.getSelectionModel().isEmpty()) {
+            delete.setDisable(false);
+        }
         if(event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) {
+            delete.setDisable(true);
             Uczestnik uczestnik = (Uczestnik) tableView.getSelectionModel().getSelectedItem();
             if(uczestnik != null) {
                 System.out.println("Wybrano " + uczestnik.getSurname());
@@ -110,6 +127,7 @@ public class TableUczestnikWindowController implements Initializable {
     
     @FXML
     private void searchUczestnik() throws IOException {
+        delete.setDisable(true);
         String input = searchTextBox.getText().toLowerCase();
         if (input.isEmpty()) {
             showUczestnik();

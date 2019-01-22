@@ -18,7 +18,7 @@ public class Zajecia extends SQLObject {
 
     @Override
     public String toString() {
-        return dayOfWeek + "," + startHour + "," + endHour + "," + sport + "," + price + "," + coachPESEL + "," + coachName + "," + buildingId + "," + hallId;
+        return dayOfWeek + "," + startHour + "," + endHour + "," + sport + "," + price + "," + coachName + "," + buildingId + "," + hallId;
     }
     
     public Zajecia(){}

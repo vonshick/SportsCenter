@@ -113,7 +113,7 @@ public class TableZajeciaWindowController implements Initializable {
     
     @FXML
     private void selectRowZajecia(MouseEvent event) throws IOException {
-        if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 1) {
+        if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 1 && !tableView.getSelectionModel().isEmpty()) {
             delete.setDisable(false);
         }
         if(event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) {

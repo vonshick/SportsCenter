@@ -45,6 +45,9 @@ public class TableTrenerWindowController implements Initializable {
 
         TableColumn<Trener, String> peselColumn = new TableColumn<>("PESEL");
         peselColumn.setCellValueFactory(new PropertyValueFactory<>("PESEL"));
+        
+//        TableColumn<Trener, String> coachNameColumn = new TableColumn<>("Nazwisko");
+//        coachNameColumn.setCellValueFactory(new PropertyValueFactory<>("coachName"));
 
         TableColumn<Trener, String> disciplinColumn = new TableColumn<>("Dyscyplina");
         disciplinColumn.setCellValueFactory(new PropertyValueFactory<>("disciplin"));

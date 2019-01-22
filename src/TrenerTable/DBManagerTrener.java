@@ -13,12 +13,21 @@ public class DBManagerTrener {
         this.dBManager = dBManager;
     }
     
-    public void deleteTrener(String PESEL) {
+    public void deleteTrener(String PESEL) throws SQLException {
         try {
+            SportsCenter.dBManager.getConnection().setAutoCommit(false);
             PreparedStatement pstmt = SportsCenter.dBManager.getConnection().prepareStatement("DELETE FROM trener WHERE PESEL = ?");
             pstmt.setString(1, PESEL);
             pstmt.executeUpdate();
+            pstmt = SportsCenter.dBManager.getConnection().prepareStatement("DELETE FROM pracownik WHERE PESEL = ?");
+            pstmt.setString(1, PESEL);
+            pstmt.executeUpdate();
+            SportsCenter.dBManager.getConnection().commit();
+            SportsCenter.dBManager.getConnection().setAutoCommit(true);
+
         } catch (SQLException ex) {
+            SportsCenter.dBManager.getConnection().rollback();
+            SportsCenter.dBManager.getConnection().setAutoCommit(true);
             ValidateData.printSQLException(ex, PESEL);
         }
     }

@@ -71,12 +71,10 @@ public class ValidateData {
                             AlertBox.showAlert("Invalid username or password");
                             break;
                         case 12505:
-                            Alert alert = new Alert(AlertType.ERROR, "The Network Adapter could not establish the connection");
-                            alert.getDialogPane().getChildren().stream().filter(node -> node instanceof Label).forEach(node -> ((Label)node).setMinHeight(Region.USE_PREF_SIZE));
-                            alert.showAndWait();
+                            showErrorPane("The Network Adapter could not establish the connection");
                             break;
                         case 2292:
-                            AlertBox.showAlert("Nie można usunąć danych, naruszenie więzów integralności (klucz obcy)!");
+                            showErrorPane("Nie można usunąć danych, naruszenie więzów integralności (klucz obcy)!");
                             break;
                         case 2291:
                             AlertBox.showAlert("Nie znaleziono podanego ID (klucz nadrzędny)");

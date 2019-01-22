@@ -6,10 +6,11 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="TrenerTable.TableTrenerWindowController">
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="TrenerTable.TableTrenerWindowController">
     <children>
         <TableView fx:id="tableView" layoutX="31.0" layoutY="67.0" onMouseClicked="#selectRowTrener" prefHeight="198.0" prefWidth="538.0" />
         <ComboBox fx:id="selectTableView" layoutX="31.0" layoutY="28.0" onAction="#changeTableView" prefWidth="150.0" />
         <TextField fx:id="searchTextBox" layoutX="202.0" layoutY="28.0" onKeyReleased="#searchTrener" prefHeight="25.0" prefWidth="365.0" promptText="Wyszukaj" />
+      <Button fx:id="delete" disable="true" layoutX="269.0" layoutY="325.0" mnemonicParsing="false" onAction="#deleteTrener" text="Usuń" />
     </children>
 </AnchorPane>

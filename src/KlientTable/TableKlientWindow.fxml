@@ -9,9 +9,9 @@
 <AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="KlientTable.TableKlientWindowController">
    <children>
       <TableView fx:id="tableView" layoutX="31.0" layoutY="67.0" onMouseClicked="#selectRowKlient" prefHeight="198.0" prefWidth="538.0" />
-      <Button fx:id="AddData" layoutX="314.0" layoutY="317.0" mnemonicParsing="false" onAction="#openNewKlientWindow" prefWidth="60.0" text="Dodaj" />
+      <Button fx:id="AddData" layoutX="320.0" layoutY="317.0" mnemonicParsing="false" onAction="#openNewKlientWindow" prefHeight="25.0" prefWidth="80.0" text="Dodaj" />
       <ComboBox fx:id="selectTableView" layoutX="31.0" layoutY="28.0" onAction="#changeTableView" prefWidth="150.0" />
       <TextField fx:id="searchTextBox" layoutX="202.0" layoutY="28.0" onKeyReleased="#searchKlient" prefHeight="25.0" prefWidth="365.0" promptText="Wyszukaj" />
-      <Button fx:id="delete" layoutX="227.0" layoutY="317.0" mnemonicParsing="false" onAction="#deleteKlient" prefHeight="25.0" prefWidth="60.0" text="Usuń" />
+      <Button fx:id="delete" disable="true" layoutX="202.0" layoutY="317.0" mnemonicParsing="false" onAction="#deleteKlient" prefHeight="25.0" prefWidth="80.0" text="Usuń" />
    </children>
 </AnchorPane>

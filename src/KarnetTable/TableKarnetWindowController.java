@@ -106,7 +106,7 @@ public class TableKarnetWindowController implements Initializable {
             delete.setDisable(false);
         }
         if(event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) {
-            delete.setDisable(false);
+            delete.setDisable(true);
             Karnet karnet = (Karnet) tableView.getSelectionModel().getSelectedItem();
             if(karnet != null) {
                 FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/KarnetTable/EditKarnet.fxml"));

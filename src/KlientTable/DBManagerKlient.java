@@ -20,7 +20,7 @@ public class DBManagerKlient {
             pstmt.executeQuery();
         } catch (SQLException e) {
             ValidateData.printSQLException(e, "");
-            System.out.println("Employee update error");
+            System.out.println("Employee delete error");
         }
     }
     
